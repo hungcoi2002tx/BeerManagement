@@ -7,11 +7,11 @@ namespace Share.Ultils
     {
         public static void AddAutoMapperConfig(this IServiceCollection services)
         {
-            //#region Add automapper
-            //var assembly = Assembly.GetAssembly(typeof(MapperServiceExtension));
-            //services.AddAutoMapper(assembly);
-            //#endregion
-            //services.AddAutoMapper(typeof(MapperConfig));
+            #region Add automapper
+            var assembly = Assembly.GetAssembly(typeof(MapperServiceExtension));
+            services.AddAutoMapper(assembly);
+            #endregion
+            services.AddAutoMapper(typeof(MapperConfig));
         }
     }
 }
