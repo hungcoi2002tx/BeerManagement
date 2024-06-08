@@ -11,10 +11,4 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\Domain\" />
-    <Folder Include="Models\EditModels\" />
-    <Folder Include="Models\ViewModels\" />
-  </ItemGroup>
-
 </Project>
