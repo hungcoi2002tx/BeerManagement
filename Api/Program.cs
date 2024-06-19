@@ -1,5 +1,5 @@
-using Api.Ultils;
 using DataLayer;
+using Business;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,8 +16,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddService();
-builder.Services.AddServicesDataLayer(config);
+builder.Services.AddServicesDbcontext(config)
+                .AddServicesDataLayer()
+                .AddServicesBusinessLayer();
 
 
 var app = builder.Build();
