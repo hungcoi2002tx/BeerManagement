@@ -16,6 +16,7 @@ namespace DataLayer.Implements
     {
         private readonly BeerManagementContext _context;
         protected IDbContextTransaction _transaction;
+        private DbSet<T> _dbSet { get => _context.Set<T>(); }
 
         public Repository(BeerManagementContext beerManagementContext)
         {
@@ -24,7 +25,7 @@ namespace DataLayer.Implements
 
         public async Task AddAsync(T obj)
         {
-            await _context.Set<T>().AddAsync(obj);
+            await _dbSet.AddAsync(obj);
         }
 
         public async Task<Boolean> DeleteAsync(int id)
@@ -34,28 +35,28 @@ namespace DataLayer.Implements
             {
                 return false;
             }
-            _context.Set<T>().Remove(obj);
+            _dbSet.Remove(obj);
             return true;
         }
 
         private async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            return await _dbSet.FindAsync(id);
         }
 
         public async Task EditAsync(T obj)
         {
-            await _context.Set<T>().AddAsync(obj);
+            await _dbSet.AddAsync(obj);
         }
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _context.Set<T>().ToListAsync();
+            return await _dbSet.ToListAsync();
         }
 
         public T GetByKey(Object key)
         {
-            var entity = _context.Set<T>().Find(key);
+            var entity = _dbSet.Find(key);
             return entity;
         }
 
