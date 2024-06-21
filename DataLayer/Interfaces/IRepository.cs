@@ -1,6 +1,8 @@
-﻿using Share.Models.Domain;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using Share.Models.Domain;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,10 @@ namespace DataLayer.Interfaces
     {
         Task<List<T>> GetAllAsync();
         Task AddAsync(T obj);
-        Task DeleteAsync(int id);
+        Task<Boolean> DeleteAsync(int id);
         Task EditAsync(T obj);
+        IDbContextTransaction OpenTransaction();
+        void CommitTransactionAsync();
+        void RollBackTransactionAsync();
     }
 }
