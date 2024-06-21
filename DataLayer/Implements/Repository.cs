@@ -39,7 +39,7 @@ namespace DataLayer.Implements
             return true;
         }
 
-        private async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int id)
         {
             return await _dbSet.FindAsync(id);
         }
@@ -66,12 +66,12 @@ namespace DataLayer.Implements
             return _transaction;
         }
 
-        public void CommitTransactionAsync()
+        public async Task CommitTransactionAsync()
         {
             _transaction.CommitAsync();
         }
 
-        public void RollBackTransactionAsync()
+        public async Task RollBackTransactionAsync()
         {
             _transaction.RollbackAsync();
         }

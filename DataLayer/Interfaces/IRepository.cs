@@ -16,7 +16,7 @@ namespace DataLayer.Interfaces
         Task<Boolean> DeleteAsync(int id);
         Task EditAsync(T obj);
         IDbContextTransaction OpenTransaction();
-        void CommitTransactionAsync();
-        void RollBackTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollBackTransactionAsync();
     }
 }

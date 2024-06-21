@@ -25,7 +25,7 @@ namespace Business.Implements
 
         public async Task DeleteCategoryAsync(int id)
         {
-            await _categoryRepository.DeleteAsync(id);
+            
         }
 
         public async Task EditCategoryAsync(Category category)
@@ -35,7 +35,18 @@ namespace Business.Implements
 
         public async Task<List<Category>> GetAllCategoryAsync()
         {
-            return await _categoryRepository.GetAllAsync();
+            try
+            {
+                _categoryRepository.OpenTransaction();
+                var list = await _categoryRepository.GetAllAsync();
+                await _categoryRepository.CommitTransactionAsync();
+                return list;
+            }
+            catch (Exception ex)
+            {
+                _categoryRepository.RollBackTransactionAsync();
+                throw;
+            }
         }
     }
 }

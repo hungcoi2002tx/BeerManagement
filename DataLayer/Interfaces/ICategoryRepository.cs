@@ -7,11 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Interfaces
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IRepository<Category>
     {
-        Task<List<Category>> GetAllAsync();
-        Task AddAsync(Category obj);
-        Task DeleteAsync(int id);
-        Task EditAsync(Category obj);
     }
 }
