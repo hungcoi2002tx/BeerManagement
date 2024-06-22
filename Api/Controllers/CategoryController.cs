@@ -1,7 +1,10 @@
 ﻿using Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Share.Models;
 using Share.Models.Domain;
+using System.Security.Claims;
 
 namespace Api.Controllers
 {
@@ -21,6 +24,7 @@ namespace Api.Controllers
         {
             try
             {
+                //var a = GetSessionData();
                 var categories = await _categoryService.GetAllCategoryAsync();
                 return Ok(categories);
             }
@@ -70,6 +74,16 @@ namespace Api.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
+
+        private Boolean GetSessionData()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if(identity == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

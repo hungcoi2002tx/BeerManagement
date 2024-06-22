@@ -68,7 +68,22 @@ namespace DataLayer.Implements
 
         public async Task CommitTransactionAsync()
         {
-            _transaction.CommitAsync();
+            try
+            {
+                _transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                if(_transaction != null)
+                {
+                    _transaction.Dispose();
+                    _transaction = null;
+                }
+            }
         }
 
         public async Task RollBackTransactionAsync()
