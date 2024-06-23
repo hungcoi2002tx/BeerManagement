@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Models;
+using Share.Models.Domain;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -35,7 +36,7 @@ namespace Client.Pages
             if (response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                var a = 0;
+                HttpContext.Session.SetString("JWToken", responseBody);
             }
             else
             {
@@ -44,7 +45,20 @@ namespace Client.Pages
                 Console.WriteLine($"Error: {response.StatusCode}, Details: {errorContent}");
                 return null;
             }
-            return RedirectToPage(new { handler = "OnGet" });
+            return RedirectToPage(new { handler = "ABC" });
+        }
+
+        public async Task OnGetABCAsync()
+        {
+            HttpClient _httpClient = new HttpClient();
+            var token = HttpContext.Session.GetString("JWToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",token);
+            var apiUrlStudio = "https://localhost:7169/api/Category";
+            var response = await _httpClient.GetAsync(apiUrlStudio);
+            if (response.IsSuccessStatusCode)
+            {
+                var list =await response.Content.ReadFromJsonAsync<List<Category>>();
+            }
         }
     }
     public class TokenResponse
