@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models;
 using Share.Models.Domain;
+using System.Net;
 using System.Security.Claims;
 
 namespace Api.Controllers
@@ -20,18 +21,17 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [CustomAuthorize]
         public async Task<IActionResult> GetAllCategoryAsync()
         {
             try
             {
-                //var a = GetSessionData();
                 var categories = await _categoryService.GetAllCategoryAsync();
                 return Ok(categories);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 

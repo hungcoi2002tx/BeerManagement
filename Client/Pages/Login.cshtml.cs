@@ -11,15 +11,13 @@ namespace Client.Pages
 {
     public class LoginModel : PageModel
     {
-        private HttpClient _httpClient;
         private readonly CustomHttpClient _customHttpClient;
 
         [BindProperty]
         public UserLogin User { get; set; }
 
-        public LoginModel(HttpClient httpClient, CustomHttpClient customHttpClient)
+        public LoginModel(CustomHttpClient customHttpClient)
         {
-            _httpClient = httpClient;
             _customHttpClient = customHttpClient;
         }
 
@@ -34,12 +32,13 @@ namespace Client.Pages
                 UserName = User.UserName,
                 Password = User.Password
             };
-          
+
             var response = await _customHttpClient.PostJsonAsync("https://localhost:7169/api/Login", loginModel);
 
             if (response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
+
                 HttpContext.Session.SetString("JWToken", responseBody);
             }
             else
@@ -53,13 +52,32 @@ namespace Client.Pages
             return RedirectToPage(new { handler = "ABC" });
         }
 
-        public async Task OnGetABCAsync()
+        public async Task<IActionResult> OnGetABCAsync()
         {
             var response = await _customHttpClient.GetAsync("https://localhost:7169/api/Category");
 
             if (response.IsSuccessStatusCode)
             {
                 var list = await response.Content.ReadFromJsonAsync<List<Category>>();
+                return RedirectToPage();
+            }
+            else
+            {
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                {
+                    return RedirectToPage();
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError)
+                {
+                    Console.WriteLine("Error: Internal Server Error (500). Something went wrong on the server.");
+                    return RedirectToPage();
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error: {response.StatusCode}, Details: {errorContent}");
+                    return RedirectToPage();
+                }
             }
         }
     }
