@@ -2,6 +2,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+// Add httpclient Services
+builder.Services.AddHttpClient();
+
+#region Add session
+builder.Services.AddDistributedMemoryCache(); //using local storage to save session
+builder.Services.AddSession(x =>
+{
+    x.IdleTimeout = TimeSpan.FromSeconds(100000000); //settime out for session
+    x.Cookie.HttpOnly = true; //Security sesion cookies
+    x.Cookie.IsEssential = true;
+});
+#endregion
 
 var app = builder.Build();
 
@@ -12,7 +24,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

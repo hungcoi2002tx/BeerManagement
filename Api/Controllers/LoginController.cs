@@ -21,9 +21,8 @@ namespace Api.Controllers
             _config = config;
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        public IActionResult Login([FromBody] UserLogin userLogin)
+        public IActionResult Login(UserLogin userLogin)
         {
             var user = Authenticate(userLogin);
             if (user != null)
