@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Models;
 using Share.Models.Domain;
+using Share.Ultils;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -10,16 +11,16 @@ namespace Client.Pages
 {
     public class LoginModel : PageModel
     {
-
         private HttpClient _httpClient;
-
+        private readonly CustomHttpClient _customHttpClient;
 
         [BindProperty]
         public UserLogin User { get; set; }
 
-        public LoginModel(HttpClient httpClient)
+        public LoginModel(HttpClient httpClient, CustomHttpClient customHttpClient)
         {
             _httpClient = httpClient;
+            _customHttpClient = customHttpClient;
         }
 
         public void OnGet()
@@ -28,11 +29,14 @@ namespace Client.Pages
 
         public async Task<RedirectToPageResult> OnPostAsync()
         {
-            var ac = JsonSerializer.Serialize(User);
-            var loginModel = new { UserName = User.UserName, Password = User.Password };
-            var content = new StringContent(JsonSerializer.Serialize(loginModel), Encoding.UTF8, "application/json");
+            var loginModel = new UserLogin
+            {
+                UserName = User.UserName,
+                Password = User.Password
+            };
+          
+            var response = await _customHttpClient.PostJsonAsync("https://localhost:7169/api/Login", loginModel);
 
-            var response = await _httpClient.PostAsync("https://localhost:7169/api/Login", content);
             if (response.IsSuccessStatusCode)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -45,19 +49,17 @@ namespace Client.Pages
                 Console.WriteLine($"Error: {response.StatusCode}, Details: {errorContent}");
                 return null;
             }
+
             return RedirectToPage(new { handler = "ABC" });
         }
 
         public async Task OnGetABCAsync()
         {
-            HttpClient _httpClient = new HttpClient();
-            var token = HttpContext.Session.GetString("JWToken");
-            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer",token);
-            var apiUrlStudio = "https://localhost:7169/api/Category";
-            var response = await _httpClient.GetAsync(apiUrlStudio);
+            var response = await _customHttpClient.GetAsync("https://localhost:7169/api/Category");
+
             if (response.IsSuccessStatusCode)
             {
-                var list =await response.Content.ReadFromJsonAsync<List<Category>>();
+                var list = await response.Content.ReadFromJsonAsync<List<Category>>();
             }
         }
     }

@@ -76,14 +76,7 @@ namespace DataLayer.Implements
             {
                 throw;
             }
-            finally
-            {
-                if(_transaction != null)
-                {
-                    _transaction.Dispose();
-                    _transaction = null;
-                }
-            }
+           
         }
 
         public async Task RollBackTransactionAsync()
