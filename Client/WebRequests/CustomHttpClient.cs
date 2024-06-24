@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Net.Http.Json;
+﻿using System.Text.Json;
 using System.Text;
-using System.Text.Json;
 
-namespace Share.Ultils
+namespace Client.WebRequests
 {
-    public class CustomHttpClient
+    public class CustomHttpClient : ICustomHttpClient
     {
+
         private readonly HttpClient _httpClient;
 
         public CustomHttpClient(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)

@@ -1,3 +1,4 @@
+using Client.WebRequests;
 using Share.Ultils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,8 @@ builder.Services.AddRazorPages();
 // Add httpclient Services
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<CustomHttpClient>();
+builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
+
 
 #region Add session
 builder.Services.AddDistributedMemoryCache(); //using local storage to save session

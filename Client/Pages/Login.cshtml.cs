@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Client.WebRequests;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Models;
 using Share.Models.Domain;
@@ -11,12 +12,12 @@ namespace Client.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly CustomHttpClient _customHttpClient;
+        private readonly ICustomHttpClient _customHttpClient;
 
         [BindProperty]
         public UserLogin User { get; set; }
 
-        public LoginModel(CustomHttpClient customHttpClient)
+        public LoginModel(ICustomHttpClient customHttpClient)
         {
             _customHttpClient = customHttpClient;
         }

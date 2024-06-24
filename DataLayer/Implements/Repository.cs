@@ -76,7 +76,6 @@ namespace DataLayer.Implements
             {
                 throw;
             }
-           
         }
 
         public async Task RollBackTransactionAsync()

@@ -22,6 +22,7 @@ namespace Api.Controllers
 
         [HttpGet]
         [CustomAuthorize]
+
         public async Task<IActionResult> GetAllCategoryAsync()
         {
             try
