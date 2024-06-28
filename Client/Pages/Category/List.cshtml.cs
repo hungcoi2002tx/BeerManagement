@@ -1,6 +1,7 @@
 using Client.WebRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Share.Constant;
 
 namespace Client.Pages.Category
 {
@@ -13,12 +14,13 @@ namespace Client.Pages.Category
             _httpClient = httpClient;
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-            var response = _httpClient.GetAsync("https://localhost:7169/api/Category");
-            if (response != null)
+            var response = await _httpClient.GetAsync(RestApiName.GET_LIST_CATEGORY);
+
+            if (response.IsSuccessStatusCode)
             {
-                var body = response.Result;
+                var responseBody = await response.Content.ReadAsStringAsync();
             }
         }
     }
