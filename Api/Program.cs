@@ -1,6 +1,7 @@
 using DataLayer;
 using Business;
 using Microsoft.EntityFrameworkCore;
+using Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +33,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseMiddleware<ResponseCodeValidationMiddleware>();
 app.MapControllers();
 
 app.Run();
