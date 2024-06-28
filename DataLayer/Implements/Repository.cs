@@ -26,6 +26,7 @@ namespace DataLayer.Implements
         public async Task AddAsync(T obj)
         {
             await _dbSet.AddAsync(obj);
+            _context.SaveChanges();
         }
 
         public async Task<Boolean> DeleteAsync(int id)
@@ -36,22 +37,28 @@ namespace DataLayer.Implements
                 return false;
             }
             _dbSet.Remove(obj);
+            _context.SaveChanges();
+
             return true;
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var result = await _dbSet.FindAsync(id);
+            _context.SaveChanges();
+            return result;
         }
 
         public async Task EditAsync(T obj)
         {
             await _dbSet.AddAsync(obj);
+            _context.SaveChanges();
         }
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            var result = await _dbSet.ToListAsync();
+            return result;
         }
 
         public T GetByKey(Object key)
