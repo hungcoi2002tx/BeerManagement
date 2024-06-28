@@ -20,6 +20,7 @@ namespace Share.Models.Domain
         public int SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
+        public bool IsEnable { get; set; }
 
         public virtual Category Category { get; set; } = null!;
         public virtual Supplier Supplier { get; set; } = null!;

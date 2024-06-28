@@ -1,14 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
 using Share.Models.Domain;
 
-
-
-namespace Share
+namespace DataLayer
 {
     public partial class BeerManagementContext : DbContext
     {
-
         private readonly IConfiguration _configuration;
         public BeerManagementContext(IConfiguration configuration)
         {
@@ -48,6 +48,10 @@ namespace Share
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Description).HasMaxLength(255);
+
+                entity.Property(e => e.Image)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Name).HasMaxLength(255);
             });
