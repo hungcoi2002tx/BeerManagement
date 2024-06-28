@@ -17,6 +17,7 @@ namespace Share.Models.Domain
         public DateTime? PaymentDate { get; set; }
         public int PaymentStatus { get; set; }
         public int TableId { get; set; }
+        public bool IsEnable { get; set; }
 
         public virtual Table Table { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

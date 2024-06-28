@@ -1,8 +1,12 @@
+using Client.WebRequests;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

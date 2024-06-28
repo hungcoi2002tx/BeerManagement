@@ -16,6 +16,7 @@ namespace Share.Models.Domain
         public string? CompanyName { get; set; }
         public string SupplierName { get; set; } = null!;
         public string? Description { get; set; }
+        public bool IsEnable { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }
     }

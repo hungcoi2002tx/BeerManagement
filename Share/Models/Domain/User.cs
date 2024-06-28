@@ -10,5 +10,6 @@ namespace Share.Models.Domain
         public string Account { get; set; } = null!;
         public byte[] Password { get; set; } = null!;
         public int Role { get; set; }
+        public bool IsEnable { get; set; }
     }
 }
