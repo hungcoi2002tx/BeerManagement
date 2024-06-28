@@ -30,7 +30,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> AddCategoryAsync(Category category)
         {
             try
@@ -58,7 +58,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> EditCategoryAsync(Category category)
         {
             try

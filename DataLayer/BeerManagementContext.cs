@@ -9,10 +9,8 @@ namespace DataLayer
 {
     public partial class BeerManagementContext : DbContext
     {
-        private readonly IConfiguration _configuration;
         public BeerManagementContext(IConfiguration configuration)
         {
-
         }
 
         public BeerManagementContext(DbContextOptions<BeerManagementContext> options, IConfiguration configuration)
