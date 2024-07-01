@@ -28,9 +28,9 @@ namespace Business.Implements
             
         }
 
-        public async Task EditCategoryAsync(Category category)
+        public Task EditCategoryAsync(Category category)
         {
-            await _categoryRepository.EditAsync(category);
+            throw new NotImplementedException();
         }
 
         public async Task<List<Category>> GetAllCategoryAsync()
