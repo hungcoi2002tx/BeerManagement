@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Share.Models.EditModels
 {
-    public class SupperlierEditModel
+    public class SupplierEditModel
     {
         public int Id { get; set; }
         [Required]
@@ -17,5 +17,6 @@ namespace Share.Models.EditModels
         [Required]
         public string SupplierName { get; set; } = null!;
         public string? Description { get; set; }
+        public bool IsEnable { get; set; }
     }
 }

@@ -14,45 +14,54 @@ namespace DataLayer.Implements
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        private readonly BeerManagementContext _context;
+        public readonly BeerManagementContext _context;
         protected IDbContextTransaction _transaction;
-        private DbSet<T> _dbSet { get => _context.Set<T>(); }
+        public DbSet<T> _dbSet { get => _context.Set<T>(); }
 
         public Repository(BeerManagementContext beerManagementContext)
         {
             _context = beerManagementContext;
         }
 
-        public async Task AddAsync(T obj)
+        public async Task<T> AddAsync(T obj, bool usingTransaction = true)
         {
-            await _dbSet.AddAsync(obj);
-            _context.SaveChanges();
+            try
+            {
+                if (usingTransaction) OpenTransaction();
+                await _dbSet.AddAsync(obj);
+                await _context.SaveChangesAsync();
+                if (usingTransaction) await CommitTransactionAsync();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                if (usingTransaction) await RollBackTransactionAsync();
+                throw;
+            }
         }
 
-        public async Task<Boolean> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(T obj, bool usingTransaction = true)
         {
-            var obj = await GetByIdAsync(id);
-            if (obj == null)
+            try
             {
-                return false;
+                if (usingTransaction) OpenTransaction();
+                _dbSet.Remove(obj);
+                _context.SaveChanges();
+                if (usingTransaction) await CommitTransactionAsync();
+                return true;
             }
-            _dbSet.Remove(obj);
-            _context.SaveChanges();
-
-            return true;
+            catch (Exception ex)
+            {
+                if (usingTransaction) await RollBackTransactionAsync();
+                throw;
+            }
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
             var result = await _dbSet.FindAsync(id);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return result;
-        }
-
-        public async Task EditAsync(T obj)
-        {
-            await _dbSet.AddAsync(obj);
-            _context.SaveChanges();
         }
 
         public async Task<List<T>> GetAllAsync()
