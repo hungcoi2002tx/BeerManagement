@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Constant
+namespace Share.Ultils
 {
     public class Logger
     {
-        public void Log(string message)
+        public void Log(string message) 
         {
             Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} - {message}");
         }

@@ -18,7 +18,7 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<List<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
+        public async Task<(List<Supplier>,int)> GetPageBySearchAsync(SupplierSearchModel model)
         {
             try
             {
@@ -27,19 +27,24 @@ namespace DataLayer.Implements
                 {
                     filter.Where(x => x.Id == model.Id);    
                 }
-                if (model.Page != null)
-                {
-                    filter = filter.Skip(model.Page.PageSize * model.Page.PageIndex)
-                        .Take(model.Page.PageSize);
-                }
                 if (model.SupplierName.IsNotNullOrEmpty())
                 {
                     filter = filter.Where(x => x.SupplierName == model.SupplierName);
                 }
+                if (model.PhoneNumber.IsNotNullOrEmpty())
+                {
+                    filter = filter.Where(x => x.PhoneNumber == model.PhoneNumber);
+                }
+                var count = await filter.CountAsync();
+                if (model.Page != null && model.Page.PageIndex != 0)
+                {
+                    filter = filter.Skip(model.Page.PageSize * (model.Page.PageIndex-1))
+                        .Take(model.Page.PageSize);
+                }
                 var data = await filter.ToListAsync();
-                return data;
+                return (data, count);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

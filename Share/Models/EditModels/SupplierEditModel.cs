@@ -10,7 +10,7 @@ namespace Share.Models.EditModels
     public class SupplierEditModel
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Code không được trống")]
         public string PhoneNumber { get; set; } = null!;
         public string? Address { get; set; }
         public string? CompanyName { get; set; }

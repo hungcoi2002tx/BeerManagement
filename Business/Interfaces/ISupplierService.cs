@@ -1,6 +1,6 @@
-﻿using Share.Constant;
-using Share.Models.Domain;
+﻿using Share.Models.Domain;
 using Share.Models.SearchModels;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,6 @@ namespace Business.Interfaces
         Task<ExecuteRespone<Supplier>> AddAsync(Supplier model);
         Task<ExecuteRespone<Supplier>> UpdateAsync(Supplier model);
         Task<ExecuteRespone<Supplier>> DeleteAsync(Supplier model);
-        Task<List<Supplier>> GetPageBySearchAsync(SupplierSearchModel model);
+        Task<ExecuteRespone<Supplier>> GetPageBySearchAsync(SupplierSearchModel model);
     }
 }

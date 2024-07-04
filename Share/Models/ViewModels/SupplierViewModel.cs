@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Share.Models.ViewModels
 {
-    public class SupperlierViewModel
+    public class SupplierViewModel
     {
         public int Id { get; set; }
         [Display(Name = "No")]

@@ -25,7 +25,7 @@
     <title>Davur : Restaurant Admin Dashboard + FrontEnd</title>
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/favicon.png" />
     <link href="~/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/vendor/chartist/css/chartist.min.css" />
     <link href="~/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
@@ -56,9 +56,9 @@
           ***********************************-->
         <div class="nav-header">
             <a href="index.html" class="brand-logo">
-                <img class="logo-abbr" src="images/logo.png" alt="" />
-                <img class="logo-compact" src="images/logo-text.png" alt="" />
-                <img class="brand-title" src="images/logo-text.png" alt="" />
+                <img class="logo-abbr" src="~/images/logo.png" alt="" />
+                <img class="logo-compact" src="~/images/logo-text.png" alt="" />
+                <img class="brand-title" src="~/images/logo-text.png" alt="" />
             </a>
 
             <div class="nav-control">
@@ -149,7 +149,7 @@
                                     <li class="active dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/1.jpg"
+                                                <img src="~/images/avatar/1.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -163,7 +163,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/2.jpg"
+                                                <img src="~/images/avatar/2.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -177,7 +177,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/3.jpg"
+                                                <img src="~/images/avatar/3.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -191,7 +191,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/4.jpg"
+                                                <img src="~/images/avatar/4.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -206,7 +206,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/5.jpg"
+                                                <img src="~/images/avatar/5.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -220,7 +220,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/1.jpg"
+                                                <img src="~/images/avatar/1.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -234,7 +234,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/2.jpg"
+                                                <img src="~/images/avatar/2.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -263,7 +263,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/4.jpg"
+                                                <img src="~/images/avatar/4.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -995,7 +995,7 @@
                                     <div class="header-info">
                                         <span>Hello, <strong>Samuel</strong></span>
                                     </div>
-                                    <img src="images/profile/pic1.jpg" width="20" alt="" />
+                                    <img src="~/images/profile/pic1.jpg" width="20" alt="" />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a href="app-profile.html" class="dropdown-item ai-icon">
@@ -1387,13 +1387,13 @@
                             <li><a href="page-register.html">Category</a></li>
                         </ul>
                         <ul aria-expanded="false">
-                            <li><a asp-page="./Supperlier/Index">Supperlier</a></li>
+                            <li><a asp-page="./Supplier/Index">Supperlier</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <div class="add-menu-sidebar">
-                    <img src="images/icon1.png" alt="" />
+                    <img src="~/images/icon1.png" alt="" />
                     <p>Organize your menus through button bellow</p>
                     <a href="javascript:void(0);" class="btn bg-white text-black">+ Add Menus</a>
                 </div>
@@ -1414,7 +1414,7 @@
           ***********************************-->
         <div class="content-body">
             <!-- row -->
-            @RenderBody();
+            @RenderBody()
         </div>
         <!--**********************************
               Content body end

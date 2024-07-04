@@ -2,9 +2,9 @@
 using Business.Interfaces;
 using DataLayer.Interfaces;
 using Microsoft.Extensions.Logging;
-using Share.Constant;
 using Share.Models.Domain;
 using Share.Models.SearchModels;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +30,7 @@ namespace Business.Implements
         {
             try
             {
-                _supplierRepository.OpenTransaction();
                 var entity = await _supplierRepository.AddAsync(model);
-                await _supplierRepository.CommitTransactionAsync();
                 return new ExecuteRespone<Supplier>
                 {
                     Status = true,
@@ -57,7 +55,7 @@ namespace Business.Implements
                 var result = await _supplierRepository.DeleteAsync(model);
                 return new ExecuteRespone<Supplier>()
                 {
-                    Status = true,
+                    Status = result,
                 };
             }
             catch (Exception ex)
@@ -84,17 +82,26 @@ namespace Business.Implements
             }
         }
 
-        public async Task<List<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
+        public async Task<ExecuteRespone<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
         {
             try
             {
                 var data = await _supplierRepository.GetPageBySearchAsync(model);
-                return data;
+                return new ExecuteRespone<Supplier>()
+                {
+                    Status = true,
+                    Objects = data.Item1,
+                    Total = data.Item2
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return new List<Supplier>();
+                return new ExecuteRespone<Supplier>()
+                {
+                    Status = false,
+                    Total = 0
+                };
             }
         }
 

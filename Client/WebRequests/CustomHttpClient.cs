@@ -15,6 +15,11 @@ namespace Client.WebRequests
             //_httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
 
+        public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
+        {
+            return await _httpClient.DeleteAsync(requestUri);
+        }
+
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             return await _httpClient.GetAsync(requestUri);

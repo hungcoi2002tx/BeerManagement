@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Constant;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,11 @@ namespace Share.Ultils
         public static bool IsNotNullOrEmpty(this string str)
         {
             return str != "" && str != null;
+        }
+
+        public static string GenerateUrl(this Page page, int number)
+        {
+            return page.BaseUrl + "?pageIndex=" + number;
         }
     }
 }

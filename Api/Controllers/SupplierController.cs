@@ -38,6 +38,20 @@ namespace Api.Controllers
             }
         }
 
+        [HttpPost("GetPage")]
+        public async Task<IActionResult> GetPageAsync([FromBody] SupplierSearchModel search)
+        {
+            try
+            {
+                var list = await _supplierService.GetPageBySearchAsync(search);
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost("Add")]
         public async Task<IActionResult> AddAsync([FromBody] SupplierEditModel editModel)
         {
@@ -87,8 +101,8 @@ namespace Api.Controllers
                 {
                     return NotFound("Not Exist");
                 }
-                var result = await _supplierService.DeleteAsync(model.First());
-                return Ok();
+                var result = await _supplierService.DeleteAsync(model.Objects.First());
+                return Ok(result);
             }
             catch (Exception ex)
             {
