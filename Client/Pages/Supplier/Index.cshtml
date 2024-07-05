@@ -10,7 +10,7 @@
 <!-- notification add successfully -->
 @if (isDataAdded)
 {
-    <div class="alert alert-success alert-dismissible fade show" class="success-message" style="z-index: 1000;">
+    <div class="alert alert-success alert-dismissible fade show" class="success-message-add" style="z-index: 1000;">
         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
         <strong>Add successfully!</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close" onclick="hideNotification()">
@@ -21,7 +21,7 @@
 <!-- notification delete successfully -->
 @if (isDataDeleted)
 {
-    <div class="alert alert-success alert-dismissible fade show" class="success-message" style="z-index: 1000;">
+    <div class="alert alert-success alert-dismissible fade show" class="success-message-delete" style="z-index: 1000;">
         <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="me-2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
         <strong>Delete successfully!</strong>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="btn-close" onclick="hideNotification()">
@@ -46,7 +46,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form class="comment-form" method="post">
+                    <form id="deleteForm" method="post" asp-page-handler="Delete" style="display:none;">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" name="supplierId" id="supplierId" />
+                        <input type="hidden" name="pageIndex" id="pageIndex" />
+                        <input type="hidden" asp-for="EditModel1.Id" />
+                    </form>
+                    <form class="comment-form" method="post" asp-page-handler="Add">
                         <div class="row">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="col-lg-6">
@@ -144,10 +150,7 @@
         </div>
     </div>
 </div>
-<form id="deleteForm" method="post" asp-page-handler="Delete" style="display:none;">
-    <input type="hidden" name="supplierId" id="supplierId" />
-    <input type="hidden" name="pageIndex" id="pageIndex" />
-</form>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Kiểm tra nếu có lỗi xác thực
@@ -166,13 +169,22 @@
     });
 
     function hideNotification() {
-        var notification = document.getElementsByClassName('success-message');
+        var notification = document.getElementsByClassName('success-message-add');
         if (notification) {
             // Dùng hiệu ứng mờ dần để ẩn thông báo
             notification.style.opacity = '0';
             // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
             setTimeout(() => {
                 notification.style.display = 'none';
+            }, 500); // Thời gian chờ tương ứng với transition của CSS
+        }
+        var notificationDelete = document.getElementsByClassName('success-message-delete');
+        if (notificationDelete) {
+            // Dùng hiệu ứng mờ dần để ẩn thông báo
+            notificationDelete.style.opacity = '0';
+            // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
+            setTimeout(() => {
+                notificationDelete.style.display = 'none';
             }, 500); // Thời gian chờ tương ứng với transition của CSS
         }
     }

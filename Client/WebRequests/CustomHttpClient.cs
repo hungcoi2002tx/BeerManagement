@@ -35,5 +35,11 @@ namespace Client.WebRequests
             var content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
             return await _httpClient.PostAsync(requestUri, content);
         }
+
+        public async Task<HttpResponseMessage> PutAsync<T>(string requestUri, T obj)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
+            return await _httpClient.PutAsync(requestUri, content);
+        }
     }
 }

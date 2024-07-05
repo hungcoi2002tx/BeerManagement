@@ -27,8 +27,9 @@ namespace Client.Pages.Supperlier
 
         public SupplierSearchModel Search { get; set; } = new SupplierSearchModel();
         public List<SupplierViewModel> ViewModels { get; set; } = new();
-        [BindProperty]
-        public SupplierEditModel EditModel { get; set; }
+        public SupplierEditModel EditModel { get; set; } = new();
+
+        public DemoEditModel EditModel1 { get; set; }
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             try
@@ -42,7 +43,7 @@ namespace Client.Pages.Supperlier
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAddAsync(SupplierEditModel EditModel)
         {
             try
             {
@@ -80,7 +81,7 @@ namespace Client.Pages.Supperlier
         private async Task GetBaseDataAsync(int pageIndex = 1)
         {
             Search.Page = new Share.Constant.Page()
-            {
+            {                                                                                                                                   
                 PageIndex = pageIndex == 0 ? 1 : pageIndex,
                 BaseUrl = "Supplier"
             };
@@ -99,6 +100,11 @@ namespace Client.Pages.Supperlier
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    await GetBaseDataAsync();
+                    return Page();
+                }
                 var apiUrl = string.Format(RestApiName.DELETE_SUPPLIER, supplierId);
                 var request = await _request.DeleteAsync(apiUrl);
                 var data = await request.Content.ReadFromJsonAsync<ExecuteRespone<Share.Models.Domain.Supplier>>();
@@ -108,7 +114,7 @@ namespace Client.Pages.Supperlier
                 }
                 ViewData["DataDeleted"] = true;
                 await GetBaseDataAsync(pageIndex);
-                return RedirectToAction("OnGetAsync");
+                return Page();
             }
             catch (Exception ex)
             {

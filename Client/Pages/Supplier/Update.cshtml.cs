@@ -60,7 +60,31 @@ namespace Client.Pages.Supplier
 			}
         }
 
-		private async Task<ExecuteRespone<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchModel search)
+        public async Task<IActionResult> OnPostAsync(SupplierEditModel EditModel)
+        {
+            try
+            {
+                if (!ModelState.IsValid || EditModel == null)
+                {
+                    return Page();
+                }
+                EditModel.IsEnable = true;
+                var request = await _request.PutAsync(RestApiName.PUT_SUPPLIER, EditModel);
+                var result = await request.Content.ReadFromJsonAsync<ExecuteRespone<Share.Models.Domain.Supplier>>();
+                if (!result.Status)
+                {
+                    return Page();
+                }
+                return RedirectToPage(GlobalVariants.LINK_SUPPLIER_INDEX);
+            }
+            catch (Exception ex)
+            {
+                ViewData["DataAdded"] = false;
+                return Redirect(GlobalVariants.PAGE_404);
+            }
+        }
+
+        private async Task<ExecuteRespone<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchModel search)
 		{
 			try
 			{

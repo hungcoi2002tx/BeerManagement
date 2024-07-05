@@ -15,7 +15,8 @@ namespace Share.Constant
         public const string GET_ALL_LIST_SUPPLIER = BaseUrl + "Supplier/GetAll";
         public const string POST_PAGE_LIST_SUPPLIER = BaseUrl + "Supplier/GetPage";
         public const string POST_Add_SUPPLIER = BaseUrl + "Supplier/Add";
-        public const string DELETE_SUPPLIER = BaseUrl + "Supplier/Delete/id={0}";
+        public const string DELETE_SUPPLIER = BaseUrl + "Supplier/Delete/{0}";
+        public const string PUT_SUPPLIER = BaseUrl + "Supplier/Update";
 
     }
 }

@@ -25,7 +25,7 @@ namespace DataLayer.Implements
                 IQueryable<Supplier> filter = _context.Suppliers;
                 if(model.Id != 0)
                 {
-                    filter.Where(x => x.Id == model.Id);    
+                    filter = filter.Where(x => x.Id == model.Id);    
                 }
                 if (model.SupplierName.IsNotNullOrEmpty())
                 {
