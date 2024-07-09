@@ -11,10 +11,10 @@ namespace Business.Interfaces
 {
     public interface ISupplierService
     {
-        Task<List<Supplier>> GetAllAsync();
-        Task<ExecuteRespone<Supplier>> AddAsync(Supplier model);
-        Task<ExecuteRespone<Supplier>> UpdateAsync(Supplier model);
-        Task<ExecuteRespone<Supplier>> DeleteAsync(Supplier model);
-        Task<ExecuteRespone<Supplier>> GetPageBySearchAsync(SupplierSearchModel model);
+        Task<ResponseCustom<Supplier>> GetAllAsync();
+        Task<ResponseCustom<Supplier>> AddAsync(Supplier model);
+        Task<ResponseCustom<Supplier>> UpdateAsync(Supplier model);
+        Task<ResponseCustom<Supplier>> DeleteAsync(Supplier model);
+        Task<ResponseCustom<Supplier>> GetPageBySearchAsync(SupplierSearchModel model);
     }
 }

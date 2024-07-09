@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Share.Ultils
 {
-    public class ExecuteRespone<T> where T : class
+    public class ResponseCustom<T> where T : class
     {
         public bool Status { get; set; }
         public int Id { get; set; }

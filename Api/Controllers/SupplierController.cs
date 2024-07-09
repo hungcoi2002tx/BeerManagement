@@ -25,71 +25,71 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<ResponseCustom<Supplier>> GetAllAsync()
         {
             try
             {
-                var list = await _supplierService.GetAllAsync();
-                return Ok(list);
+                var result = await _supplierService.GetAllAsync();
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Supplier>.GetError500(ex.Message);
             }
         }
 
         [HttpPost("GetPage")]
-        public async Task<IActionResult> GetPageAsync([FromBody] SupplierSearchModel search)
+        public async Task<ResponseCustom<Supplier>> GetPageAsync([FromBody] SupplierSearchModel search)
         {
             try
             {
-                var list = await _supplierService.GetPageBySearchAsync(search);
-                return Ok(list);
+                var result = await _supplierService.GetPageBySearchAsync(search);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Supplier>.GetError500(ex.Message);
             }
         }
 
         [HttpPost("Add")]
-        public async Task<IActionResult> AddAsync([FromBody] SupplierEditModel editModel)
+        public async Task<ResponseCustom<Supplier>> AddAsync([FromBody] SupplierEditModel editModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    throw new Exception("Loi validate hoac binding");
+                    return ResponeExtentions<Supplier>.GetError400("Validate AddAsync - SupperlierController");
                 }
                 var result = await _supplierService.AddAsync(_mapper.Map<Supplier>(editModel));
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message.GetMesssageError("Supplier - AddAsync"));
+                return ResponeExtentions<Supplier>.GetError500(ex.Message);
             }
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateAsync([FromBody] SupplierEditModel editModel)
+        public async Task<ResponseCustom<Supplier>> UpdateAsync([FromBody] SupplierEditModel editModel)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    throw new Exception("Loi validate hoac binding");
+                    return ResponeExtentions<Supplier>.GetError400("Validate UpdateAsync - SupperlierController");
                 }
                 var result = await _supplierService.UpdateAsync(_mapper.Map<Supplier>(editModel));
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message.GetMesssageError("Supplier - UpdateAsync"));
+                return ResponeExtentions<Supplier>.GetError500(ex.Message);
             }
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
         {
             try
             {
@@ -99,14 +99,14 @@ namespace Api.Controllers
                 });
                 if(model == null)
                 {
-                    return NotFound("Not Exist");
+                    return ResponeExtentions<Supplier>.GetError404("Not Found ID == id");
                 }
                 var result = await _supplierService.DeleteAsync(model.Objects.First());
-                return Ok(result);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, ex.Message.GetMesssageError("Supplier - UpdateAsync"));
+                return ResponeExtentions<Supplier>.GetError500(ex.Message);
             }
         }
     }

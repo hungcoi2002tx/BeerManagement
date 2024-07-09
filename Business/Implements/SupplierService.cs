@@ -26,12 +26,12 @@ namespace Business.Implements
             _mapper = mapper;
         }
 
-        public async Task<ExecuteRespone<Supplier>> AddAsync(Supplier model)
+        public async Task<ResponseCustom<Supplier>> AddAsync(Supplier model)
         {
             try
             {
                 var entity = await _supplierRepository.AddAsync(model);
-                return new ExecuteRespone<Supplier>
+                return new ResponseCustom<Supplier>
                 {
                     Status = true,
                     Object = entity
@@ -41,19 +41,24 @@ namespace Business.Implements
             {
                 await _supplierRepository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
-                return new ExecuteRespone<Supplier>
-                {
-                    Status = false
-                };
+                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ExecuteRespone<Supplier>> DeleteAsync(Supplier model)
+        public async Task<ResponseCustom<Supplier>> DeleteAsync(Supplier model)
         {
             try
             {
+                var entity = _supplierRepository.GetPageBySearchAsync(new SupplierSearchModel()
+                {
+                    Id = model.Id,
+                });
+                if (entity == null)
+                {
+                    return ResponeExtentions<Supplier>.GetError404($"Not Found Id = {model.Id}");
+                }
                 var result = await _supplierRepository.DeleteAsync(model);
-                return new ExecuteRespone<Supplier>()
+                return new ResponseCustom<Supplier>()
                 {
                     Status = result,
                 };
@@ -61,33 +66,34 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return new ExecuteRespone<Supplier>()
-                {
-                    Status = false
-                };
+                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<List<Supplier>> GetAllAsync()
+        public async Task<ResponseCustom<Supplier>> GetAllAsync()
         {
             try
             {
                 var list = await _supplierRepository.GetAllAsync();
-                return list;
+                return new ResponseCustom<Supplier>
+                {
+                    Status = true,
+                    Objects = list.ToList(),
+                };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return new List<Supplier>();
+                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ExecuteRespone<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
+        public async Task<ResponseCustom<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
         {
             try
             {
                 var data = await _supplierRepository.GetPageBySearchAsync(model);
-                return new ExecuteRespone<Supplier>()
+                return new ResponseCustom<Supplier>()
                 {
                     Status = true,
                     Objects = data.Item1,
@@ -97,20 +103,16 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return new ExecuteRespone<Supplier>()
-                {
-                    Status = false,
-                    Total = 0
-                };
+                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ExecuteRespone<Supplier>> UpdateAsync(Supplier model)
+        public async Task<ResponseCustom<Supplier>> UpdateAsync(Supplier model)
         {
             try
             {
                 var entity = await _supplierRepository.UpdateAsync(model);
-                return new ExecuteRespone<Supplier>
+                return new ResponseCustom<Supplier>
                 {
                     Status = true,
                 };
@@ -118,10 +120,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return new ExecuteRespone<Supplier>
-                {
-                    Status = false
-                };
+                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
     }

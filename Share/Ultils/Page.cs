@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Share.Constant
+namespace Share.Ultils
 {
     public class Page
     {

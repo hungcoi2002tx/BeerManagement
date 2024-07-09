@@ -17,6 +17,6 @@ namespace Share.Models.EditModels
         [Required]
         public string SupplierName { get; set; } = null!;
         public string? Description { get; set; }
-        public bool IsEnable { get; set; }
+        public bool IsEnable { get; set; } = true;
     }
 }

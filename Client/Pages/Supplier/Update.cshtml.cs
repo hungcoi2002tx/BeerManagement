@@ -70,7 +70,7 @@ namespace Client.Pages.Supplier
                 }
                 EditModel.IsEnable = true;
                 var request = await _request.PutAsync(RestApiName.PUT_SUPPLIER, EditModel);
-                var result = await request.Content.ReadFromJsonAsync<ExecuteRespone<Share.Models.Domain.Supplier>>();
+                var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (!result.Status)
                 {
                     return Page();
@@ -84,17 +84,17 @@ namespace Client.Pages.Supplier
             }
         }
 
-        private async Task<ExecuteRespone<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchModel search)
+        private async Task<ResponseCustom<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchModel search)
 		{
 			try
 			{
 				var requestGetData = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_SUPPLIER, search);
-				var dataReturn = await requestGetData.Content.ReadFromJsonAsync<ExecuteRespone<Share.Models.Domain.Supplier>>();
+				var dataReturn = await requestGetData.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
 				return dataReturn;
 			}
 			catch (Exception ex)
 			{
-				return new ExecuteRespone<Share.Models.Domain.Supplier>();
+				return new ResponseCustom<Share.Models.Domain.Supplier>();
 			}
 		}
 	}
