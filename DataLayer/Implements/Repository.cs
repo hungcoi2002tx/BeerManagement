@@ -15,7 +15,7 @@ namespace DataLayer.Implements
     public abstract class Repository<T> : IRepository<T> where T : class
     {
         protected readonly BeerManagementContext _context;
-        protected IDbContextTransaction _transaction;
+        private IDbContextTransaction _transaction;
         protected DbSet<T> _dbSet { get => _context.Set<T>(); }
 
         public Repository(BeerManagementContext beerManagementContext)
