@@ -15,6 +15,11 @@ namespace Client.WebRequests
             //_httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
 
+        public async Task<HttpResponseMessage> DeleteAsync(string requestUri)
+        {
+            return await _httpClient.DeleteAsync(requestUri);
+        }
+
         public async Task<HttpResponseMessage> GetAsync(string requestUri)
         {
             return await _httpClient.GetAsync(requestUri);
@@ -29,6 +34,12 @@ namespace Client.WebRequests
         {
             var content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
             return await _httpClient.PostAsync(requestUri, content);
+        }
+
+        public async Task<HttpResponseMessage> PutAsync<T>(string requestUri, T obj)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(obj), Encoding.UTF8, "application/json");
+            return await _httpClient.PutAsync(requestUri, content);
         }
     }
 }

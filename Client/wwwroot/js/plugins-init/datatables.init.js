@@ -37,9 +37,6 @@ let dataSet = [
     [ "Unity Butler", "Marketing Designer", "San Francisco", "5384", "2009/12/09", "$85,675" ]
 ];
 
-
-
-
 (function($) {
     "use strict"
     //example 1
@@ -207,11 +204,17 @@ let dataSet = [
 			  }
 			
 		});
-		
-		
+
+	var table = $('#example3').DataTable({
+		searching: false,
+		paging: false,
+		select: false,
+		info: false,
+		lengthChange: false,
+	});
 	
 	// table row
-	var table = $('#dataTable1, #dataTable2, #dataTable3, #dataTable4,  #example3, #example4 ').DataTable({
+	var table = $('#dataTable1, #dataTable2, #dataTable3, #dataTable4, #example4 ').DataTable({
 		language: {
 			paginate: {
 			  next: '<i class="fa fa-angle-double-right" aria-hidden="true"></i>',

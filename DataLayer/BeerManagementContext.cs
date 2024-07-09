@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Configuration;
@@ -8,16 +9,10 @@ namespace DataLayer
 {
     public partial class BeerManagementContext : DbContext
     {
-        private readonly IConfiguration _configuration;
 
-        public BeerManagementContext(IConfiguration configuration)
-        {
-        }
-
-        public BeerManagementContext(DbContextOptions<BeerManagementContext> options, IConfiguration configuration)
+        public BeerManagementContext(DbContextOptions<BeerManagementContext> options)
             : base(options)
         {
-            _configuration = configuration;
         }
 
         public virtual DbSet<Category> Categories { get; set; } = null!;
@@ -31,11 +26,6 @@ namespace DataLayer
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-                var strConn = _configuration.GetConnectionString("MyDatabase");
-                optionsBuilder.UseSqlServer(strConn);
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
