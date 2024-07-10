@@ -14,8 +14,8 @@ namespace DataLayer.Implements
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly BeerManagementContext _context;
         private IDbContextTransaction _transaction;
+        protected readonly BeerManagementContext _context;
         protected DbSet<T> _dbSet { get => _context.Set<T>(); }
 
         public Repository(BeerManagementContext beerManagementContext)
@@ -60,7 +60,6 @@ namespace DataLayer.Implements
         public async Task<T> GetByIdAsync(int id)
         {
             var result = await _dbSet.FindAsync(id);
-            await _context.SaveChangesAsync();
             return result;
         }
 
@@ -70,7 +69,7 @@ namespace DataLayer.Implements
             return result;
         }
 
-        public T GetByKey(Object key)
+        public T? GetByKey(Object key)
         {
             var entity = _dbSet.Find(key);
             return entity;
@@ -84,12 +83,12 @@ namespace DataLayer.Implements
 
         public async Task CommitTransactionAsync()
         {
-            _transaction.CommitAsync();
+            await _transaction.CommitAsync();
         }
 
         public async Task RollBackTransactionAsync()
         {
-            _transaction.RollbackAsync();
+            await _transaction.RollbackAsync();
         }
     }
 }

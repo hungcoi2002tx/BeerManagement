@@ -93,15 +93,7 @@ namespace Api.Controllers
         {
             try
             {
-                var model = await _supplierService.GetPageBySearchAsync(new SupplierSearchModel()
-                {
-                    Id = id
-                });
-                if(model == null)
-                {
-                    return ResponeExtentions<Supplier>.GetError404("Not Found ID == id");
-                }
-                var result = await _supplierService.DeleteAsync(model.Objects.First());
+                var result = await _supplierService.DeleteAsync(id);
                 return result;
             }
             catch (Exception ex)

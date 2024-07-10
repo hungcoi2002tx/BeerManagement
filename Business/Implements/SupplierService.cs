@@ -16,13 +16,13 @@ namespace Business.Implements
     public class SupplierService : ISupplierService
     {
         private readonly Logger _logger;
-        private readonly ISupplierRepository _supplierRepository;
+        private readonly ISupplierRepository _repository;
         private readonly IMapper _mapper;
 
         public SupplierService(Logger logger, ISupplierRepository supplierRepository, IMapper mapper)
         {
             _logger = logger;
-            _supplierRepository = supplierRepository;
+            _repository = supplierRepository;
             _mapper = mapper;
         }
 
@@ -30,7 +30,7 @@ namespace Business.Implements
         {
             try
             {
-                var entity = await _supplierRepository.AddAsync(model);
+                var entity = await _repository.AddAsync(model);
                 return new ResponseCustom<Supplier>
                 {
                     Status = true,
@@ -39,25 +39,25 @@ namespace Business.Implements
             }
             catch (Exception ex)
             {
-                await _supplierRepository.RollBackTransactionAsync();
+                await _repository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
                 return ResponeExtentions<Supplier>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> DeleteAsync(Supplier model)
+        public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
         {
             try
             {
-                var entity = _supplierRepository.GetPageBySearchAsync(new SupplierSearchModel()
+                var entity = await _repository.GetPageBySearchAsync(new SupplierSearchModel()
                 {
-                    Id = model.Id,
+                    Id = id,
                 });
-                if (entity == null)
+                if (entity.Item2 == 0)
                 {
-                    return ResponeExtentions<Supplier>.GetError404($"Not Found Id = {model.Id}");
+                    return ResponeExtentions<Supplier>.GetError404($"Not Found Id = {id}");
                 }
-                var result = await _supplierRepository.DeleteAsync(model);
+                var result = await _repository.DeleteAsync(entity.Item1.First());
                 return new ResponseCustom<Supplier>()
                 {
                     Status = result,
@@ -74,7 +74,7 @@ namespace Business.Implements
         {
             try
             {
-                var list = await _supplierRepository.GetAllAsync();
+                var list = await _repository.GetAllAsync();
                 return new ResponseCustom<Supplier>
                 {
                     Status = true,
@@ -92,7 +92,7 @@ namespace Business.Implements
         {
             try
             {
-                var data = await _supplierRepository.GetPageBySearchAsync(model);
+                var data = await _repository.GetPageBySearchAsync(model);
                 return new ResponseCustom<Supplier>()
                 {
                     Status = true,
@@ -111,7 +111,7 @@ namespace Business.Implements
         {
             try
             {
-                var entity = await _supplierRepository.UpdateAsync(model);
+                var entity = await _repository.UpdateAsync(model);
                 return new ResponseCustom<Supplier>
                 {
                     Status = true,
