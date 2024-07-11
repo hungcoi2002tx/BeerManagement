@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
 using Share.Models.EditModels;
+using Share.Models.SearchModels;
 using Share.Ultils;
 
 namespace Api.Controllers
@@ -78,6 +79,20 @@ namespace Api.Controllers
                     return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - SupperlierController");
                 }
                 var result = await _servive.UpdateAsync(_mapper.Map<Category>(editModel));
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ResponeExtentions<Category>.GetError500(ex.Message);
+            }
+        }
+
+        [HttpPost("GetPage")]
+        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchModel search)
+        {
+            try
+            {
+                var result = await _servive.GetPageBySearchAsync(search);
                 return result;
             }
             catch (Exception ex)

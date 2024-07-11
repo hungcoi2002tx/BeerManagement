@@ -48,7 +48,7 @@ namespace Client.Pages.Category
                     BaseUrl = "Category"
                 };
                 var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_CATEGORY, Search);
-                var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+                var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (datas.Status)
                 {
                     ViewModels = _mapper.Map<List<CategoryViewModels>>(datas.Objects);

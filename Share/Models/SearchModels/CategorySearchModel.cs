@@ -1,4 +1,5 @@
-﻿using Share.Ultils;
+﻿using Share.AbtractModel;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Share.Models.SearchModels
 {
-    public class CategorySearchModel
+    public class CategorySearchModel : SearchModelBase
     {
         public CategorySearchModel()
         {
             
         }
         public int Id { get; set; }
-        public string Name { get; set; }
-        public Page Page { get; set; } = new Page();
+        public string? Name { get; set; }
     }
 }
