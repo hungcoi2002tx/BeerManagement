@@ -8,14 +8,13 @@ using System.Threading.Tasks;
 
 namespace Share.Models.SearchModels
 {
-    public class SupplierSearchModel : SearchModelBase
+    public class CategorySearchModel : SearchModelBase
     {
-        public SupplierSearchModel()
+        public CategorySearchModel()
         {
+            
         }
-
         public int Id { get; set; }
-        public string? SupplierName { get; set; }    
-        public string? PhoneNumber { get; set; }
+        public string? Name { get; set; }
     }
 }

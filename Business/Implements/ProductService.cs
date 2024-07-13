@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
 using DataLayer.Interfaces;
-using Microsoft.Extensions.Logging;
 using Share.Models.Domain;
 using Share.Models.SearchModels;
 using Share.Ultils;
@@ -13,25 +12,25 @@ using System.Threading.Tasks;
 
 namespace Business.Implements
 {
-    public class SupplierService : ISupplierService
+    public class ProductService : IProductService
     {
         private readonly Logger _logger;
-        private readonly ISupplierRepository _repository;
+        private readonly IProductRepository _repository;
         private readonly IMapper _mapper;
 
-        public SupplierService(Logger logger, ISupplierRepository supplierRepository, IMapper mapper)
+        public ProductService(Logger logger, IProductRepository productRepository, IMapper mapper)
         {
             _logger = logger;
-            _repository = supplierRepository;
+            _repository = productRepository;
             _mapper = mapper;
         }
 
-        public async Task<ResponseCustom<Supplier>> AddAsync(Supplier model)
+        public async Task<ResponseCustom<Product>> AddAsync(Product model)
         {
             try
             {
                 var entity = await _repository.AddAsync(model);
-                return new ResponseCustom<Supplier>
+                return new ResponseCustom<Product>
                 {
                     Status = true,
                     Object = entity
@@ -41,24 +40,24 @@ namespace Business.Implements
             {
                 await _repository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
+                return ResponeExtentions<Product>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
+        public async Task<ResponseCustom<Product>> DeleteAsync(int id)
         {
             try
             {
-                var entity = await _repository.GetPageBySearchAsync(new SupplierSearchModel()
+                var entity = await _repository.GetPageBySearchAsync(new ProductSearchModel
                 {
-                    Id = id,
+                    Id = id
                 });
-                if (entity.Item2 == 0)
+                if(entity.Item2 == 0)
                 {
-                    return ResponeExtentions<Supplier>.GetError404($"Not Found Id = {id}");
+                    return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
                 }
                 var result = await _repository.DeleteAsync(entity.Item1.First());
-                return new ResponseCustom<Supplier>()
+                return new ResponseCustom<Product>()
                 {
                     Status = result,
                 };
@@ -66,34 +65,34 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
+                return ResponeExtentions<Product>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> GetAllAsync()
+        public async Task<ResponseCustom<Product>> GetAllAsync()
         {
             try
             {
-                var list = await _repository.GetAllAsync();
-                return new ResponseCustom<Supplier>
+                var products = await _repository.GetAllAsync();
+                return new ResponseCustom<Product>
                 {
                     Status = true,
-                    Objects = list.ToList(),
+                    Objects = products.ToList()
                 };
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
+                return ResponeExtentions<Product>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> GetPageBySearchAsync(SupplierSearchModel model)
+        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model)
         {
             try
             {
                 var data = await _repository.GetPageBySearchAsync(model);
-                return new ResponseCustom<Supplier>()
+                return new ResponseCustom<Product>()
                 {
                     Status = true,
                     Objects = data.Item1,
@@ -103,16 +102,16 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
+                return ResponeExtentions<Product>.GetError500(ex.ToString());
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> UpdateAsync(Supplier model)
+        public async Task<ResponseCustom<Product>> UpdateAsync(Product model)
         {
             try
             {
                 var entity = await _repository.UpdateAsync(model);
-                return new ResponseCustom<Supplier>
+                return new ResponseCustom<Product>
                 {
                     Status = true,
                 };
@@ -120,7 +119,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Supplier>.GetError500(ex.ToString());
+                return ResponeExtentions<Product>.GetError500(ex.ToString());
             }
         }
     }

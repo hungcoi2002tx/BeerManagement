@@ -31,7 +31,6 @@ namespace Client.Pages.Supperlier
 		public List<SupplierViewModel> ViewModels { get; set; } = new();
 		public SupplierEditModel EditModel { get; set; } = new();
 
-		public DemoEditModel EditModel1 { get; set; }
 		public async Task<IActionResult> OnGetAsync(int pageIndex)
 		{
 			try

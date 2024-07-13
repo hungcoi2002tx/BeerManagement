@@ -1,0 +1,77 @@
+﻿@page
+@model Client.Pages.Category.IndexModel
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item-no-link">Setting/</li>
+            <li class="breadcrumb-item-no-link">Category/</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="modal fade" id="sendMessageModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Supplier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">List Suppliers</h4>
+                    <button type="button" class="btn btn-rounded btn-info" data-bs-toggle="modal" data-bs-target="#sendMessageModal" id="btn-supplier">
+                        <span class="btn-icon-start text-info">
+                            <i class="fa fa-plus color-info"></i>
+                        </span>Add
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Description</th>
+                                    <th>Active Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                @foreach (var item in Model.ViewModels)
+                                {
+                                    <tr>
+                                        <td>
+                                            <img class="rounded-circle"
+                                                 width="35"
+                                                 src=""
+                                                 alt="" />
+                                        </td>
+                                        <td>@item.Stt</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Description</td>
+                                        <td>Active</td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <a asp-page="./Update" asp-route-id="@item.Id" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
+                                                <a onclick="deleteSupplier(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <partial name="_Paging" model="@Model.Search" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

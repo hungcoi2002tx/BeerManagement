@@ -1,7 +1,12 @@
-﻿using Business.Interfaces;
+﻿using AutoMapper;
+using Business.Implements;
+using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
+using Share.Models.EditModels;
+using Share.Models.SearchModels;
+using Share.Ultils;
 
 namespace Api.Controllers
 {
@@ -9,66 +14,90 @@ namespace Api.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryService _servive;
+        private readonly IMapper _mapper;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, IMapper mapper)
         {
-            _categoryService = categoryService;
+            _servive = categoryService;
+            _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllCategoryAsync()
+        [HttpGet("GetAll")]
+        public async Task<ResponseCustom<Category>> GetAllAsync()
         {
             try
             {
-                var categories = await _categoryService.GetAllCategoryAsync();
-                return Ok(categories);
+                var result = await _servive.GetAllAsync();
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Category>.GetError500(ex.Message);
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddCategoryAsync(Category category)
+        [HttpPost("Add")]
+        public async Task<ResponseCustom<Category>> AddAsync([FromBody] CategoryEditModel editModel)
         {
             try
             {
-                await _categoryService.AddCategoryAsync(category);
-                return Ok();
+                if (!ModelState.IsValid)
+                {
+                    return ResponeExtentions<Category>.GetError400("Validate AddAsync - SupperlierController");
+                }
+                var result = await _servive.AddAsync(_mapper.Map<Category>(editModel));
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Category>.GetError500(ex.Message);
             }
         }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteCategoryAsync(int id)
+        [HttpDelete("Delete/{id}")]
+        public async Task<ResponseCustom<Category>> DeleteAsync(int id)
         {
             try
             {
-                await _categoryService.DeleteCategoryAsync(id);
-                return Ok();
+                var result = await _servive.DeleteAsync(id);
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Category>.GetError500(ex.Message);
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> EditCategoryAsync(Category category)
+        [HttpPut("Update")]
+        public async Task<ResponseCustom<Category>> UpdateAsync([FromBody] CategoryEditModel editModel)
         {
             try
             {
-                await _categoryService.EditCategoryAsync(category);
-                return Ok();
+                if (!ModelState.IsValid)
+                {
+                    return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - SupperlierController");
+                }
+                var result = await _servive.UpdateAsync(_mapper.Map<Category>(editModel));
+                return result;
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return ResponeExtentions<Category>.GetError500(ex.Message);
+            }
+        }
+
+        [HttpPost("GetPage")]
+        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchModel search)
+        {
+            try
+            {
+                var result = await _servive.GetPageBySearchAsync(search);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ResponeExtentions<Category>.GetError500(ex.Message);
             }
         }
     }

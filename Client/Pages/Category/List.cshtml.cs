@@ -16,7 +16,7 @@ namespace Client.Pages.Category
 
         public async Task OnGet()
         {
-            var response = await _httpClient.GetAsync(RestApiName.GET_LIST_CATEGORY);
+            var response = await _httpClient.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
 
             if (response.IsSuccessStatusCode)
             {
