@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\category\" />
+    <Folder Include="wwwroot\images\draf-save\category\" />
   </ItemGroup>
 
 </Project>
