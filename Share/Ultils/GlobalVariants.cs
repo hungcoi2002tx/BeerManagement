@@ -15,6 +15,7 @@ namespace Share.Ultils
         public const string PAGE_500 = "/Error500";
         public const string PAGE_503 = "/Error503";
         public const string LINK_SUPPLIER_INDEX = "/Supplier/Index";
-		#endregion
-	}
+        public const string LINK_PRODUCT_INDEX = "/Product/Index";
+        #endregion
+    }
 }

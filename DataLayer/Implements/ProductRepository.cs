@@ -18,11 +18,15 @@ namespace DataLayer.Implements
             
         }
 
-        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model)
+        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model, bool isDeleted = false)
         {
             try
             {
                 IQueryable<Product> filter = _context.Products;
+                if(isDeleted) 
+                { 
+                    filter = filter.Where(x => x.IsEnable == true); 
+                }
                 if(model.Id != 0)
                 {
                     filter = filter.Where(x => x.Id == model.Id);

@@ -87,11 +87,11 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model)
+        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model, bool isDeleted = false)
         {
             try
-            {
-                var data = await _repository.GetPageBySearchAsync(model);
+            {               
+                var data = await _repository.GetPageBySearchAsync(model, isDeleted);
                 return new ResponseCustom<Product>()
                 {
                     Status = true,

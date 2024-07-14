@@ -37,12 +37,12 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("GetPage")]
+        [HttpPost("GetPage")]
         public async Task<ResponseCustom<Product>> GetPageAsync([FromBody] ProductSearchModel search)
         {
             try
             {
-                var result = await _productService.GetPageBySearchAsync(search);
+                var result = await _productService.GetPageBySearchAsync(search, isDeleted:true);
                 return result;
             }
             catch (Exception ex)
@@ -92,7 +92,10 @@ namespace Api.Controllers
         {
             try
             {
-                var result = await _productService.DeleteAsync(id);
+                var response = await _productService.GetPageBySearchAsync(new ProductSearchModel { Id = id });
+                var product = response.Objects.FirstOrDefault(x => x.Id == id);
+                product.IsEnable = false;
+                var result = await _productService.UpdateAsync(product);
                 return result;
             }
             catch (Exception ex)

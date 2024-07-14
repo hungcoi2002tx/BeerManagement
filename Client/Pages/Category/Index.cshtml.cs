@@ -23,7 +23,7 @@ namespace Client.Pages.Category
         }
 
         public CategorySearchModel Search { get; set; } = new CategorySearchModel();
-        public List<CategoryViewModels> ViewModels { get; set; } = new();
+        public List<CategoryViewModel> ViewModels { get; set; } = new();
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             try
@@ -51,7 +51,7 @@ namespace Client.Pages.Category
                 var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (datas.Status)
                 {
-                    ViewModels = _mapper.Map<List<CategoryViewModels>>(datas.Objects);
+                    ViewModels = _mapper.Map<List<CategoryViewModel>>(datas.Objects);
                     Search.Page.Total = datas.Total;
                     int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
                     foreach (var item in ViewModels)
