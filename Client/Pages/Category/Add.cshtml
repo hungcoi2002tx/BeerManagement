@@ -18,11 +18,11 @@
                     <h1> Add New Category</h1>
                 </div>
                 <div class="card-body">
-                    <form class="mb-5" enctype="multipart/form-data">
+                    <form class="mb-5" enctype="multipart/form-data" method="post">
                         <div class="d-flex align-items-center">
                             <div class="avatar-upload" style="flex:2">
                                 <div class="avatar-edit">
-                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" asp-for="@Model.EditModel.Image">
+                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" name="ImageFile">
                                     <label for="imageUpload"></label>
                                 </div>
                                 <div class="avatar-preview">
@@ -38,7 +38,11 @@
                                 <textarea rows="8" class="form-control solid" asp-for="EditModel.Description" placeholder="Description"></textarea>
                             </div>
                         </div>
-                        
+                        <div class="col-lg-12" style="position:relative">
+                            <div class="mb-3 mb-0" style="position:absolute; right:0">
+                                <input type="submit" value="Add" class="submit btn btn-primary" name="submit">
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
