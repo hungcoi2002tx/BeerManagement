@@ -23,5 +23,10 @@ namespace Share.Ultils
         {
             return page.BaseUrl + "?pageIndex=" + number;
         }
+
+        public static string GenerateGuid(this string str)
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace Business.Implements
                 {
                     return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
                 }
-                var result = await _repository.DeleteAsync(entity.Item1.First());
+                var result = await _repository.SoftDeleteAsync(entity.Item1.First());
                 return new ResponseCustom<Product>()
                 {
                     Status = result,
@@ -87,11 +87,11 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model, bool isDeleted = false)
+        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model)
         {
             try
             {               
-                var data = await _repository.GetPageBySearchAsync(model, isDeleted);
+                var data = await _repository.GetPageBySearchAsync(model);
                 return new ResponseCustom<Product>()
                 {
                     Status = true,

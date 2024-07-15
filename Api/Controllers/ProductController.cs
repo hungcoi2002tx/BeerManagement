@@ -42,7 +42,7 @@ namespace Api.Controllers
         {
             try
             {
-                var result = await _productService.GetPageBySearchAsync(search, isDeleted:true);
+                var result = await _productService.GetPageBySearchAsync(search);
                 return result;
             }
             catch (Exception ex)

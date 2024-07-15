@@ -21,11 +21,15 @@ namespace Share.Models.ViewModels
         [Display(Name = "Name")]
         public string Name { get; set; } = null!;
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
         public int SupplierId { get; set; }
-        public string SupplierName { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }
+        public string GetImage
+        {
+            get => $"/images/product/{Image}";
+        }
+        public CategoryViewModel Category { get; set; }
+        public SupplierViewModel Supplier { get; set; }
     }
 }

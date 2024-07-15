@@ -15,6 +15,6 @@ namespace Business.Interfaces
         Task<ResponseCustom<Product>> AddAsync(Product model);
         Task<ResponseCustom<Product>> UpdateAsync(Product model);
         Task<ResponseCustom<Product>> DeleteAsync(int id);
-        Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model, bool isDeleted = false);
+        Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model);
     }
 }

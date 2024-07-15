@@ -11,6 +11,7 @@ namespace DataLayer.Interfaces
     public interface IProductRepository : IRepository<Product>
     {
         Task<bool> UpdateAsync(Product model);
-        Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model, bool isDeleted = false);
+        Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model);
+        Task<bool> SoftDeleteAsync(Product model);
     }
 }

@@ -80,22 +80,31 @@ namespace Client.Pages.Product
         {
             try
             {
+                string? fileName = null;
+                if (UploadImage != null)
+                {
+                    var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
+                    fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
+                    var uploadFolder = Path.Combine(_environment.WebRootPath, "images", "product");
+                    if (!Directory.Exists(uploadFolder))
+                    {
+                        Directory.CreateDirectory(uploadFolder);
+                    }
+                    var file = Path.Combine(uploadFolder, fileName);
+                    using (var fileStream = new FileStream(file, FileMode.Create))
+                    {
+                        await UploadImage.CopyToAsync(fileStream);
+                    }
+                }
+
+                ValidateImageUpload(UploadImage);
+
                 if (!ModelState.IsValid || EditModel == null)
                 {
                     await OnGetAsync(EditModel.Id);
                     return Page();
                 }
-
-                if (UploadImage != null)
-                {
-                    var file = Path.Combine(_environment.WebRootPath, "images", "product", UploadImage.FileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
-                        await UploadImage.CopyToAsync(fileStream);
-                    }
-                    EditModel.Image = $"/images/product/{UploadImage.FileName}";
-                }
-
+                EditModel.Image = fileName;
                 var request = await _request.PutAsync(RestApiName.PUT_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (!result.Status)
@@ -122,6 +131,22 @@ namespace Client.Pages.Product
             catch (Exception ex)
             {
                 return new ResponseCustom<Share.Models.Domain.Product>();
+            }
+        }
+
+        private void ValidateImageUpload(IFormFile? imageFile)
+        {
+            if (imageFile == null)
+            {
+                ModelState.AddModelError("UploadImage", "Please upload an image");
+            }
+            else if (imageFile.Length > 4 * 1024 * 1024) // 4MB
+            {
+                ModelState.AddModelError("UploadImage", "The file size cannot exceed 4MB.");
+            }
+            else if (!new[] { ".jpg", ".jpeg", ".png", ".gif" }.Contains(Path.GetExtension(imageFile.FileName).ToLowerInvariant()))
+            {
+                ModelState.AddModelError("UploadImage", "The file type must be one of the following: .jpg, .jpeg, .png, .gif.");
             }
         }
     }
