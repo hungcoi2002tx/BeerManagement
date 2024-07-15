@@ -24,5 +24,10 @@ namespace Share.Models.EditModels
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; } = true;
+
+        public string GetImage
+        {
+            get => $"/images/product/{Image}";
+        }
     }
 }

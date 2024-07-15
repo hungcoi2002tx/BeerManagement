@@ -12,6 +12,5 @@ namespace DataLayer.Interfaces
     {
         Task<bool> UpdateAsync(Product model);
         Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model);
-        Task<bool> SoftDeleteAsync(Product model);
     }
 }

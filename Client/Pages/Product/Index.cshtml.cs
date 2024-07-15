@@ -52,6 +52,13 @@ namespace Client.Pages.Product
         {
             try
             {
+                ValidateImageUpload(UploadImage);
+                if (!ModelState.IsValid || EditModel == null)
+                {
+                    await GetBaseDataAsync();
+                    return Page();
+                }
+
                 string? fileName = null;
                 if (UploadImage != null)
                 {
@@ -69,19 +76,13 @@ namespace Client.Pages.Product
                     }
                 }
 
-                ValidateImageUpload(UploadImage);
-                if (!ModelState.IsValid || EditModel == null)
-                {
-                    await GetBaseDataAsync();
-                    return Page();
-                }
-
                 EditModel.Image = fileName;
                 var request = await _request.PostJsonAsync(RestApiName.POST_Add_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (result.Status)
                 {
                     ViewData["DataAdded"] = true;
+                    EditModel = new ProductEditModel();
                     await GetBaseDataAsync();
                     return Page();
                 }

@@ -23,7 +23,6 @@ namespace Client.Pages.Product
             _environment = environment;
         }
 
-        [BindProperty]
         public ProductEditModel EditModel { get; set; } = new();
         public IFormFile? UploadImage { get; set; }
         public List<CategoryViewModel> Categories { get; set; } = new();
@@ -80,11 +79,18 @@ namespace Client.Pages.Product
         {
             try
             {
-                string? fileName = null;
+                ValidateImageUpload(UploadImage);
+
+                if (!ModelState.IsValid || EditModel == null)
+                {
+                    await OnGetAsync(EditModel.Id);
+                    return Page();
+                }
+
                 if (UploadImage != null)
                 {
                     var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
-                    fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
+                    var fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
                     var uploadFolder = Path.Combine(_environment.WebRootPath, "images", "product");
                     if (!Directory.Exists(uploadFolder))
                     {
@@ -95,16 +101,11 @@ namespace Client.Pages.Product
                     {
                         await UploadImage.CopyToAsync(fileStream);
                     }
+                    var oldPath = Path.Combine(uploadFolder, EditModel.Image);
+                    System.IO.File.Delete(oldPath);
+                    EditModel.Image = fileName;
                 }
-
-                ValidateImageUpload(UploadImage);
-
-                if (!ModelState.IsValid || EditModel == null)
-                {
-                    await OnGetAsync(EditModel.Id);
-                    return Page();
-                }
-                EditModel.Image = fileName;
+                
                 var request = await _request.PutAsync(RestApiName.PUT_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (!result.Status)
@@ -136,11 +137,11 @@ namespace Client.Pages.Product
 
         private void ValidateImageUpload(IFormFile? imageFile)
         {
-            if (imageFile == null)
+            if(imageFile == null)
             {
-                ModelState.AddModelError("UploadImage", "Please upload an image");
+                return;
             }
-            else if (imageFile.Length > 4 * 1024 * 1024) // 4MB
+            if (imageFile.Length > 4 * 1024 * 1024) // 4MB
             {
                 ModelState.AddModelError("UploadImage", "The file size cannot exceed 4MB.");
             }

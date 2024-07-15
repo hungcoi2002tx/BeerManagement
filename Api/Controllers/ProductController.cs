@@ -92,10 +92,7 @@ namespace Api.Controllers
         {
             try
             {
-                var response = await _productService.GetPageBySearchAsync(new ProductSearchModel { Id = id });
-                var product = response.Objects.FirstOrDefault(x => x.Id == id);
-                product.IsEnable = false;
-                var result = await _productService.UpdateAsync(product);
+                var result = await _productService.DeleteAsync(id);
                 return result;
             }
             catch (Exception ex)

@@ -21,6 +21,9 @@
                     <div class="card-header">
                         <h4 class="card-title">Update Product</h4>
                     </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <img src="@Model.EditModel.GetImage" class="rounded-lg" width="200" alt="@Model.EditModel.Name">
+                    </div>
                     <div class="card-body">
                         <form class="comment-form" method="post" enctype="multipart/form-data">
                             <div class="row">
@@ -36,6 +39,7 @@
                                     <div class="mb-3">
                                         <label class="text-black font-w600 form-label">Image</label>
                                         <input type="file" class="form-control" asp-for="UploadImage">
+                                        <input type="hidden" asp-for="EditModel.Image" />
                                         <span asp-validation-for="UploadImage" class="text-danger"></span>
                                     </div>
                                 </div>

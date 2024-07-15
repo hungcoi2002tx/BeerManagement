@@ -56,7 +56,9 @@ namespace Business.Implements
                 {
                     return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
                 }
-                var result = await _repository.SoftDeleteAsync(entity.Item1.First());
+                var product = entity.Item1.First();
+                product.IsEnable = false;
+                var result = await _repository.UpdateAsync(product);
                 return new ResponseCustom<Product>()
                 {
                     Status = result,

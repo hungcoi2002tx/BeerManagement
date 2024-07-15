@@ -59,24 +59,6 @@ namespace DataLayer.Implements
             }
         }
 
-        public async Task<bool> SoftDeleteAsync(Product model)
-        {
-            try
-            {
-                model.IsEnable = false;
-                OpenTransaction();
-                _context.Attach(model).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                await CommitTransactionAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                await RollBackTransactionAsync();
-                throw;
-            }
-        }
-
         public async Task<bool> UpdateAsync(Product model)
         {
             try
