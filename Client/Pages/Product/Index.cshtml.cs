@@ -30,7 +30,6 @@ namespace Client.Pages.Product
 
         public ProductSearchModel Search { get; set; } = new ProductSearchModel();
         public List<ProductViewModel> ViewModels { get; set; } = new();
-        [BindProperty]
         public ProductEditModel EditModel { get; set; } = new();
         public List<CategoryViewModel> Categories { get; set; } = new();
         public List<SupplierViewModel> Suppliers { get; set; } = new();
@@ -74,7 +73,7 @@ namespace Client.Pages.Product
                 {
                     ViewData["DataAdded"] = true;
                     await GetBaseDataAsync();
-                    return RedirectToPage();
+                    return Page();
                 }
                 else
                 {
@@ -160,7 +159,7 @@ namespace Client.Pages.Product
                 }
                 ViewData["DataDeleted"] = true;
                 await GetBaseDataAsync(pageIndex);
-                return RedirectToPage();
+                return Page();
             }
             catch (Exception ex)
             {
