@@ -50,6 +50,16 @@
                         <input type="hidden" name="productId" id="productId" />
                         <input type="hidden" name="productId" id="pageIndex" />
                     </form>
+                    <div class="card-action card-tabs mb-3">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="import" >Import</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="export" >Export</button>
+                            </li>
+                        </ul>
+                    </div>
                     <form class="comment-form" method="post" asp-page-handler="Add" enctype="multipart/form-data">
                         <div class="row">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -93,19 +103,19 @@
                                     <span asp-validation-for="EditModel.CategoryId" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-6" id="supplierChoice">
                                 <div class="mb-3">
-                                    <label class="text-black font-w600 form-label">Supplier:<span class="required">*</span></label>
-                                    <select asp-for="EditModel.SupplierId" class="default-select  form-control wide">
+                                    <label class="text-black font-w600 form-label">Supplier:</label>
+                                    <select asp-for="EditModel.SupplierId" class="default-select  form-control wide" id="supplierId">
+                                        <option value="-1">None</option>
                                         @foreach (var supplier in Model.Suppliers)
                                         {
                                             <option value="@supplier.Id">@supplier.SupplierName</option>
                                         }
                                     </select>
-                                    <span asp-validation-for="EditModel.SupplierId" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            @* <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="text-black font-w600 form-label">For Sell</label>
                                     <select asp-for="EditModel.ForSell" class="default-select  form-control wide">
@@ -113,7 +123,7 @@
                                         <option value="false">No</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> *@
                             <div class="col-lg-6">
                                 <div class="mb-3">
                                     <label class="text-black font-w600 form-label">Available</label>
@@ -177,7 +187,7 @@
                                         <td>@item.QuantityPerUnit</td>
                                         <td>@item.UnitPrice</td>
                                         <td>@item.Category.Name</td>
-                                        <td>@item.Supplier.SupplierName</td>
+                                        <td>@(item.Supplier != null ? item.Supplier.SupplierName : "")</td>
                                         <td>@(item.ForSell ? "Yes" : "No")</td>
                                         <td>@(item.IsAvailable ? "Yes" : "No")</td>
                                         <td>
@@ -200,10 +210,33 @@
 </div>
 
 <script>
+    let isImport = true;
+    let importBtn = document.getElementById("import");
+    let exportBtn = document.getElementById("export");
+    let supplierChoice = document.getElementById("supplierChoice");
+    let supplierId = document.getElementById("supplierId");
+    importBtn.onclick = function () {
+        importBtn.classList.add("active");
+        exportBtn.classList.remove("active");
+        isImport = true;
+        supplierChoice.classList.add("d-block");
+        supplierChoice.classList.remove("d-none");
+        supplierId.options[0].disabled = true;
+        supplierId.selectedIndex = 1;
+    }
+    exportBtn.onclick = function () {
+        exportBtn.classList.add("active");
+        importBtn.classList.remove("active");
+        isImport = false;
+        supplierChoice.classList.add("d-none")
+        supplierChoice.classList.remove("d-block");
+        supplierId.options[0].disabled = false;
+        supplierId.selectedIndex = 0;
+    }
     document.addEventListener("DOMContentLoaded", function () {
         // Kiểm tra nếu có lỗi xác thực
         var hasValidationErrors = @Html.Raw(Json.Serialize(hasValidationErrors));
-
+        importBtn.click();
         // Nếu có lỗi, mở modal
         if (hasValidationErrors) {
             var modalElement = new bootstrap.Modal(document.getElementById('sendMessageModal'));

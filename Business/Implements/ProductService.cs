@@ -29,6 +29,15 @@ namespace Business.Implements
         {
             try
             {
+                if(model.SupplierId == -1)
+                {
+                    model.ForSell = false;
+                    model.SupplierId = null;
+                }
+                else
+                {
+                    model.ForSell = true;
+                }
                 model.IsEnable = true;
                 var entity = await _repository.AddAsync(model);
                 return new ResponseCustom<Product>
@@ -113,6 +122,10 @@ namespace Business.Implements
         {
             try
             {
+                if (model.SupplierId == -1)
+                {
+                    model.SupplierId = null;
+                }
                 var entity = await _repository.UpdateAsync(model);
                 return new ResponseCustom<Product>
                 {

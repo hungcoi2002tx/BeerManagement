@@ -69,27 +69,25 @@
                                         <span asp-validation-for="EditModel.CategoryId" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="text-black font-w600 form-label">Supplier:<span class="required">*</span></label>
-                                        <select asp-for="EditModel.SupplierId" class="default-select  form-control wide">
-                                            @foreach (var supplier in Model.Suppliers)
-                                            {
-                                                <option value="@supplier.Id">@supplier.SupplierName</option>
-                                            }
-                                        </select>
-                                        <span asp-validation-for="EditModel.SupplierId" class="text-danger"></span>
+                                @if(Model.EditModel.ForSell)
+                                {
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="text-black font-w600 form-label">Supplier:<span class="required">*</span></label>
+                                            <select asp-for="EditModel.SupplierId" class="default-select  form-control wide">
+                                                @foreach (var supplier in Model.Suppliers)
+                                                {
+                                                    <option value="@supplier.Id">@supplier.SupplierName</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="EditModel.SupplierId" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="text-black font-w600 form-label">For Sell</label>
-                                        <select asp-for="EditModel.ForSell" class="default-select  form-control wide">
-                                            <option value="true">Yes</option>
-                                            <option value="false">No</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <input type="hidden" asp-for="EditModel.SupplierId" value="-1" />
+                                }
                                 <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="text-black font-w600 form-label">Available</label>
@@ -100,6 +98,8 @@
                                     </div>
                                 </div>
                                 <input asp-for="EditModel.Id" type="hidden" />
+                                <input asp-for="EditModel.IsEnable" type="hidden"/>
+                                <input asp-for="EditModel.ForSell" type="hidden" />
                                 <div class="col-lg-12">
                                     <div class="mb-3 mb-0">
                                         <input type="submit" value="Update" class="submit btn btn-primary" name="submit">
