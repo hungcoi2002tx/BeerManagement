@@ -34,6 +34,8 @@ namespace Client.Pages.Product
         public List<CategoryViewModel> Categories { get; set; } = new();
         public List<SupplierViewModel> Suppliers { get; set; } = new();
 
+        public bool IsImport { get; set; } = true;
+
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             try
@@ -58,7 +60,6 @@ namespace Client.Pages.Product
                     await GetBaseDataAsync();
                     return Page();
                 }
-
                 string? fileName = null;
                 if (UploadImage != null)
                 {

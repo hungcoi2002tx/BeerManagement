@@ -19,8 +19,7 @@ namespace Share.Models.EditModels
         public string Name { get; set; } = null!;
         [Required]
         public int CategoryId { get; set; }
-        [Required]
-        public int SupplierId { get; set; }
+        public int? SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }

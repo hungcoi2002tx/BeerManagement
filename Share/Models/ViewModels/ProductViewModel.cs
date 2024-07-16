@@ -21,7 +21,7 @@ namespace Share.Models.ViewModels
         [Display(Name = "Name")]
         public string Name { get; set; } = null!;
         public int CategoryId { get; set; }
-        public int SupplierId { get; set; }
+        public int? SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }
@@ -30,6 +30,6 @@ namespace Share.Models.ViewModels
             get => $"/images/product/{Image}";
         }
         public CategoryViewModel Category { get; set; }
-        public SupplierViewModel Supplier { get; set; }
+        public SupplierViewModel? Supplier { get; set; }
     }
 }
