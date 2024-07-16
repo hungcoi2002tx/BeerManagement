@@ -87,6 +87,7 @@ namespace Client.Pages.Product
                     return Page();
                 }
 
+                #region Upload new image if new image not null
                 if (UploadImage != null)
                 {
                     var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
@@ -105,7 +106,8 @@ namespace Client.Pages.Product
                     System.IO.File.Delete(oldPath);
                     EditModel.Image = fileName;
                 }
-                
+                #endregion
+
                 var request = await _request.PutAsync(RestApiName.PUT_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (!result.Status)

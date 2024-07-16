@@ -29,6 +29,7 @@ namespace Business.Implements
         {
             try
             {
+                model.IsEnable = true;
                 var entity = await _repository.AddAsync(model);
                 return new ResponseCustom<Product>
                 {

@@ -23,7 +23,7 @@ namespace Share.Models.EditModels
         public int SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
-        public bool IsEnable { get; set; } = true;
+        public bool IsEnable { get; set; }
 
         public string GetImage
         {
