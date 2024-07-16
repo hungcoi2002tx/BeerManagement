@@ -29,6 +29,7 @@ namespace Business.Implements
         {
             try
             {
+                model.IsEnable = true;
                 var entity = await _repository.AddAsync(model);
                 return new ResponseCustom<Product>
                 {
@@ -56,7 +57,9 @@ namespace Business.Implements
                 {
                     return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
                 }
-                var result = await _repository.DeleteAsync(entity.Item1.First());
+                var product = entity.Item1.First();
+                product.IsEnable = false;
+                var result = await _repository.UpdateAsync(product);
                 return new ResponseCustom<Product>()
                 {
                     Status = result,
@@ -90,7 +93,7 @@ namespace Business.Implements
         public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model)
         {
             try
-            {
+            {               
                 var data = await _repository.GetPageBySearchAsync(model);
                 return new ResponseCustom<Product>()
                 {

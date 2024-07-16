@@ -10,6 +10,8 @@ namespace Share.Models.ViewModels
     public class ProductViewModel
     {
         public int Id { get; set; }
+        [Display(Name = "No")]
+        public int Stt {  get; set; }
         [Display(Name = "Image")]
         public string? Image { get; set; }
         [Display(Name = "Unit Price")]
@@ -23,5 +25,11 @@ namespace Share.Models.ViewModels
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }
+        public string GetImage
+        {
+            get => $"/images/product/{Image}";
+        }
+        public CategoryViewModel Category { get; set; }
+        public SupplierViewModel Supplier { get; set; }
     }
 }

@@ -37,7 +37,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("GetPage")]
+        [HttpPost("GetPage")]
         public async Task<ResponseCustom<Product>> GetPageAsync([FromBody] ProductSearchModel search)
         {
             try

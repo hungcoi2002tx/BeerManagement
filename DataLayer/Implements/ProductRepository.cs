@@ -23,6 +23,10 @@ namespace DataLayer.Implements
             try
             {
                 IQueryable<Product> filter = _context.Products;
+                if(model.IsEnableOnly) 
+                { 
+                    filter = filter.Where(x => x.IsEnable == true); 
+                }
                 if(model.Id != 0)
                 {
                     filter = filter.Where(x => x.Id == model.Id);
@@ -31,11 +35,20 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.Name == model.Name);
                 }
+                filter = filter.OrderBy(x => x.Id);
                 int count = await filter.CountAsync();
                 if (model.Page != null && model.Page.PageIndex != 0)
                 {
                     filter = filter.Skip(model.Page.PageSize * (model.Page.PageIndex - 1))
                         .Take(model.Page.PageSize);
+                }
+                if(model.IsIncludeCategory)
+                {
+                    filter = filter.Include(x => x.Category);
+                }
+                if(model.IsIncludeSupplier)
+                {
+                    filter = filter.Include(x => x.Supplier);
                 }
                 var data = await filter.ToListAsync();
                 return (data, count);

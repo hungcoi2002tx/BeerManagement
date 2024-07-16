@@ -13,6 +13,7 @@ namespace Share.Models.EditModels
         public string? Image { get; set; }
         [Required]
         public double UnitPrice { get; set; }
+        [Required]
         public int? QuantityPerUnit { get; set; }
         [Required]
         public string Name { get; set; } = null!;
@@ -23,5 +24,10 @@ namespace Share.Models.EditModels
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }
+
+        public string GetImage
+        {
+            get => $"/images/product/{Image}";
+        }
     }
 }
