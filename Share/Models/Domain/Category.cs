@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Share.Models.Domain
 {
@@ -15,7 +16,7 @@ namespace Share.Models.Domain
         public string? Description { get; set; }
         public string? Image { get; set; }
         public bool IsEnable { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }
