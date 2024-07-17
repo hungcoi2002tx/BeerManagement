@@ -6,7 +6,11 @@
     <div class="row page-titles">
         <ol class="breadcrumb">
             <li class="breadcrumb-item-no-link">Setting/</li>
-            <li class="breadcrumb-item-no-link">Category/</li>
+            <li class="breadcrumb-item-no-link">
+                <a asp-page="Index">
+                    Category/
+                </a>
+            </li>
             <li class="breadcrumb-item active">Add</li>
         </ol>
     </div>
@@ -22,7 +26,7 @@
                         <div class="d-flex align-items-center">
                             <div class="avatar-upload" style="flex:2">
                                 <div class="avatar-edit">
-                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" name="ImageFile">
+                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" name="UploadImage">
                                     <label for="imageUpload"></label>
                                 </div>
                                 <div class="avatar-preview">
