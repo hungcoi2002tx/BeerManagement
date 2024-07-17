@@ -23,7 +23,7 @@ namespace Share.Models.ViewModels
 
         public string GetImageUrl
         {
-            get => $"~/images/category/{Image}";
+            get => $"./images/category/{Image}";
             set {}
         }
     }
