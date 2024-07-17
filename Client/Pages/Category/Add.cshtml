@@ -38,6 +38,7 @@
                                 <label class="font-w600">Category Name</label>
                                 <input type="text" class="form-control solid" asp-for="@Model.EditModel.Name">
                                 <input type="text" class="form-control solid" asp-for="@Model.EditModel.Image" hidden>
+                                <input type="text" class="form-control solid" asp-for="@Model.EditModel.Id" hidden>
                                 <br />
                                 <label class="font-w600">Category Description</label>
                                 <textarea rows="8" class="form-control solid" asp-for="EditModel.Description" placeholder="Description"></textarea>
@@ -65,8 +66,8 @@
     {
         <script>
             document.querySelector(".title-form").innerHTML = "Update";
-            var preview = document.getElementById('imagePreview-category');
-            preview.style.backgroundImage = 'url(\images\category\1.jpg)';;
+            var preview1 = document.getElementById('imagePreview-category');
+            preview1.style.backgroundImage = "url('@Url.Content("~/images/category/" + Model.EditModel.Image)')";
         </script>
     }
 }

@@ -99,11 +99,20 @@ namespace Client.Pages.Category
                 {
                     return Page();
                 }
-                var request = await _request.PostJsonAsync(RestApiName.POST_Add_CATEGORY, EditModel);
-                var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+                HttpResponseMessage request;
+                ResponseCustom<Share.Models.Domain.Category> result;
+                if (EditModel.Id != 0 && EditModel.Id != null)
+                {
+                    request = await _request.PutAsync(RestApiName.PUT_CATEGORY, EditModel);
+                }
+                else
+                {
+                    request = await _request.PostJsonAsync(RestApiName.POST_Add_CATEGORY, EditModel);
+                }
+                result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (result.Status)
                 {
-                    return Redirect(GlobalVariants.LINK_CATEGORY_INDEX);
+                    return RedirectToPage(GlobalVariants.LINK_CATEGORY_INDEX);
                 }
                 else
                 {
