@@ -19,14 +19,14 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h1> Add New Category</h1>
+                    <h1 class="title-form"> Add New Category</h1>
                 </div>
                 <div class="card-body">
                     <form class="mb-5" enctype="multipart/form-data" method="post">
                         <div class="d-flex align-items-center">
                             <div class="avatar-upload" style="flex:2">
                                 <div class="avatar-edit">
-                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" name="UploadImage">
+                                    <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" asp-for="UploadImage">
                                     <label for="imageUpload"></label>
                                 </div>
                                 <div class="avatar-preview">
@@ -37,6 +37,8 @@
                             <div class="form-group mb-3 pb-3" style="flex:8; padding-left:10px">
                                 <label class="font-w600">Category Name</label>
                                 <input type="text" class="form-control solid" asp-for="@Model.EditModel.Name">
+                                <input type="text" class="form-control solid" asp-for="@Model.EditModel.Image" hidden>
+                                <input type="text" class="form-control solid" asp-for="@Model.EditModel.Id" hidden>
                                 <br />
                                 <label class="font-w600">Category Description</label>
                                 <textarea rows="8" class="form-control solid" asp-for="EditModel.Description" placeholder="Description"></textarea>
@@ -56,10 +58,16 @@
 @section Scripts {
     <script>
         document.querySelector('input[type="file"]').addEventListener('change', function () {
-            console.log("abc");
             var preview = document.getElementById('imagePreview-category');
             preview.style.backgroundImage = 'url(' + URL.createObjectURL(this.files[0]) + ')';
-            console.log('url(' + URL.createObjectURL(this.files[0]) + ')');
         });
     </script>
+    @if(Model.EditModel.Id != null && Model.EditModel.Image != null)
+    {
+        <script>
+            document.querySelector(".title-form").innerHTML = "Update";
+            var preview1 = document.getElementById('imagePreview-category');
+            preview1.style.backgroundImage = "url('@Url.Content("~/images/category/" + Model.EditModel.Image)')";
+        </script>
+    }
 }
