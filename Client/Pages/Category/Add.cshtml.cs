@@ -8,6 +8,7 @@ using Share.Models.Domain;
 using Share.Models.EditModels;
 using Share.Models.SearchModels;
 using Share.Ultils;
+using System.IO;
 
 namespace Client.Pages.Category
 {
@@ -28,11 +29,13 @@ namespace Client.Pages.Category
         [BindProperty]
         public CategoryEditModel EditModel { get; set; } = new CategoryEditModel();
         public IFormFile? UploadImage { get; set; }
+
+        public string Path1 { get; set; }
         public async Task<IActionResult> OnGetAsync(int id = 0)
         {
             try
             {
-                if(id != 0)
+                if (id != 0)
                 {
                     var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_CATEGORY
                         , new CategorySearchModel
@@ -44,14 +47,14 @@ namespace Client.Pages.Category
                     {
                         return Redirect(GlobalVariants.PAGE_500);
                     }
-                    if(entity.Objects?.Any() != true)
+                    if (entity.Objects?.Any() != true)
                     {
                         return Redirect(GlobalVariants.PAGE_400);
                     }
                     EditModel = _mapper.Map<CategoryEditModel>(entity.Objects.First());
-                    if(EditModel.Image != null)
+                    if (EditModel.Image != null)
                     {
-
+                        Path1 = Path.Combine(_webHostEnvironment.WebRootPath, "images", "category", EditModel.Image);
                     }
                 }
                 return Page();
