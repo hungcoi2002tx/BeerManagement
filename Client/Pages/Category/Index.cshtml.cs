@@ -69,5 +69,38 @@ namespace Client.Pages.Category
                 _logger.LogError(ex.Message);
             }
         }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int categoryId, int pageIndex)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    await GetBaseDataAsync(pageIndex);
+                    return Page();
+                }
+                var apiUrl = string.Format(RestApiName.DELETE_CATEGORY, categoryId);
+                var request = await _request.DeleteAsync(apiUrl);
+                var data = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+                if (!data.Status)
+                {
+                    if (data.StatusCode == 404)
+                    {
+                        return Redirect(GlobalVariants.PAGE_404);
+                    }
+                    else
+                    {
+                        return Redirect(GlobalVariants.PAGE_500);
+                    }
+                }
+                ViewData["DataDeleted"] = true;
+                await GetBaseDataAsync(pageIndex);
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                return Redirect(GlobalVariants.PAGE_400);
+            }
+        }
     }
 }
