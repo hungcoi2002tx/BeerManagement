@@ -23,5 +23,8 @@ namespace Share.Models.ViewModels
         public string SupplierName { get; set; } = null!;
         [Display(Name = "Description")]
         public string? Description { get; set; }
+        [Display(Name = "Status")]
+        public bool IsEnable { get; set; }
+
     }
 }

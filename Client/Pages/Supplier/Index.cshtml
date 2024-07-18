@@ -131,11 +131,34 @@
                                         <td>@item.Address</td>
                                         <td>@item.CompanyName</td>
                                         <td>@item.Description</td>
-                                        <td>Active</td>
+                                        @if (item.IsEnable)
+                                        {
+                                            <td><span class="badge light badge-success">Enable</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge light badge-danger">Disable</span></td>
+                                        }
                                         <td>
                                             <div class="d-flex">
                                                 <a asp-page="./Update" asp-route-id="@item.Id" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
-                                                <a onclick="deleteSupplier(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp"><i class="fa fa-trash"></i></a>
+                                                @if (item.IsEnable)
+                                                {
+                                                    <a onclick="deleteSupplier(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                                        </svg>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a onclick="deleteSupplier(@item.Id); return false;" class="btn .btn-info shadow btn-xs sharp">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+                                                            <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z" />
+                                                        </svg>
+                                                    </a>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
