@@ -57,7 +57,9 @@ namespace Business.Implements
                 {
                     return ResponeExtentions<Category>.GetError404($"Not Found Id = {id}");
                 }
-                var result = await _repository.DeleteAsync(entity.Item1.First());
+                var model = entity.Item1.First();
+                model.IsEnable = !model.IsEnable;
+                var result = await _repository.UpdateAsync(model);
                 return new ResponseCustom<Category>()
                 {
                     Status = result,
