@@ -27,7 +27,7 @@ namespace Share.Models.ViewModels
         public bool IsEnable { get; set; }
         public string GetImage
         {
-            get => $"/images/product/{Image}";
+            get => $"./images/product/{Image}";
         }
         public CategoryViewModel Category { get; set; }
         public SupplierViewModel? Supplier { get; set; }
