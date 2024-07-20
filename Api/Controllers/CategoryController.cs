@@ -4,8 +4,9 @@ using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 
 namespace Api.Controllers
@@ -29,6 +30,7 @@ namespace Api.Controllers
             try
             {
                 var result = await _servive.GetAllAsync();
+
                 return result;
             }
             catch (Exception ex)
@@ -38,7 +40,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<Category>> AddAsync([FromBody] CategoryEditModel editModel)
+        public async Task<ResponseCustom<Category>> AddAsync([FromBody] CategoryEditDto editModel)
         {
             try
             {
@@ -46,6 +48,7 @@ namespace Api.Controllers
                 {
                     return ResponeExtentions<Category>.GetError400("Validate AddAsync - SupperlierController");
                 }
+
                 var result = await _servive.AddAsync(_mapper.Map<Category>(editModel));
                 return result;
             }
@@ -70,7 +73,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<Category>> UpdateAsync([FromBody] CategoryEditModel editModel)
+        public async Task<ResponseCustom<Category>> UpdateAsync([FromBody] CategoryEditDto editModel)
         {
             try
             {
@@ -88,7 +91,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchModel search)
+        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchDto search)
         {
             try
             {

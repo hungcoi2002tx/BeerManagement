@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.SearchModels
+namespace Share.Models.Dtos.SearchDtos
 {
-    public class ProductSearchModel : SearchModelBase
+    public class ProductSearchDto : SearchModelBase
     {
-        public ProductSearchModel() { }
         public int Id { get; set; }
         public string? Name { get; set; }
         public bool IsEnableOnly { get; set; }

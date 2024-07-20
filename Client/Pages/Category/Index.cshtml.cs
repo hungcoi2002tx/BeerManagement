@@ -3,8 +3,9 @@ using Client.WebRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
-using Share.Models.SearchModels;
-using Share.Models.ViewModels;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.Dtos.ViewDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 
 namespace Client.Pages.Category
@@ -22,8 +23,8 @@ namespace Client.Pages.Category
             _logger = logger;
         }
 
-        public CategorySearchModel Search { get; set; } = new CategorySearchModel();
-        public List<CategoryViewModel> ViewModels { get; set; } = new();
+        public CategorySearchDto Search { get; set; } = new CategorySearchDto();
+        public List<CategoryViewDto> ViewModels { get; set; } = new();
         public async Task<IActionResult> OnGetAsync(int pageIndex)
         {
             try
@@ -42,7 +43,7 @@ namespace Client.Pages.Category
         {
             try
             {
-                Search.Page = new Share.Ultils.Page()
+                Search.Page = new Share.Models.PagingObject.Page()
                 {
                     PageIndex = pageIndex == 0 ? 1 : pageIndex,
                     BaseUrl = "Category"
@@ -51,7 +52,7 @@ namespace Client.Pages.Category
                 var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (datas.Status)
                 {
-                    ViewModels = _mapper.Map<List<CategoryViewModel>>(datas.Objects);
+                    ViewModels = _mapper.Map<List<CategoryViewDto>>(datas.Objects);
                     Search.Page.Total = datas.Total;
                     int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
                     foreach (var item in ViewModels)

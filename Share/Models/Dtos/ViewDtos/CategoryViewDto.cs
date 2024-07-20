@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.ViewModels
+namespace Share.Models.Dtos.ViewDtos
 {
-    public class CategoryViewModel
+    public class CategoryViewDto
     {
         public int Id { get; set; }
         [Display(Name = "No")]
         public int Stt { get; set; }
-        [Display(Name ="Name")]
+        [Display(Name = "Name")]
         public string Name { get; set; } = null!;
         [Display(Name = "Description")]
         public string? Description { get; set; }
@@ -24,7 +24,7 @@ namespace Share.Models.ViewModels
         public string GetImageUrl
         {
             get => $"./images/category/{Image}";
-            set {}
+            set { }
         }
     }
 }

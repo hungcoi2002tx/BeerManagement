@@ -1,4 +1,4 @@
-﻿using Share.Ultils;
+﻿using Share.Models.PagingObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;

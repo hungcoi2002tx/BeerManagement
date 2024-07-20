@@ -5,28 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.EditModels
+namespace Share.Models.Dtos.ViewDtos
 {
-    public class ProductEditModel
+    public class ProductViewDto
     {
         public int Id { get; set; }
+        [Display(Name = "No")]
+        public int Stt { get; set; }
+        [Display(Name = "Image")]
         public string? Image { get; set; }
-        [Required]
+        [Display(Name = "Unit Price")]
         public double UnitPrice { get; set; }
-        [Required]
+        [Display(Name = "Quantity Per Unit")]
         public int? QuantityPerUnit { get; set; }
-        [Required]
+        [Display(Name = "Name")]
         public string Name { get; set; } = null!;
-        [Required]
         public int CategoryId { get; set; }
         public int? SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
         public bool IsEnable { get; set; }
-
         public string GetImage
         {
             get => $"/images/product/{Image}";
         }
+        public CategoryViewDto Category { get; set; }
+        public SupplierViewDto? Supplier { get; set; }
     }
 }

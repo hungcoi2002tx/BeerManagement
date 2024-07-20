@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Share.Models.Domain;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.SearchDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +18,12 @@ namespace DataLayer.Implements
             
         }
 
-        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchModel model)
+        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchDto model)
         {
             try
             {
                 IQueryable<Product> filter = _context.Products;
+
                 if(model.IsEnableOnly) 
                 { 
                     filter = filter.Where(x => x.IsEnable == true); 
@@ -35,21 +36,26 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.Name == model.Name);
                 }
+
                 filter = filter.OrderBy(x => x.Id);
                 int count = await filter.CountAsync();
+
                 if (model.Page != null && model.Page.PageIndex != 0)
                 {
                     filter = filter.Skip(model.Page.PageSize * (model.Page.PageIndex - 1))
                         .Take(model.Page.PageSize);
                 }
+
                 if(model.IsIncludeCategory)
                 {
                     filter = filter.Include(x => x.Category);
                 }
+
                 if(model.IsIncludeSupplier)
                 {
                     filter = filter.Include(x => x.Supplier);
                 }
+
                 var data = await filter.ToListAsync();
                 return (data, count);
             }

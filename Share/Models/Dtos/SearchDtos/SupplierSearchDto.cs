@@ -6,16 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.SearchModels
+namespace Share.Models.Dtos.SearchDtos
 {
-    public class SupplierSearchModel : SearchModelBase
+    public class SupplierSearchDto : SearchModelBase
     {
-        public SupplierSearchModel()
-        {
-        }
-
         public int Id { get; set; }
-        public string? SupplierName { get; set; }    
+        public string? SupplierName { get; set; }
         public string? PhoneNumber { get; set; }
     }
 }
