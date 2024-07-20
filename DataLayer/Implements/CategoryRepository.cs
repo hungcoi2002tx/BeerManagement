@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Share;
 using Share.Models.Domain;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.SearchDtos;
 using Share.Ultils;
 using System;
 using System.Collections.Generic;
@@ -18,11 +18,12 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<(List<Category>, int)> GetPageBySearchAsync(CategorySearchModel model)
+        public async Task<(List<Category>, int)> GetPageBySearchAsync(CategorySearchDto model)
         {
             try
             {
                 IQueryable<Category> filter = _context.Categories;
+
                 if (model.Id != 0)
                 {
                     filter = filter.Where(x => x.Id == model.Id);
@@ -37,6 +38,7 @@ namespace DataLayer.Implements
                     filter = filter.Skip(model.Page.PageSize * (model.Page.PageIndex - 1))
                         .Take(model.Page.PageSize);
                 }
+
                 var data = await filter.ToListAsync();
                 return (data, count);
             }
@@ -51,12 +53,15 @@ namespace DataLayer.Implements
             try
             {
                 OpenTransaction();
+
                 _context.Attach(model).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
+
                 await CommitTransactionAsync();
+
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await RollBackTransactionAsync();
                 throw;

@@ -1,5 +1,5 @@
 ﻿using Share.Models.Domain;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.SearchDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace DataLayer.Interfaces
     public interface ICategoryRepository : IRepository<Category>
     {
         Task<bool> UpdateAsync(Category model);
-        Task<(List<Category>, int)> GetPageBySearchAsync(CategorySearchModel model);
+        Task<(List<Category>, int)> GetPageBySearchAsync(CategorySearchDto model);
     }
 }

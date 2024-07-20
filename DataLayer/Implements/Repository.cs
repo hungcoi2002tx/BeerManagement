@@ -28,15 +28,18 @@ namespace DataLayer.Implements
             try
             {
                 if (usingTransaction) OpenTransaction();
+
                 await _dbSet.AddAsync(obj);
                 await _context.SaveChangesAsync();
+
                 if (usingTransaction) await CommitTransactionAsync();
+
                 return obj;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (usingTransaction) await RollBackTransactionAsync();
-                throw;
+                throw ;
             }
         }
 
@@ -45,12 +48,15 @@ namespace DataLayer.Implements
             try
             {
                 if (usingTransaction) OpenTransaction();
+
                 _dbSet.Remove(obj);
                 _context.SaveChanges();
+
                 if (usingTransaction) await CommitTransactionAsync();
+
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (usingTransaction) await RollBackTransactionAsync();
                 throw;
@@ -60,24 +66,28 @@ namespace DataLayer.Implements
         public async Task<T> GetByIdAsync(int id)
         {
             var result = await _dbSet.FindAsync(id);
+
             return result;
         }
 
         public async Task<List<T>> GetAllAsync()
         {
             var result = await _dbSet.ToListAsync();
+
             return result;
         }
 
         public T? GetByKey(Object key)
         {
             var entity = _dbSet.Find(key);
+
             return entity;
         }
 
         public IDbContextTransaction OpenTransaction()
         {
             _transaction = _context.Database.BeginTransaction();
+
             return _transaction;
         }
 

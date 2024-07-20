@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.ViewModels
+namespace Share.Models.Dtos.ViewDtos
 {
-    public class SupplierViewModel
+    public class SupplierViewDto
     {
         public int Id { get; set; }
         [Display(Name = "No")]

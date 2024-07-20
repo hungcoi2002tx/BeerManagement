@@ -1,6 +1,7 @@
 ﻿using Share.Models.Domain;
-using Share.Models.SearchModels;
-using Share.Ultils;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace Business.Interfaces
         Task<ResponseCustom<Category>> AddAsync(Category model);
         Task<ResponseCustom<Category>> UpdateAsync(Category model);
         Task<ResponseCustom<Category>> DeleteAsync(int id);
-        Task<ResponseCustom<Category>> GetPageBySearchAsync(CategorySearchModel model);
+        Task<ResponseCustom<Category>> GetPageBySearchAsync(CategorySearchDto model);
     }
 }

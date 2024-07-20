@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Share.Models.EditModels
+namespace Share.Models.Dtos.EditDtos
 {
-    public class SupplierEditModel
+    public class SupplierEditDto
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "Code không được trống")]

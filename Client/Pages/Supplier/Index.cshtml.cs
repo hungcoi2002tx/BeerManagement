@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Share.Constant;
 using Share.Models.Domain;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
-using Share.Models.ViewModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.Dtos.ViewDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 
 namespace Client.Pages.Supperlier
 {
-	public class IndexModel : PageModel
+    public class IndexModel : PageModel
 	{
 
 		private readonly ICustomHttpClient _request;
@@ -27,9 +28,9 @@ namespace Client.Pages.Supperlier
 			_logger = logger;
 		}
 
-		public SupplierSearchModel Search { get; set; } = new SupplierSearchModel();
-		public List<SupplierViewModel> ViewModels { get; set; } = new();
-		public SupplierEditModel EditModel { get; set; } = new();
+		public SupplierSearchDto Search { get; set; } = new SupplierSearchDto();
+		public List<SupplierViewDto> ViewModels { get; set; } = new();
+		public SupplierEditDto EditModel { get; set; } = new();
 
 		public async Task<IActionResult> OnGetAsync(int pageIndex)
 		{
@@ -45,7 +46,7 @@ namespace Client.Pages.Supperlier
 			}
 		}
 
-		public async Task<IActionResult> OnPostAddAsync(SupplierEditModel EditModel)
+		public async Task<IActionResult> OnPostAddAsync(SupplierEditDto EditModel)
 		{
 			try
 			{
@@ -79,7 +80,7 @@ namespace Client.Pages.Supperlier
 		{
 			try
 			{
-				Search.Page = new Share.Ultils.Page()
+				Search.Page = new Share.Models.PagingObject.Page()
 				{
 					PageIndex = pageIndex == 0 ? 1 : pageIndex,
 					BaseUrl = "Supplier"
@@ -88,7 +89,7 @@ namespace Client.Pages.Supperlier
 				var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
 				if (datas.Status)
 				{
-					ViewModels = _mapper.Map<List<SupplierViewModel>>(datas.Objects);
+					ViewModels = _mapper.Map<List<SupplierViewDto>>(datas.Objects);
 					Search.Page.Total = datas.Total;
 					int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
 					foreach (var item in ViewModels)

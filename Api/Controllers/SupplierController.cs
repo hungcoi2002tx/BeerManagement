@@ -4,10 +4,11 @@ using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
-using Share.Models.EditModels;
 using Share.Ultils;
 using Share;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 
 namespace Api.Controllers
 {
@@ -39,7 +40,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<Supplier>> GetPageAsync([FromBody] SupplierSearchModel search)
+        public async Task<ResponseCustom<Supplier>> GetPageAsync([FromBody] SupplierSearchDto search)
         {
             try
             {
@@ -53,7 +54,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<Supplier>> AddAsync([FromBody] SupplierEditModel editModel)
+        public async Task<ResponseCustom<Supplier>> AddAsync([FromBody] SupplierEditDto editModel)
         {
             try
             {
@@ -71,7 +72,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<Supplier>> UpdateAsync([FromBody] SupplierEditModel editModel)
+        public async Task<ResponseCustom<Supplier>> UpdateAsync([FromBody] SupplierEditDto editModel)
         {
             try
             {

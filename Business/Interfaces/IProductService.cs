@@ -1,6 +1,6 @@
 ﻿using Share.Models.Domain;
-using Share.Models.SearchModels;
-using Share.Ultils;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +15,6 @@ namespace Business.Interfaces
         Task<ResponseCustom<Product>> AddAsync(Product model);
         Task<ResponseCustom<Product>> UpdateAsync(Product model);
         Task<ResponseCustom<Product>> DeleteAsync(int id);
-        Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model);
+        Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchDto model);
     }
 }

@@ -2,7 +2,8 @@
 using Business.Interfaces;
 using DataLayer.Interfaces;
 using Share.Models.Domain;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Business.Implements
         {
             try
             {
-                if(model.SupplierId == -1)
+                if (model.SupplierId == -1)
                 {
                     model.ForSell = false;
                     model.SupplierId = null;
@@ -38,8 +39,10 @@ namespace Business.Implements
                 {
                     model.ForSell = true;
                 }
+
                 model.IsEnable = true;
                 var entity = await _repository.AddAsync(model);
+
                 return new ResponseCustom<Product>
                 {
                     Status = true,
@@ -50,7 +53,7 @@ namespace Business.Implements
             {
                 await _repository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Product>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -58,17 +61,20 @@ namespace Business.Implements
         {
             try
             {
-                var entity = await _repository.GetPageBySearchAsync(new ProductSearchModel
+                var entity = await _repository.GetPageBySearchAsync(new ProductSearchDto
                 {
                     Id = id
                 });
-                if(entity.Item2 == 0)
+
+                if (entity.Item2 == 0)
                 {
                     return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
                 }
+
                 var product = entity.Item1.First();
                 product.IsEnable = false;
                 var result = await _repository.UpdateAsync(product);
+
                 return new ResponseCustom<Product>()
                 {
                     Status = result,
@@ -77,7 +83,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Product>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -86,6 +92,7 @@ namespace Business.Implements
             try
             {
                 var products = await _repository.GetAllAsync();
+
                 return new ResponseCustom<Product>
                 {
                     Status = true,
@@ -95,14 +102,14 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Product>.GetError500(ex.ToString());
+                throw;
             }
         }
 
-        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchModel model)
+        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchDto model)
         {
             try
-            {               
+            {
                 var data = await _repository.GetPageBySearchAsync(model);
                 return new ResponseCustom<Product>()
                 {
@@ -114,7 +121,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Product>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -126,7 +133,9 @@ namespace Business.Implements
                 {
                     model.SupplierId = null;
                 }
+
                 var entity = await _repository.UpdateAsync(model);
+
                 return new ResponseCustom<Product>
                 {
                     Status = true,
@@ -135,7 +144,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Product>.GetError500(ex.ToString());
+                throw;
             }
         }
     }
