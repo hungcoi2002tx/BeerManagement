@@ -15,18 +15,27 @@ namespace Share.Ultils
             #region Auto Map Config
             var assembly = Assembly.GetAssembly(typeof(MapperConfig));
             var classes = assembly.ExportedTypes.Where(x => x.Namespace.Equals("Share.Models.Domain"));
+
             foreach (var type in classes)
             {
                 CreateMap(type, type).ReverseMap();
-                var editModelClass = assembly.ExportedTypes.FirstOrDefault(x => x.Name == type.Name + "EditModel");
-                if (editModelClass != null)
+
+                var editDtoClass = assembly.ExportedTypes.FirstOrDefault(x => x.Name == type.Name + "EditDto");
+                if (editDtoClass != null)
                 {
-                    CreateMap(type, editModelClass).ReverseMap();
+                    CreateMap(type, editDtoClass).ReverseMap();
                 }
-                var viewModelClass = assembly.ExportedTypes.FirstOrDefault(x => x.Name == type.Name + "ViewModel");
-                if (viewModelClass != null)
+
+                var viewDtoClass = assembly.ExportedTypes.FirstOrDefault(x => x.Name == type.Name + "ViewDto");
+                if (viewDtoClass != null)
                 {
-                    CreateMap(type, viewModelClass).ReverseMap();
+                    CreateMap(type, viewDtoClass).ReverseMap();
+                }
+
+                var addDtoClass = assembly.ExportedTypes.FirstOrDefault(x => x.Name == type.Name + "AddDto");
+                if (addDtoClass != null)
+                {
+                    CreateMap(type, addDtoClass).ReverseMap();
                 }
             }
             #endregion

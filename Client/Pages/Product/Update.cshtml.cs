@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
-using Share.Models.ViewModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.Dtos.ViewDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 
 namespace Client.Pages.Product
@@ -27,10 +28,10 @@ namespace Client.Pages.Product
             _logger = logger;
         }
 
-        public ProductEditModel EditModel { get; set; } = new();
+        public ProductEditDto EditModel { get; set; } = new();
         public IFormFile? UploadImage { get; set; }
-        public List<CategoryViewModel> Categories { get; set; } = new();
-        public List<SupplierViewModel> Suppliers { get; set; } = new();
+        public List<CategoryViewDto> Categories { get; set; } = new();
+        public List<SupplierViewDto> Suppliers { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -48,7 +49,7 @@ namespace Client.Pages.Product
                     var model = result.Objects.FirstOrDefault();
                     if (model != null)
                     {
-                        EditModel = _mapper.Map<ProductEditModel>(model);
+                        EditModel = _mapper.Map<ProductEditDto>(model);
                         return Page();
                     }
                     else
@@ -86,7 +87,7 @@ namespace Client.Pages.Product
             }
         }
 
-        public async Task<IActionResult> OnPostAsync(ProductEditModel EditModel)
+        public async Task<IActionResult> OnPostAsync(ProductEditDto EditModel)
         {
             try
             {
@@ -137,7 +138,7 @@ namespace Client.Pages.Product
             }
         }
 
-        private async Task<ResponseCustom<Share.Models.Domain.Product>> GetModelBySearchAsync(ProductSearchModel search)
+        private async Task<ResponseCustom<Share.Models.Domain.Product>> GetModelBySearchAsync(ProductSearchDto search)
         {
             try
             {

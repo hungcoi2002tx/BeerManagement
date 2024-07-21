@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
 using Share.Models.Domain;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 using System.IO;
 
@@ -27,7 +28,7 @@ namespace Client.Pages.Category
         }
 
         [BindProperty]
-        public CategoryEditModel EditModel { get; set; } = new CategoryEditModel();
+        public CategoryEditDto EditModel { get; set; } = new CategoryEditDto();
         public IFormFile? UploadImage { get; set; }
         public async Task<IActionResult> OnGetAsync(int id = 0)
         {
@@ -36,7 +37,7 @@ namespace Client.Pages.Category
                 if (id != 0)
                 {
                     var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_CATEGORY
-                        , new CategorySearchModel
+                        , new CategorySearchDto
                         {
                             Id = id
                         });

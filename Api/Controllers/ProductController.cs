@@ -4,8 +4,9 @@ using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 
 namespace Api.Controllers
@@ -38,7 +39,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<Product>> GetPageAsync([FromBody] ProductSearchModel search)
+        public async Task<ResponseCustom<Product>> GetPageAsync([FromBody] ProductSearchDto search)
         {
             try
             {
@@ -52,7 +53,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<Product>> AddAsync([FromBody] ProductEditModel editModel)
+        public async Task<ResponseCustom<Product>> AddAsync([FromBody] ProductEditDto editModel)
         {
             try
             {
@@ -70,7 +71,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<Product>> UpdateAsync([FromBody] ProductEditModel editModel)
+        public async Task<ResponseCustom<Product>> UpdateAsync([FromBody] ProductEditDto editModel)
         {
             try
             {

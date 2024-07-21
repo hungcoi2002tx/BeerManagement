@@ -3,10 +3,10 @@ using Client.WebRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
-using Share.Models.ViewModels;
-using Share.Ultils;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.Dtos.ViewDtos;
+using Share.Models.ResponseObject;
 
 namespace Client.Pages.Supplier
 {
@@ -22,10 +22,10 @@ namespace Client.Pages.Supplier
             _mapper = mapper;
         }
 
-        public SupplierSearchModel Search { get; set; } = new SupplierSearchModel();
-        public List<SupplierViewModel> ViewModels { get; set; } = new();
+        public SupplierSearchDto Search { get; set; } = new SupplierSearchDto();
+        public List<SupplierViewDto> ViewModels { get; set; } = new();
         [BindProperty]
-        public SupplierEditModel EditModel { get; set; }
+        public SupplierEditDto EditModel { get; set; }
         public async Task<IActionResult> OnGetAsync(int id)
         {
             try
@@ -33,14 +33,14 @@ namespace Client.Pages.Supplier
                 if (id != 0)
                 {
 					#region get id
-					var result = await GetModelBySearchAsync(new SupplierSearchModel
+					var result = await GetModelBySearchAsync(new SupplierSearchDto
                     {
                         Id = id,
                     });
                     var model = result.Objects.FirstOrDefault();
                     if (model != null)
                     {
-                        EditModel = _mapper.Map<SupplierEditModel>(model);
+                        EditModel = _mapper.Map<SupplierEditDto>(model);
 						return Page();
                     }
                     else
@@ -60,7 +60,7 @@ namespace Client.Pages.Supplier
 			}
         }
 
-        public async Task<IActionResult> OnPostAsync(SupplierEditModel EditModel)
+        public async Task<IActionResult> OnPostAsync(SupplierEditDto EditModel)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Client.Pages.Supplier
             }
         }
 
-        private async Task<ResponseCustom<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchModel search)
+        private async Task<ResponseCustom<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchDto search)
 		{
 			try
 			{

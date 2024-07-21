@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using DataLayer.Implements;
 using DataLayer.Interfaces;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Share.Models.Domain;
+using Share.Models.Dtos.AddDtos;
+using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
 using Share.Models.ResponseObject;
 using Share.Ultils;
@@ -14,58 +17,58 @@ using System.Threading.Tasks;
 
 namespace Business.Implements
 {
-    public class SupplierService : ISupplierService
+    public class TableService : ITableService
     {
         private readonly Logger _logger;
-        private readonly ISupplierRepository _repository;
+        private readonly ITableRepository _tableRepository;
         private readonly IMapper _mapper;
 
-        public SupplierService(Logger logger, ISupplierRepository supplierRepository, IMapper mapper)
+        public TableService(Logger logger, ITableRepository tableRepository, IMapper mapper)
         {
             _logger = logger;
-            _repository = supplierRepository;
+            _tableRepository = tableRepository;
             _mapper = mapper;
         }
 
-        public async Task<ResponseCustom<Supplier>> AddAsync(Supplier model)
+        public async Task<ResponseCustom<Table>> AddAsync(TableAddDto obj)
         {
             try
             {
-                var entity = await _repository.AddAsync(model);
+                var response = await _tableRepository.AddAsync(_mapper.Map<Table>(obj));
 
-                return new ResponseCustom<Supplier>
+                return new ResponseCustom<Table>
                 {
                     Status = true,
-                    Object = entity
+                    Object = response
                 };
             }
             catch (Exception ex)
             {
-                await _repository.RollBackTransactionAsync();
+                await _tableRepository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
                 throw;
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
+        public async Task<ResponseCustom<Table>> DeleteAsync(int id)
         {
             try
             {
-                var entity = await _repository.GetPageBySearchAsync(new SupplierSearchDto()
+                var response = await _tableRepository.GetPageBySearchAsync(new TableSearchDto()
                 {
                     Id = id,
                 });
 
-                if (entity.Item2 == 0)
+                if (response.Item2 == 0)
                 {
-                    return ResponeExtentions<Supplier>.GetError404($"Not Found Id = {id}");
+                    return ResponeExtentions<Table>.GetError404($"Not found table with id = {id}");
                 }
 
-                var model = entity.Item1.First();
+                var model = response.Item1.First();
                 model.IsEnable = !model.IsEnable;
-                var result = await _repository.UpdateAsync(model);
+                var result = await _tableRepository.UpdateAsync(model);
 
-                return new ResponseCustom<Supplier>()
+                return new ResponseCustom<Table>()
                 {
                     Status = result,
                 };
@@ -77,16 +80,16 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> GetAllAsync()
+        public async Task<ResponseCustom<Table>> GetAllAsync()
         {
             try
             {
-                var list = await _repository.GetAllAsync();
+                var response = await _tableRepository.GetAllAsync();
 
-                return new ResponseCustom<Supplier>
+                return new ResponseCustom<Table>
                 {
                     Status = true,
-                    Objects = list.ToList(),
+                    Objects = response,
                 };
             }
             catch (Exception ex)
@@ -96,13 +99,13 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> GetPageBySearchAsync(SupplierSearchDto model)
+        public async Task<ResponseCustom<Table>> GetPageBySearchAsync(TableSearchDto obj)
         {
             try
             {
-                var data = await _repository.GetPageBySearchAsync(model);
+                var data = await _tableRepository.GetPageBySearchAsync(obj);
 
-                return new ResponseCustom<Supplier>()
+                return new ResponseCustom<Table>()
                 {
                     Status = true,
                     Objects = data.Item1,
@@ -116,13 +119,13 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> UpdateAsync(Supplier model)
+        public async Task<ResponseCustom<Table>> UpdateAsync(TableEditDto obj)
         {
             try
             {
-                var entity = await _repository.UpdateAsync(model);
+                var entity = await _tableRepository.UpdateAsync(_mapper.Map<Table>(obj));
 
-                return new ResponseCustom<Supplier>
+                return new ResponseCustom<Table>
                 {
                     Status = true,
                 };

@@ -3,7 +3,9 @@ using Business.Interfaces;
 using DataLayer.Implements;
 using DataLayer.Interfaces;
 using Share.Models.Domain;
-using Share.Models.SearchModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 using System;
 using System.Collections.Generic;
@@ -31,6 +33,7 @@ namespace Business.Implements
             try
             {
                 var entity = await _repository.AddAsync(model);
+
                 return new ResponseCustom<Category>
                 {
                     Status = true,
@@ -41,7 +44,7 @@ namespace Business.Implements
             {
                 await _repository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Category>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -49,17 +52,20 @@ namespace Business.Implements
         {
             try
             {
-                var entity = await _repository.GetPageBySearchAsync(new CategorySearchModel()
+                var entity = await _repository.GetPageBySearchAsync(new CategorySearchDto()
                 {
                     Id = id,
                 });
+
                 if (entity.Item2 == 0)
                 {
                     return ResponeExtentions<Category>.GetError404($"Not Found Id = {id}");
                 }
+
                 var model = entity.Item1.First();
                 model.IsEnable = !model.IsEnable;
                 var result = await _repository.UpdateAsync(model);
+
                 return new ResponseCustom<Category>()
                 {
                     Status = result,
@@ -68,7 +74,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Category>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -77,6 +83,7 @@ namespace Business.Implements
             try
             {
                 var list = await _repository.GetAllAsync();
+
                 return new ResponseCustom<Category>
                 {
                     Status = true,
@@ -86,11 +93,11 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Category>.GetError500(ex.ToString());
+                throw;
             }
         }
 
-        public async Task<ResponseCustom<Category>> GetPageBySearchAsync(CategorySearchModel model)
+        public async Task<ResponseCustom<Category>> GetPageBySearchAsync(CategorySearchDto model)
         {
             try
             {
@@ -105,7 +112,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Category>.GetError500(ex.ToString());
+                throw;
             }
         }
 
@@ -113,7 +120,7 @@ namespace Business.Implements
         {
             try
             {
-                var entity = await _repository.UpdateAsync(model);
+                var entity = await _repository.UpdateAsync(_mapper.Map<Category>(model));
                 return new ResponseCustom<Category>
                 {
                     Status = true,
@@ -122,7 +129,7 @@ namespace Business.Implements
             catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
-                return ResponeExtentions<Category>.GetError500(ex.ToString());
+                throw;
             }
         }
     }

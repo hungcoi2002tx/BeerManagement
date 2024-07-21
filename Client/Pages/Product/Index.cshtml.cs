@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
-using Share.Models.EditModels;
-using Share.Models.SearchModels;
-using Share.Models.ViewModels;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
+using Share.Models.Dtos.ViewDtos;
+using Share.Models.ResponseObject;
 using Share.Ultils;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,11 +31,11 @@ namespace Client.Pages.Product
         }
         public IFormFile? UploadImage {  get; set; }
 
-        public ProductSearchModel Search { get; set; } = new ProductSearchModel();
-        public List<ProductViewModel> ViewModels { get; set; } = new();
-        public ProductEditModel EditModel { get; set; } = new();
-        public List<CategoryViewModel> Categories { get; set; } = new();
-        public List<SupplierViewModel> Suppliers { get; set; } = new();
+        public ProductSearchDto Search { get; set; } = new ProductSearchDto();
+        public List<ProductViewDto> ViewModels { get; set; } = new();
+        public ProductEditDto EditModel { get; set; } = new();
+        public List<CategoryViewDto> Categories { get; set; } = new();
+        public List<SupplierViewDto> Suppliers { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int pageIndex, bool DataAdded)
         {
@@ -51,7 +52,7 @@ namespace Client.Pages.Product
             }
         }
 
-        public async Task<IActionResult> OnPostAddAsync(ProductEditModel EditModel)
+        public async Task<IActionResult> OnPostAddAsync(ProductEditDto EditModel)
         {
             try
             {
@@ -114,7 +115,7 @@ namespace Client.Pages.Product
         {
             try
             {
-                Search.Page = new Share.Ultils.Page()
+                Search.Page = new Share.Models.PagingObject.Page()
                 {
                     PageIndex = pageIndex == 0 ? 1 : pageIndex,
                     BaseUrl = "Product"
@@ -130,15 +131,15 @@ namespace Client.Pages.Product
                 var dataSuppliers = await requestSupplier.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (dataCategories.Status)
                 {
-                    Categories = _mapper.Map<List<CategoryViewModel>>(dataCategories.Objects);
+                    Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
                 }
                 if (dataSuppliers.Status)
                 {
-                    Suppliers = _mapper.Map<List<SupplierViewModel>>(dataSuppliers.Objects);
+                    Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
                 }
                 if (dataProduct.Status)
                 {
-                    ViewModels = _mapper.Map<List<ProductViewModel>>(dataProduct.Objects);
+                    ViewModels = _mapper.Map<List<ProductViewDto>>(dataProduct.Objects);
                     Search.Page.Total = dataProduct.Total;
                     int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
                     foreach (var item in ViewModels)
