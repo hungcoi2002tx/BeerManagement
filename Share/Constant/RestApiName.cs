@@ -28,5 +28,7 @@ namespace Share.Constant
         public const string DELETE_PRODUCT = BaseUrl + "Product/Delete/{0}";
         public const string PUT_PRODUCT = BaseUrl + "Product/Update";
 
+
+
     }
 }
