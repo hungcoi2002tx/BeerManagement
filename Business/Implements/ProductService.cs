@@ -30,17 +30,6 @@ namespace Business.Implements
         {
             try
             {
-                if (model.SupplierId == -1)
-                {
-                    model.ForSell = false;
-                    model.SupplierId = null;
-                }
-                else
-                {
-                    model.ForSell = true;
-                }
-
-                model.IsEnable = true;
                 var entity = await _repository.AddAsync(model);
 
                 return new ResponseCustom<Product>
@@ -72,7 +61,7 @@ namespace Business.Implements
                 }
 
                 var product = entity.Item1.First();
-                product.IsEnable = false;
+                product.IsEnable = !product.IsEnable;
                 var result = await _repository.UpdateAsync(product);
 
                 return new ResponseCustom<Product>()

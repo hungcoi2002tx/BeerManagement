@@ -1,5 +1,7 @@
 using AutoMapper;
+using Client.Ultils;
 using Client.WebRequests;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
@@ -17,17 +19,17 @@ namespace Client.Pages.Product
         private readonly ICustomHttpClient _request;
         private readonly IMapper _mapper;
         private readonly Logger _logger;
-        private readonly IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public IFormFile? UploadImage {  get; set; }
 
         public IndexModel(ICustomHttpClient request, IMapper mapper, Logger logger, IWebHostEnvironment environment)
         {
             _request = request;
             _mapper = mapper;
             _logger = logger;
-            _environment = environment;
+            _webHostEnvironment = environment;
         }
+        public IFormFile? UploadImage {  get; set; }
 
         public ProductSearchDto Search { get; set; } = new ProductSearchDto();
         public List<ProductViewDto> ViewModels { get; set; } = new();
@@ -35,12 +37,11 @@ namespace Client.Pages.Product
         public List<CategoryViewDto> Categories { get; set; } = new();
         public List<SupplierViewDto> Suppliers { get; set; } = new();
 
-        public bool IsImport { get; set; } = true;
-
-        public async Task<IActionResult> OnGetAsync(int pageIndex)
+        public async Task<IActionResult> OnGetAsync(int pageIndex, bool DataAdded)
         {
             try
             {
+                ViewData["DataAdded"] = DataAdded;
                 await GetBaseDataAsync(pageIndex);
                 return Page();
             }
@@ -55,38 +56,46 @@ namespace Client.Pages.Product
         {
             try
             {
-                ValidateImageUpload(UploadImage);
+                if (UploadImage != null)
+                {
+                    var errorImage = UploadImage.ValidateImageUpload();
+                    if (errorImage.key != null)
+                    {
+                        ModelState.AddModelError(errorImage.key, errorImage.value);
+                    }
+                    else
+                    {
+                        string? fileName = null;
+                        var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
+                        fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
+                        var uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "product");
+                        if (!Directory.Exists(uploadFolder))
+                        {
+                            Directory.CreateDirectory(uploadFolder);
+                        }
+                        var file = Path.Combine(uploadFolder, fileName);
+                        using (var fileStream = new FileStream(file, FileMode.Create))
+                        {
+                            await UploadImage.CopyToAsync(fileStream);
+                        }
+                        EditModel.Image = fileName;
+                      }
+                }
                 if (!ModelState.IsValid || EditModel == null)
                 {
                     await GetBaseDataAsync();
                     return Page();
                 }
-                string? fileName = null;
-                if (UploadImage != null)
-                {
-                    var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
-                    fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
-                    var uploadFolder = Path.Combine(_environment.WebRootPath, "images", "product");
-                    if (!Directory.Exists(uploadFolder))
-                    {
-                        Directory.CreateDirectory(uploadFolder);
-                    }
-                    var file = Path.Combine(uploadFolder, fileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
-                        await UploadImage.CopyToAsync(fileStream);
-                    }
-                }
+                #region check import or export product
+                EditModel.ForSell = EditModel.SupplierId == -1;
+                EditModel.SupplierId = null;
+                #endregion
 
-                EditModel.Image = fileName;
                 var request = await _request.PostJsonAsync(RestApiName.POST_Add_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (result.Status)
                 {
-                    ViewData["DataAdded"] = true;
-                    EditModel = new ProductEditDto();
-                    await GetBaseDataAsync();
-                    return Page();
+                    return RedirectToPage("./Index", new { DataAdded = true});
                 }
                 else
                 {
@@ -112,15 +121,14 @@ namespace Client.Pages.Product
                     BaseUrl = "Product"
                 };
                 Search.IsIncludeSupplier = true;
-                Search.IsEnableOnly = true;
                 Search.IsIncludeCategory = true;
                 var requestProduct = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, Search);
-                var requestCategories = await _request.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
-                var requestSuppliers = await _request.GetAsync(RestApiName.GET_ALL_LIST_SUPPLIER);
+                var requestCategory = await _request.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
+                var requestSupplier = await _request.GetAsync(RestApiName.GET_ALL_LIST_SUPPLIER);
 
                 var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-                var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+                var dataCategories = await requestCategory.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+                var dataSuppliers = await requestSupplier.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (dataCategories.Status)
                 {
                     Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);

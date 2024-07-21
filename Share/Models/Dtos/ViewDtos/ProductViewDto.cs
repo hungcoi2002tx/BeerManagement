@@ -27,7 +27,7 @@ namespace Share.Models.Dtos.ViewDtos
         public bool IsEnable { get; set; }
         public string GetImage
         {
-            get => $"/images/product/{Image}";
+            get => $"./images/product/{Image}";
         }
         public CategoryViewDto Category { get; set; }
         public SupplierViewDto? Supplier { get; set; }
