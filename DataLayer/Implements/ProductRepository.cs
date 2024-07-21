@@ -24,9 +24,9 @@ namespace DataLayer.Implements
             {
                 IQueryable<Product> filter = _context.Products;
 
-                if (model.IsEnableOnly)
+                if (model.IsEnable != null)
                 {
-                    filter = filter.Where(x => x.IsEnable == true);
+                    filter = filter.Where(x => x.IsEnable == model.IsEnable);
                 }
                 if (model.Id != 0)
                 {
@@ -35,6 +35,10 @@ namespace DataLayer.Implements
                 if (model.Name != null)
                 {
                     filter = filter.Where(x => x.Name == model.Name);
+                }
+                if (model.IsForSell != null)
+                {
+                    filter = filter.Where(x => x.ForSell == model.IsForSell);
                 }
                 return filter;
             }
