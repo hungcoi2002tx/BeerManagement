@@ -41,7 +41,7 @@ namespace Client.Pages.Product
                 {
                     await GetBaseDataAsync();
 
-                    var result = await GetModelBySearchAsync(new ProductSearchModel
+                    var result = await GetModelBySearchAsync(new ProductSearchDto
                     {
                         Id = id,
                     });
@@ -79,11 +79,11 @@ namespace Client.Pages.Product
 
             if (dataCategories.Status)
             {
-                Categories = _mapper.Map<List<CategoryViewModel>>(dataCategories.Objects);
+                Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
             }
             if (dataSuppliers.Status)
             {
-                Suppliers = _mapper.Map<List<SupplierViewModel>>(dataSuppliers.Objects);
+                Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
             }
         }
 

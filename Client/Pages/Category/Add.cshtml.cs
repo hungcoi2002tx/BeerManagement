@@ -50,7 +50,7 @@ namespace Client.Pages.Category
                     {
                         return Redirect(GlobalVariants.PAGE_400);
                     }
-                    EditModel = _mapper.Map<CategoryEditModel>(entity.Objects.First());
+                    EditModel = _mapper.Map<CategoryEditDto>(entity.Objects.First());
                 }
                 return Page();
             }
