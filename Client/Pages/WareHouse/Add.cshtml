@@ -32,13 +32,8 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="#wizard_Details">
+                                    <a class="nav-link" href="#wizard_Details" id="nav-link-total">
                                         <span>3</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href="#wizard_Payment">
-                                        <span>4</span>
                                     </a>
                                 </li>
                             </ul>
@@ -46,33 +41,24 @@
                                 <div id="wizard_Service" class="tab-pane" role="tabpanel">
                                     <div class="row">
                                         <div class="col-lg-6 mb-2">
-                                            <div class="form-group">
-                                                <label class="form-label">First Name<span class="required">*</span></label>
-                                                <input type="text" name="firstName" class="form-control" placeholder="Parsley" required>
+                                            <div class="card-header d-block">
+                                                <h4 class="card-title">Choose Product</h4>
+                                                <p class="m-0 subtitle">
+                                                    Choosing products to be entered into the Warehouse.
+                                                </p>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6 mb-2">
-                                            <div class="form-group">
-                                                <label class="form-label">Last Name<span class="required">*</span></label>
-                                                <input type="text" name="lastName" class="form-control" placeholder="Montana" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 mb-2">
-                                            <div class="form-group">
-                                                <label class="form-label">Email Address<span class="required">*</span></label>
-                                                <input type="email" class="form-control" id="inputGroupPrepend2" aria-describedby="inputGroupPrepend2" placeholder="example@example.com.com" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 mb-2">
-                                            <div class="form-group">
-                                                <label class="form-label">Phone Number<span class="required">*</span></label>
-                                                <input type="text" name="phoneNumber" class="form-control" placeholder="(+1)408-657-9007" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12 mb-3">
-                                            <div class="form-group">
-                                                <label class="form-label">Where are you from<span class="required">*</span></label>
-                                                <input type="text" name="place" class="form-control" required>
+                                            <div class="card-body">
+                                                <div class="basic-dropdown">
+                                                    <label for="productSelect">Select a product:</label>
+                                                    <select id="productSelect" class="form-control solid" onchange="handleSelectChange()">
+                                                        @foreach (var item in Model.Products)
+                                                        {
+                                                            <option value="@item.Id">
+                                                                @item.Name
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -81,165 +67,56 @@
                                     <div class="row">
                                         <div class="col-lg-6 mb-2">
                                             <div class="form-group">
-                                                <label class="form-label">Company Name<span class="required">*</span></label>
-                                                <input type="text" name="firstName" class="form-control" placeholder="Cellophane Square" required>
+                                                <label class="form-label">Quantity<span class="required">*</span></label>
+                                                <input asp-for="EditModel.Quantity" class="form-control solid" placeholder="0" oninput="syncInput()" id="input-quantity">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <div class="form-group">
-                                                <label class="form-label">Company Email Address<span class="required">*</span></label>
-                                                <input type="email" class="form-control" id="emial1" placeholder="example@example.com.com" required>
+                                                <label class="form-label">UnitPrice<span class="required">*</span></label>
+                                                <input asp-for="EditModel.UnitPrice" class="form-control solid" placeholder="0" id="input-unitPrice" oninput="syncInput()">
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 mb-2">
+                                        <div class="col-lg-12 mb-2">
                                             <div class="form-group">
-                                                <label class="form-label">Company Phone Number<span class="required">*</span></label>
-                                                <input type="text" name="phoneNumber" class="form-control" placeholder="(+1)408-657-9007" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 mb-2">
-                                            <div class="form-group">
-                                                <label class="form-label">Your position in Company<span class="required">*</span></label>
-                                                <input type="text" name="place" class="form-control" required>
+                                                <label class="form-label">Description<span class="required">*</span></label>
+                                                <textarea rows="8" class="form-control solid" asp-for="EditModel.Description" placeholder="Description"></textarea>
+                                                <span asp-validation-for="EditModel.Description" class="text-danger"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div id="wizard_Details" class="tab-pane" role="tabpanel">
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-4 mb-2">
-                                            <label class="form-label">Monday<span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="9.00" type="number" name="input1" id="input1">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-black">Summany Transaction</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Price</h6>
+                                                <small class="text-muted"></small>
                                             </div>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="6.00" type="number" name="input2" id="input2">
+                                            <span class="text-muted" id="price"></span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Quantity</h6>
+                                                <small class="text-muted"></small>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-4 mb-2">
-                                            <label class="form-label">Tuesday<span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="9.00" type="number" name="input3" id="input3">
+                                            <span class="text-muted" id="quantity"></span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between active">
+                                            <div class="text-white">
+                                                <h6 class="my-0 text-white">Total</h6>
                                             </div>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="6.00" type="number" name="input4" id="input4">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-4 mb-2">
-                                            <label class="form-label"> Wednesday<span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="9.00" type="number" name="input5" id="input5">
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="6.00" type="number" name="input6" id="input6">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-4 mb-2">
-                                            <label class="form-label">Thursday<span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="9.00" type="number" name="input7" id="input7">
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="6.00" type="number" name="input8" id="input8">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center">
-                                        <div class="col-sm-4 mb-2">
-                                            <label class="form-label">Friday<span class="required">*</span></label>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="9.00" type="number" name="input9" id="input9">
-                                            </div>
-                                        </div>
-                                        <div class="col-6 col-sm-4 mb-2">
-                                            <div class="form-group">
-                                                <input class="form-control" value="6.00" type="number" name="input10" id="input10">
-                                            </div>
-                                        </div>
+                                            <span class="text-white" id="total"></span>
+                                        </li>
+                                    </ul>
+                                    <div class="input-group">
+                                        <input type="submit" value="Add" class="submit btn btn-primary" id="submitButton" name="Add" hidden>
                                     </div>
                                 </div>
-                                <div id="wizard_Payment" class="tab-pane" role="tabpanel">
-                                    <div class="row emial-setup">
-                                        <div class="col-lg-3 col-sm-6 col-6">
-                                            <div class="form-group">
-                                                <label for="mailclient11" class="mailclinet mailclinet-gmail">
-                                                    <input type="radio" name="emailclient" id="mailclient11">
-                                                    <span class="mail-icon">
-                                                        <i class="mdi mdi-google-plus" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span class="mail-text">I'm using Gmail</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6 col-6">
-                                            <div class="form-group">
-                                                <label for="mailclient12" class="mailclinet mailclinet-office">
-                                                    <input type="radio" name="emailclient" id="mailclient12">
-                                                    <span class="mail-icon">
-                                                        <i class="mdi mdi-office" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span class="mail-text">I'm using Office</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6 col-6">
-                                            <div class="form-group">
-                                                <label for="mailclient13" class="mailclinet mailclinet-drive">
-                                                    <input type="radio" name="emailclient" id="mailclient13">
-                                                    <span class="mail-icon">
-                                                        <i class="mdi mdi-google-drive" aria-hidden="true"></i>
-                                                    </span>
-                                                    <span class="mail-text">I'm using Drive</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-6 col-6">
-                                            <div class="form-group">
-                                                <label for="mailclient14" class="mailclinet mailclinet-another">
-                                                    <input type="radio" name="emailclient" id="mailclient14">
-                                                    <span class="mail-icon">
-                                                        <i class="fa fa-question-circle-o"
-                                                           aria-hidden="true"></i>
-                                                    </span>
-                                                    <span class="mail-text">Another Service</span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="skip-email text-center">
-                                                <p>Or if want skip this step entirely and setup it later</p>
-                                                <a href="javascript:void(0)">Skip step</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </form>
@@ -248,3 +125,38 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        var price = document.getElementById("price");
+        var quantity = document.getElementById("quantity");
+        var inputUnitPrice = document.getElementById("input-unitPrice");
+        var inputQuantity = document.getElementById("input-quantity");
+        
+        function syncInput() {
+            price.textContent = inputUnitPrice.value;
+            quantity.textContent = inputQuantity.value;
+            if (price.textContent.trim() && !isNaN(price.textContent.trim()) && quantity.textContent.trim() && !isNaN(quantity.textContent.trim())) {
+                var total = document.getElementById("total");
+                total.textContent = inputUnitPrice.value * inputQuantity.value;
+                var submitButton = document.getElementById("submitButton");
+                if (total.textContent.trim() && !isNaN(total.textContent.trim())) {
+                    submitButton.hidden = false; // Bỏ kích hoạt nút
+                } else {
+                    submitButton.hidden = true; // Vô hiệu hóa nút
+                }
+                console.log(submitButton);
+                console.log(submitButton.hidden);
+            } else {
+                var total = document.getElementById("total");
+                total.textContent = "";
+                var submitButton = document.getElementById("submitButton");
+                submitButton.hidden = true;
+            }
+            
+        }
+
+        document.getElementById("nav-link-total").addEventListener("click", function (event) {
+           
+        });
+</script>
+}

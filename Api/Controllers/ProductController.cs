@@ -24,7 +24,7 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("GetAll")]
+        [HttpPost("GetAll")]
         public async Task<ResponseCustom<Product>> GetAllBySearchAsync([FromBody] ProductSearchDto search)
         {
             try
