@@ -10,37 +10,26 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Implements
 {
-    public class OrderRepository : Repository<Order>, IOrderRepository
+    public class OrderDetailRepository : Repository<OrderDetail>, IOrderDetailRepository
     {
-        public OrderRepository(BeerManagementContext beerManagementContext) : base(beerManagementContext)
+        public OrderDetailRepository(BeerManagementContext beerManagementContext) : base(beerManagementContext)
         {
         }
 
-        public async Task<(List<Order>, int)> GetPageBySearchAsync(OrderSearchDto obj)
+        public async Task<(List<OrderDetail>, int)> GetPageBySearchAsync(OrderDetailSearchDto obj)
         {
             try
             {
-                IQueryable<Order> filter = _context.Orders;
+                IQueryable<OrderDetail> filter = _context.OrderDetails;
 
-                if (obj.Id != 0)
+                if (obj.OrderId != -1)
                 {
-                    filter = filter.Where(x => x.Id == obj.Id);
+                    filter = filter.Where(x => x.OrderId == obj.OrderId);
                 }
-                if (obj.Date != null)
+               
+                if (obj.ProductId != -1)
                 {
-                    filter = filter.Where(x => x.Date == obj.Date);
-                }
-                if (obj.PaymentDate != null)
-                {
-                    filter = filter.Where(x => x.PaymentDate == obj.PaymentDate);
-                }
-                if (obj.PaymentStatus != -1)
-                {
-                    filter = filter.Where(x => x.PaymentStatus == obj.PaymentStatus);
-                }
-                if (obj.TableId != -1)
-                {
-                    filter = filter.Where(x => x.TableId == obj.TableId);
+                    filter = filter.Where(x => x.ProductId == obj.ProductId);
                 }
 
                 var count = await filter.CountAsync();
@@ -61,7 +50,7 @@ namespace DataLayer.Implements
             }
         }
 
-        public async Task<bool> UpdateAsync(Order obj)
+        public async Task<bool> UpdateAsync(OrderDetail obj)
         {
             try
             {
