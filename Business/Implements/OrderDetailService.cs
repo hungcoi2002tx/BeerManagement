@@ -80,11 +80,11 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<OrderDetail>> GetAllAsync()
+        public async Task<ResponseCustom<OrderDetail>> GetAllBySearchAsync(OrderDetailSearchDto obj)
         {
             try
             {
-                var response = await _orderDetailRepository.GetAllAsync();
+                var response = await _orderDetailRepository.GetAllBySearchAsync(obj);
 
                 return new ResponseCustom<OrderDetail>
                 {

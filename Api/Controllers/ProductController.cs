@@ -25,11 +25,11 @@ namespace Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ResponseCustom<Product>> GetAllAsync()
+        public async Task<ResponseCustom<Product>> GetAllBySearchAsync([FromBody] ProductSearchDto search)
         {
             try
             {
-                var result = await _productService.GetAllAsync();
+                var result = await _productService.GetAllBySearchAsync(search);
                 return result;
             }
             catch (Exception ex)

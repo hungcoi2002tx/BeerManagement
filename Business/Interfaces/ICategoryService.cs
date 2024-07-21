@@ -12,7 +12,7 @@ namespace Business.Interfaces
 {
     public interface ICategoryService
     {
-        Task<ResponseCustom<Category>> GetAllAsync();
+        Task<ResponseCustom<Category>> GetAllBySearchAsync(CategorySearchDto model);
         Task<ResponseCustom<Category>> AddAsync(Category model);
         Task<ResponseCustom<Category>> UpdateAsync(Category model);
         Task<ResponseCustom<Category>> DeleteAsync(int id);

@@ -11,7 +11,7 @@ namespace Business.Interfaces
 {
     public interface ISupplierService
     {
-        Task<ResponseCustom<Supplier>> GetAllAsync();
+        Task<ResponseCustom<Supplier>> GetAllBySearchAsync(SupplierSearchDto model);
         Task<ResponseCustom<Supplier>> AddAsync(Supplier model);
         Task<ResponseCustom<Supplier>> UpdateAsync(Supplier model);
         Task<ResponseCustom<Supplier>> DeleteAsync(int id);

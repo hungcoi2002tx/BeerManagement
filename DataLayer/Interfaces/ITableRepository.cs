@@ -13,5 +13,6 @@ namespace DataLayer.Interfaces
     {
         Task<(List<Share.Models.Domain.Table>, int)> GetPageBySearchAsync(TableSearchDto obj);
         Task<bool> UpdateAsync(Share.Models.Domain.Table obj);
+        Task<List<Share.Models.Domain.Table>> GetAllBySearchAsync(TableSearchDto model);
     }
 }

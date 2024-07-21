@@ -123,12 +123,18 @@ namespace Client.Pages.Product
                 Search.IsIncludeSupplier = true;
                 Search.IsIncludeCategory = true;
                 var requestProduct = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, Search);
-                var requestCategory = await _request.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
-                var requestSupplier = await _request.GetAsync(RestApiName.GET_ALL_LIST_SUPPLIER);
+                var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
+                {
+                    IsEnable = true
+                });
+                var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
+                {
+                    IsEnable = true
+                });
 
                 var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-                var dataCategories = await requestCategory.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                var dataSuppliers = await requestSupplier.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+                var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+                var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (dataCategories.Status)
                 {
                     Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
