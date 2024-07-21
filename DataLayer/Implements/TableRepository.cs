@@ -16,12 +16,11 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<(List<Share.Models.Domain.Table>, int)> GetPageBySearchAsync(TableSearchDto obj)
+        private IQueryable<Table> GetQueryable(TableSearchDto obj)
         {
             try
             {
                 IQueryable<Table> filter = _context.Tables;
-
                 if (obj.Id != 0)
                 {
                     filter = filter.Where(x => x.Id == obj.Id);
@@ -34,6 +33,19 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.Status == obj.Status);
                 }
+                return filter;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<(List<Share.Models.Domain.Table>, int)> GetPageBySearchAsync(TableSearchDto obj)
+        {
+            try
+            {
+                var filter = GetQueryable(obj);
 
                 var count = await filter.CountAsync();
 
@@ -68,6 +80,20 @@ namespace DataLayer.Implements
             catch (Exception)
             {
                 await RollBackTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<List<Table>> GetAllBySearchAsync(TableSearchDto searchModel)
+        {
+            try
+            {
+                var filter = GetQueryable(searchModel);
+                var data = await filter.ToListAsync(); 
+                return data;
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

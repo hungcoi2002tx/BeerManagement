@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Share.Models.Domain;
 using Share.Models.Dtos.SearchDtos;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,25 +18,37 @@ namespace DataLayer.Implements
         {
             
         }
-
-        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchDto model)
+        private IQueryable<Product> GetQueryable(ProductSearchDto model)
         {
             try
             {
                 IQueryable<Product> filter = _context.Products;
 
-                if(model.IsEnableOnly) 
-                { 
-                    filter = filter.Where(x => x.IsEnable == true); 
+                if (model.IsEnableOnly)
+                {
+                    filter = filter.Where(x => x.IsEnable == true);
                 }
-                if(model.Id != 0)
+                if (model.Id != 0)
                 {
                     filter = filter.Where(x => x.Id == model.Id);
                 }
-                if(model.Name != null)
+                if (model.Name != null)
                 {
                     filter = filter.Where(x => x.Name == model.Name);
                 }
+                return filter;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchDto model)
+        {
+            try
+            {
+                var filter = GetQueryable(model);
 
                 filter = filter.OrderBy(x => x.Id);
                 int count = await filter.CountAsync();
@@ -78,6 +91,20 @@ namespace DataLayer.Implements
             catch (Exception ex)
             {
                 await RollBackTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<List<Product>> GetAllBySearchAsync(ProductSearchDto searchModel)
+        {
+            try
+            {
+                var filter = GetQueryable(searchModel);
+                var data = await filter.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
                 throw;
             }
         }

@@ -115,8 +115,14 @@ namespace Client.Pages.Product
                 Search.IsEnableOnly = true;
                 Search.IsIncludeCategory = true;
                 var requestProduct = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, Search);
-                var requestCategories = await _request.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
-                var requestSuppliers = await _request.GetAsync(RestApiName.GET_ALL_LIST_SUPPLIER);
+                var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
+                {
+                    IsEnable = true
+                });
+                var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
+                {
+                    IsEnable = true
+                });
 
                 var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();

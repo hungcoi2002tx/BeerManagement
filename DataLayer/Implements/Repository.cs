@@ -70,7 +70,7 @@ namespace DataLayer.Implements
             return result;
         }
 
-        public async Task<List<T>> GetAllAsync()
+        public async Task<List<T>> GetAllBySearchAsync()
         {
             var result = await _dbSet.ToListAsync();
 

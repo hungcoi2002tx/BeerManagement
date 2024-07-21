@@ -24,12 +24,12 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ResponseCustom<Category>> GetAllAsync()
+        [HttpPost("GetAll")]
+        public async Task<ResponseCustom<Category>> GetAllAsync([FromBody] CategorySearchDto SearchModel)
         {
             try
             {
-                var result = await _servive.GetAllAsync();
+                var result = await _servive.GetAllBySearchAsync(SearchModel);
 
                 return result;
             }

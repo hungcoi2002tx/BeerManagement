@@ -18,15 +18,22 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<(List<Supplier>,int)> GetPageBySearchAsync(SupplierSearchDto model)
+
+
+        public Task<List<Supplier>> GetAllBySearchAsync(SupplierSearchDto model)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IQueryable<Supplier> GetQueryable(SupplierSearchDto model)
         {
             try
             {
                 IQueryable<Supplier> filter = _context.Suppliers;
 
-                if(model.Id != 0)
+                if (model.Id != 0)
                 {
-                    filter = filter.Where(x => x.Id == model.Id);    
+                    filter = filter.Where(x => x.Id == model.Id);
                 }
                 if (model.SupplierName.IsNotNullOrEmpty())
                 {
@@ -36,6 +43,24 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.PhoneNumber == model.PhoneNumber);
                 }
+                if (model.IsEnable != null)
+                {
+                    filter = filter.Where(x => x.IsEnable == model.IsEnable);
+                }
+
+                return filter;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<(List<Supplier>,int)> GetPageBySearchAsync(SupplierSearchDto model)
+        {
+            try
+            {
+                var filter = GetQueryable(model);
 
                 var count = await filter.CountAsync();
 

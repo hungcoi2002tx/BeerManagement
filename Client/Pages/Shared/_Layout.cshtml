@@ -33,6 +33,12 @@
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/css/style.css" rel="stylesheet">
     <link href="~/../../cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet" />
+    <!-- Form step -->
+    <link href="~/vendor/jquery-steps/css/jquery.steps.css" rel="stylesheet">
+    <!-- Form step -->
+    <link href="~/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="~/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
 </head>
 <body>
     <!--*******************
@@ -1370,11 +1376,10 @@
                            href="javascript:void()"
                            aria-expanded="false">
                             <i class="flaticon-381-network"></i>
-                            <span class="nav-text">Table</span>
+                            <span class="nav-text">WareHouse</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-                            <li><a href="table-datatable-basic.html">Datatable</a></li>
+                            <li><a asp-page="/WareHouse/Add">Add</a></li>
                         </ul>
                     </li>
                     <li>
@@ -1387,6 +1392,7 @@
                         <ul aria-expanded="false">
                             <li><a asp-page="/Category/Index">Category</a></li>
                             <li><a asp-page="/Supplier/Index">Supplier</a></li>
+                            <li><a asp-page="/Product/Index">Product</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -1451,19 +1457,32 @@
           rel="stylesheet" />
     <script src="~/js/custom.min.js"></script>
     <script src="~/js/deznav-init.js"></script>
-
+    <script src="~/vendor/jquery-steps/build/jquery.steps.min.js"></script>
+    <script src="~/vendor/jquery-validation/jquery.validate.min.js"></script>
     <!-- Counter Up -->
     <script src="~/vendor/waypoints/jquery.waypoints.min.js"></script>
     <script src="~/vendor/jquery.counterup/jquery.counterup.min.js"></script>
 
     <!-- Chart piety plugin files -->
     <script src="~/vendor/peity/jquery.peity.min.js"></script>
-
+    <!-- Form validate init -->
+    <script src="~/js/plugins-init/jquery.validate-init.js"></script>
     <!-- Apex Chart -->
     <script src="~/vendor/apexchart/apexchart.js"></script>
     <!-- Datatable -->
     <script src="~/vendor/datatables/js/jquery.dataTables.min.js"></script>
     <script src="~/js/plugins-init/datatables.init.js"></script>
+
+    <!-- Form Steps -->
+    <script src="~/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // SmartWizard initialize
+            $('#smartwizard').smartWizard();
+        });
+    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 
