@@ -13,7 +13,7 @@ namespace Business.Interfaces
 {
     public interface ITableService
     {
-        Task<ResponseCustom<Table>> GetAllAsync();
+        Task<ResponseCustom<Table>> GetAllBySearchAsync(TableSearchDto model);
         Task<ResponseCustom<Table>> AddAsync(TableAddDto obj);
         Task<ResponseCustom<Table>> UpdateAsync(TableEditDto obj);
         Task<ResponseCustom<Table>> DeleteAsync(int id);

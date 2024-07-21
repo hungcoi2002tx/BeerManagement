@@ -77,11 +77,11 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Supplier>> GetAllAsync()
+        public async Task<ResponseCustom<Supplier>> GetAllBySearchAsync(SupplierSearchDto searchModel)
         {
             try
             {
-                var list = await _repository.GetAllAsync();
+                var list = await _repository.GetAllBySearchAsync(searchModel);
 
                 return new ResponseCustom<Supplier>
                 {

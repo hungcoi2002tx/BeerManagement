@@ -10,6 +10,7 @@ using Share.Models.Dtos.SearchDtos;
 using Share.Models.Dtos.ViewDtos;
 using Share.Models.ResponseObject;
 using Share.Ultils;
+using System.Collections.Generic;
 
 namespace Client.Pages.Product
 {
@@ -71,8 +72,14 @@ namespace Client.Pages.Product
 
         private async Task GetBaseDataAsync()
         {
-            var requestCategories = await _request.GetAsync(RestApiName.GET_ALL_LIST_CATEGORY);
-            var requestSuppliers = await _request.GetAsync(RestApiName.GET_ALL_LIST_SUPPLIER);
+            var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
+            {
+                IsEnable = true
+            });
+            var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
+            {
+                IsEnable = true
+            });
 
             var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
             var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();

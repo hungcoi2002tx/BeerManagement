@@ -11,7 +11,7 @@ namespace Business.Interfaces
 {
     public interface IProductService
     {
-        Task<ResponseCustom<Product>> GetAllAsync();
+        Task<ResponseCustom<Product>> GetAllBySearchAsync(ProductSearchDto model);
         Task<ResponseCustom<Product>> AddAsync(Product model);
         Task<ResponseCustom<Product>> UpdateAsync(Product model);
         Task<ResponseCustom<Product>> DeleteAsync(int id);

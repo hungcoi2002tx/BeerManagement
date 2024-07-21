@@ -21,12 +21,12 @@ namespace Api.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ResponseCustom<Order>> GetAllAsync()
+        [HttpPost("GetAll")]
+        public async Task<ResponseCustom<Order>> GetAllBySearchAsync([FromBody] OrderSearchDto search)
         {
             try
             {
-                var result = await _orderService.GetAllAsync();
+                var result = await _orderService.GetAllBySearchAsync(search);
                 return result;
             }
             catch (Exception)

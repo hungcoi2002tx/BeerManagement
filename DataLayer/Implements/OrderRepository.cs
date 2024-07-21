@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Share.Models.Domain;
 using Share.Models.Dtos.SearchDtos;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,21 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<(List<Order>, int)> GetPageBySearchAsync(OrderSearchDto obj)
+        public async Task<List<Order>> GetAllBySearchAsync(OrderSearchDto model)
+        {
+            try
+            {
+                var filter = GetQueryable(model);
+                var data = await filter.ToListAsync();
+                return data;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private IQueryable<Order> GetQueryable(OrderSearchDto obj)
         {
             try
             {
@@ -42,9 +57,20 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.TableId == obj.TableId);
                 }
+                return filter;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
 
+        public async Task<(List<Order>, int)> GetPageBySearchAsync(OrderSearchDto obj)
+        {
+            try
+            {
+                var filter = GetQueryable(obj);
                 var count = await filter.CountAsync();
-
                 if (obj.Page != null && obj.Page.PageIndex != 0)
                 {
                     filter = filter.Skip(obj.Page.PageSize * (obj.Page.PageIndex - 1))

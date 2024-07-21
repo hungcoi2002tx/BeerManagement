@@ -12,5 +12,6 @@ namespace DataLayer.Interfaces
     {
         Task<bool> UpdateAsync(Product model);
         Task<(List<Product>, int)> GetPageBySearchAsync(ProductSearchDto model);
+        Task<List<Product>> GetAllBySearchAsync(ProductSearchDto model);
     }
 }

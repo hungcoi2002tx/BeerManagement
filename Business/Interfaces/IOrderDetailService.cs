@@ -13,7 +13,7 @@ namespace Business.Interfaces
 {
     public interface IOrderDetailService
     {
-        Task<ResponseCustom<OrderDetail>> GetAllAsync();
+        Task<ResponseCustom<OrderDetail>> GetAllBySearchAsync(OrderDetailSearchDto obj);
         Task<ResponseCustom<OrderDetail>> AddAsync(OrderDetailAddDto obj);
         Task<ResponseCustom<OrderDetail>> UpdateAsync(OrderDetailEditDto obj);
         Task<ResponseCustom<OrderDetail>> DeleteAsync(int orderId, int productId);

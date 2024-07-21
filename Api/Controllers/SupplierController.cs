@@ -25,12 +25,12 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ResponseCustom<Supplier>> GetAllAsync()
+        [HttpPost("GetAll")]
+        public async Task<ResponseCustom<Supplier>> GetAllBySearchAsync([FromBody] SupplierSearchDto search)
         {
             try
             {
-                var result = await _supplierService.GetAllAsync();
+                var result = await _supplierService.GetAllBySearchAsync(search);
                 return result;
             }
             catch (Exception ex)
