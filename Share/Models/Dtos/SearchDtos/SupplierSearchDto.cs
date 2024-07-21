@@ -13,6 +13,6 @@ namespace Share.Models.Dtos.SearchDtos
         public int Id { get; set; }
         public string? SupplierName { get; set; }
         public string? PhoneNumber { get; set; }
-        public bool IsEnable { get; set; }
+        public bool? IsEnable { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Share.Models.Dtos.SearchDtos;
+﻿using Share.Models.Domain;
+using Share.Models.Dtos.SearchDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace DataLayer.Interfaces
     {
         Task<(List<Share.Models.Domain.OrderDetail>, int)> GetPageBySearchAsync(OrderDetailSearchDto obj);
         Task<bool> UpdateAsync(Share.Models.Domain.OrderDetail obj);
+        Task<List<Share.Models.Domain.OrderDetail>> GetAllBySearchAsync(OrderDetailSearchDto obj);
     }
 }

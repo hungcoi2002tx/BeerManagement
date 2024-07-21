@@ -18,11 +18,18 @@ namespace DataLayer.Implements
         {
         }
 
-
-
-        public Task<List<Supplier>> GetAllBySearchAsync(SupplierSearchDto model)
+        public async Task<List<Supplier>> GetAllBySearchAsync(SupplierSearchDto model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var filter = GetQueryable(model);
+                var data = await filter.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         private IQueryable<Supplier> GetQueryable(SupplierSearchDto model)

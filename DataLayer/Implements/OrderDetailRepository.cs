@@ -16,21 +16,47 @@ namespace DataLayer.Implements
         {
         }
 
-        public async Task<(List<OrderDetail>, int)> GetPageBySearchAsync(OrderDetailSearchDto obj)
+        public async Task<List<OrderDetail>> GetAllBySearchAsync(OrderDetailSearchDto searchModel)
+        {
+            try
+            {
+                var filter = GetQueryable(searchModel);
+                var data = await filter.ToListAsync();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        private IQueryable<OrderDetail> GetQueryable(OrderDetailSearchDto obj)
         {
             try
             {
                 IQueryable<OrderDetail> filter = _context.OrderDetails;
-
                 if (obj.OrderId != -1)
                 {
                     filter = filter.Where(x => x.OrderId == obj.OrderId);
                 }
-               
+
                 if (obj.ProductId != -1)
                 {
                     filter = filter.Where(x => x.ProductId == obj.ProductId);
                 }
+                return filter;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<(List<OrderDetail>, int)> GetPageBySearchAsync(OrderDetailSearchDto obj)
+        {
+            try
+            {
+                var filter = GetQueryable(obj);
 
                 var count = await filter.CountAsync();
 

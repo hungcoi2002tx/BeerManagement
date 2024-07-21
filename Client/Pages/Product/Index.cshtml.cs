@@ -133,8 +133,8 @@ namespace Client.Pages.Product
                 });
 
                 var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-                var dataCategories = await requestCategory.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                var dataSuppliers = await requestSupplier.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+                var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+                var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (dataCategories.Status)
                 {
                     Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
