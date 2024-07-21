@@ -2,7 +2,7 @@
 {
     public static class Extensitons
     {
-        public static (string key, string value) ValidateImageUpload(this IFormFile imageFile)
+        public static (string? key, string? value) ValidateImageUpload(this IFormFile imageFile)
         {
             if (imageFile == null)
             {
@@ -16,6 +16,7 @@
             {
                 return ("UploadImage", "The file type must be one of the following: .jpg, .jpeg, .png, .gif.");
             }
+
             return (null, null);
         }
     }

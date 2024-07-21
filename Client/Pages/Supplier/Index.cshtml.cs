@@ -32,11 +32,12 @@ namespace Client.Pages.Supperlier
 		public List<SupplierViewDto> ViewModels { get; set; } = new();
 		public SupplierEditDto EditModel { get; set; } = new();
 
-		public async Task<IActionResult> OnGetAsync(int pageIndex)
+		public async Task<IActionResult> OnGetAsync(int pageIndex, bool DataAdded)
 		{
 			try
 			{
-				await GetBaseDataAsync(pageIndex);
+				ViewData["DataAdded"] = DataAdded;
+                await GetBaseDataAsync(pageIndex);
 				return Page();
 			}
 			catch (Exception ex)
@@ -59,9 +60,7 @@ namespace Client.Pages.Supperlier
 				var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
 				if (result.Status)
 				{
-					ViewData["DataAdded"] = true;
-					await GetBaseDataAsync();
-					return Page();
+					return RedirectToPage("./Index", new { DataAdded = true});
 				}
 				else
 				{

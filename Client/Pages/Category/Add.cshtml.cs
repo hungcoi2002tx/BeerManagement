@@ -30,8 +30,6 @@ namespace Client.Pages.Category
         [BindProperty]
         public CategoryEditDto EditModel { get; set; } = new CategoryEditDto();
         public IFormFile? UploadImage { get; set; }
-
-        public string Path1 { get; set; }
         public async Task<IActionResult> OnGetAsync(int id = 0)
         {
             try
@@ -53,10 +51,6 @@ namespace Client.Pages.Category
                         return Redirect(GlobalVariants.PAGE_400);
                     }
                     EditModel = _mapper.Map<CategoryEditDto>(entity.Objects.First());
-                    if (EditModel.Image != null)
-                    {
-                        Path1 = Path.Combine(_webHostEnvironment.WebRootPath, "images", "category", EditModel.Image);
-                    }
                 }
                 return Page();
             }

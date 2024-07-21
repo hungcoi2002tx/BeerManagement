@@ -1,5 +1,7 @@
 using AutoMapper;
+using Client.Ultils;
 using Client.WebRequests;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Constant;
@@ -8,6 +10,7 @@ using Share.Models.Dtos.SearchDtos;
 using Share.Models.Dtos.ViewDtos;
 using Share.Models.ResponseObject;
 using Share.Ultils;
+using System.Collections.Generic;
 
 namespace Client.Pages.Product
 {
@@ -15,13 +18,15 @@ namespace Client.Pages.Product
     {
         private readonly ICustomHttpClient _request;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _environment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly Logger _logger;
 
-        public UpdateModel(ICustomHttpClient request, IMapper mapper, IWebHostEnvironment environment)
+        public UpdateModel(ICustomHttpClient request, IMapper mapper, IWebHostEnvironment environment, Logger logger)
         {
             _request = request;
             _mapper = mapper;
-            _environment = environment;
+            _webHostEnvironment = environment;
+            _logger = logger;
         }
 
         public ProductEditDto EditModel { get; set; } = new();
@@ -35,31 +40,13 @@ namespace Client.Pages.Product
             {
                 if (id != 0)
                 {
-                    var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
-                    {
-                        IsEnable = true
-                    });
-                    var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
-                    {
-                        IsEnable = true
-                    });
-
-                    var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                    var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
-
-                    if (dataCategories.Status)
-                    {
-                        Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
-                    }
-                    if (dataSuppliers.Status)
-                    {
-                        Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
-                    }
+                    await GetBaseDataAsync();
 
                     var result = await GetModelBySearchAsync(new ProductSearchDto
                     {
                         Id = id,
                     });
+
                     var model = result.Objects.FirstOrDefault();
                     if (model != null)
                     {
@@ -78,7 +65,32 @@ namespace Client.Pages.Product
             }
             catch (Exception ex)
             {
-                return Redirect("/Error404");
+                _logger.LogError(ex.Message);
+                return Redirect(GlobalVariants.PAGE_400);
+            }
+        }
+
+        private async Task GetBaseDataAsync()
+        {
+            var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
+            {
+                IsEnable = true
+            });
+            var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
+            {
+                IsEnable = true
+            });
+
+            var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+            var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+
+            if (dataCategories.Status)
+            {
+                Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
+            }
+            if (dataSuppliers.Status)
+            {
+                Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
             }
         }
 
@@ -86,34 +98,37 @@ namespace Client.Pages.Product
         {
             try
             {
-                ValidateImageUpload(UploadImage);
+                if (UploadImage != null)
+                {
+                    var errorImage = UploadImage.ValidateImageUpload();
+                    if (errorImage.key != null)
+                    {
+                        ModelState.AddModelError(errorImage.key, errorImage.value);
+                    }
+                    else
+                    {
+                        string? fileName = null;
+                        var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
+                        fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
+                        var uploadFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "product");
+                        if (!Directory.Exists(uploadFolder))
+                        {
+                            Directory.CreateDirectory(uploadFolder);
+                        }
+                        var file = Path.Combine(uploadFolder, fileName);
+                        using (var fileStream = new FileStream(file, FileMode.Create))
+                        {
+                            await UploadImage.CopyToAsync(fileStream);
+                        }
+                        EditModel.Image = fileName;
+                    }
+                }
 
                 if (!ModelState.IsValid || EditModel == null)
                 {
                     await OnGetAsync(EditModel.Id);
                     return Page();
                 }
-
-                #region Upload new image if new image not null
-                if (UploadImage != null)
-                {
-                    var fileExtention = Path.GetExtension(UploadImage.FileName).ToLowerInvariant();
-                    var fileName = UploadImage.FileName.GenerateGuid() + fileExtention;
-                    var uploadFolder = Path.Combine(_environment.WebRootPath, "images", "product");
-                    if (!Directory.Exists(uploadFolder))
-                    {
-                        Directory.CreateDirectory(uploadFolder);
-                    }
-                    var file = Path.Combine(uploadFolder, fileName);
-                    using (var fileStream = new FileStream(file, FileMode.Create))
-                    {
-                        await UploadImage.CopyToAsync(fileStream);
-                    }
-                    var oldPath = Path.Combine(uploadFolder, EditModel.Image);
-                    System.IO.File.Delete(oldPath);
-                    EditModel.Image = fileName;
-                }
-                #endregion
 
                 var request = await _request.PutAsync(RestApiName.PUT_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
@@ -141,22 +156,6 @@ namespace Client.Pages.Product
             catch (Exception ex)
             {
                 return new ResponseCustom<Share.Models.Domain.Product>();
-            }
-        }
-
-        private void ValidateImageUpload(IFormFile? imageFile)
-        {
-            if(imageFile == null)
-            {
-                return;
-            }
-            if (imageFile.Length > 4 * 1024 * 1024) // 4MB
-            {
-                ModelState.AddModelError("UploadImage", "The file size cannot exceed 4MB.");
-            }
-            else if (!new[] { ".jpg", ".jpeg", ".png", ".gif" }.Contains(Path.GetExtension(imageFile.FileName).ToLowerInvariant()))
-            {
-                ModelState.AddModelError("UploadImage", "The file type must be one of the following: .jpg, .jpeg, .png, .gif.");
             }
         }
     }

@@ -18,9 +18,9 @@ namespace DataLayer.Implements
         protected readonly BeerManagementContext _context;
         protected DbSet<T> _dbSet { get => _context.Set<T>(); }
 
-        public Repository(BeerManagementContext beerManagementContext)
+        public Repository(BeerManagementContext context)
         {
-            _context = beerManagementContext;
+            _context = context;
         }
 
         public async Task<T> AddAsync(T obj, bool usingTransaction = true)

@@ -88,7 +88,7 @@ namespace DataLayer.Implements
                 await CommitTransactionAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await RollBackTransactionAsync();
                 throw;

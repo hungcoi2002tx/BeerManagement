@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using Business.Interfaces;
+using DataLayer.Implements;
 using DataLayer.Interfaces;
+using Microsoft.Extensions.Logging;
 using Share.Models.Domain;
+using Share.Models.Dtos.AddDtos;
+using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
 using Share.Models.ResponseObject;
 using Share.Ultils;
@@ -13,58 +17,58 @@ using System.Threading.Tasks;
 
 namespace Business.Implements
 {
-    public class ProductService : IProductService
+    public class OrderService : IOrderService
     {
         private readonly Logger _logger;
-        private readonly IProductRepository _repository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IMapper _mapper;
 
-        public ProductService(Logger logger, IProductRepository productRepository, IMapper mapper)
+        public OrderService(Logger logger, IOrderRepository orderRepository, IMapper mapper)
         {
             _logger = logger;
-            _repository = productRepository;
+            _orderRepository = orderRepository;
             _mapper = mapper;
         }
 
-        public async Task<ResponseCustom<Product>> AddAsync(Product model)
+        public async Task<ResponseCustom<Order>> AddAsync(OrderAddDto obj)
         {
             try
             {
-                var entity = await _repository.AddAsync(model);
+                var response = await _orderRepository.AddAsync(_mapper.Map<Order>(obj));
 
-                return new ResponseCustom<Product>
+                return new ResponseCustom<Order>
                 {
                     Status = true,
-                    Object = entity
+                    Object = response
                 };
             }
             catch (Exception ex)
             {
-                await _repository.RollBackTransactionAsync();
+                await _orderRepository.RollBackTransactionAsync();
                 _logger.LogError(ex.ToString());
                 throw;
             }
         }
 
-        public async Task<ResponseCustom<Product>> DeleteAsync(int id)
+        public async Task<ResponseCustom<Order>> DeleteAsync(int id)
         {
             try
             {
-                var entity = await _repository.GetPageBySearchAsync(new ProductSearchDto
+                var response = await _orderRepository.GetPageBySearchAsync(new OrderSearchDto()
                 {
-                    Id = id
+                    Id = id,
                 });
 
-                if (entity.Item2 == 0)
+                if (response.Item2 == 0)
                 {
-                    return ResponeExtentions<Product>.GetError404($"Not Found Id = {id}");
+                    return ResponeExtentions<Order>.GetError404($"Not found table with id = {id}");
                 }
 
-                var product = entity.Item1.First();
-                product.IsEnable = !product.IsEnable;
-                var result = await _repository.UpdateAsync(product);
+                var model = response.Item1.First();
+                model.IsEnable = !model.IsEnable;
+                var result = await _orderRepository.UpdateAsync(model);
 
-                return new ResponseCustom<Product>()
+                return new ResponseCustom<Order>()
                 {
                     Status = result,
                 };
@@ -76,16 +80,16 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Product>> GetAllBySearchAsync(ProductSearchDto searchModel)
+        public async Task<ResponseCustom<Order>> GetAllAsync()
         {
             try
             {
-                var products = await _repository.GetAllBySearchAsync(searchModel);
+                var response = await _orderRepository.GetAllAsync();
 
-                return new ResponseCustom<Product>
+                return new ResponseCustom<Order>
                 {
                     Status = true,
-                    Objects = products.ToList()
+                    Objects = response,
                 };
             }
             catch (Exception ex)
@@ -95,12 +99,13 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Product>> GetPageBySearchAsync(ProductSearchDto model)
+        public async Task<ResponseCustom<Order>> GetPageBySearchAsync(OrderSearchDto obj)
         {
             try
             {
-                var data = await _repository.GetPageBySearchAsync(model);
-                return new ResponseCustom<Product>()
+                var data = await _orderRepository.GetPageBySearchAsync(obj);
+
+                return new ResponseCustom<Order>()
                 {
                     Status = true,
                     Objects = data.Item1,
@@ -114,18 +119,13 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<Product>> UpdateAsync(Product model)
+        public async Task<ResponseCustom<Order>> UpdateAsync(OrderEditDto obj)
         {
             try
             {
-                if (model.SupplierId == -1)
-                {
-                    model.SupplierId = null;
-                }
+                var entity = await _orderRepository.UpdateAsync(_mapper.Map<Order>(obj));
 
-                var entity = await _repository.UpdateAsync(model);
-
-                return new ResponseCustom<Product>
+                return new ResponseCustom<Order>
                 {
                     Status = true,
                 };

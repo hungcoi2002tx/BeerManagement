@@ -53,10 +53,10 @@
                     <div class="card-action card-tabs mb-3">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="import" >Import</button>
+                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="import">Import</button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="export" >Export</button>
+                                <button class="nav-link" data-bs-toggle="tab" role="tab" id="export">Export</button>
                             </li>
                         </ul>
                     </div>
@@ -68,13 +68,6 @@
                                     <label class="text-black font-w600 form-label">Product Name<span class="required">*</span></label>
                                     <input type="text" class="form-control" asp-for="EditModel.Name">
                                     <span asp-validation-for="EditModel.Name" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="text-black font-w600 form-label">Image<span class="required">*</span></label>
-                                    <input type="file" class="form-control" asp-for="UploadImage">
-                                    <span asp-validation-for="UploadImage" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -95,12 +88,27 @@
                                 <div class="mb-3">
                                     <label class="text-black font-w600 form-label">Category:<span class="required">*</span></label>
                                     <select asp-for="EditModel.CategoryId" class="default-select  form-control wide">
-                                        @foreach(var category in Model.Categories)
+                                        @foreach (var category in Model.Categories)
                                         {
                                             <option value="@category.Id">@category.Name</option>
                                         }
                                     </select>
                                     <span asp-validation-for="EditModel.CategoryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="text-black font-w600 form-label">Image<span class="required">*</span></label>
+                                    <div class="avatar-upload" style="margin-top:0px">
+                                        <div class="avatar-edit">
+                                            <input type='file' id="imageUpload" accept=".png, .jpg, .jpeg" asp-for="UploadImage">
+                                            <label for="imageUpload"></label>
+                                        </div>
+                                        <div class="avatar-preview">
+                                            <div id="imagePreview-product">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-6" id="supplierChoice">
@@ -115,24 +123,6 @@
                                     </select>
                                 </div>
                             </div>
-                            @* <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="text-black font-w600 form-label">For Sell</label>
-                                    <select asp-for="EditModel.ForSell" class="default-select  form-control wide">
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-                            </div> *@
-                            <div class="col-lg-6">
-                                <div class="mb-3">
-                                    <label class="text-black font-w600 form-label">Available</label>
-                                    <select asp-for="EditModel.IsAvailable" class="default-select  form-control wide">
-                                        <option value="true">Yes</option>
-                                        <option value="false">No</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="col-lg-12">
                                 <div class="mb-3 mb-0">
                                     <input type="submit" value="Add" class="submit btn btn-primary" name="submit">
@@ -140,7 +130,6 @@
                             </div>
                         </div>
                     </form>
-
                 </div>
             </div>
         </div>
@@ -179,25 +168,53 @@
                                     <tr>
                                         <td>@item.Stt</td>
                                         <td>
-                                            <div class="d-flex align-items-center">
-                                                <img src="@item.GetImage" class="rounded-lg me-2" width="130" alt="">
-                                            </div>
+                                            <img class="logo-abbr" src="@item.GetImage" alt="" />
                                         </td>
                                         <td>@item.Name</td>
                                         <td>@item.QuantityPerUnit</td>
                                         <td>@item.UnitPrice</td>
                                         <td>@item.Category.Name</td>
                                         <td>@(item.Supplier != null ? item.Supplier.SupplierName : "")</td>
-                                        <td>@(item.ForSell ? "Yes" : "No")</td>
-                                        <td>@(item.IsAvailable ? "Yes" : "No")</td>
+                                        @if (item.ForSell)
+                                        {
+                                            <td><span class="badge light badge-success">Yes</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge light badge-danger">No</span></td>
+                                        }
+                                        @if (item.IsEnable)
+                                        {
+                                            <td><span class="badge light badge-success">Enable</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge light badge-danger">Disable</span></td>
+                                        }
                                         <td>
                                             <div class="d-flex">
                                                 <a asp-page="./Update" asp-route-id="@item.Id" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
-                                                <a onclick="deleteProduct(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp"><i class="fa fa-trash"></i></a>
+                                                @if (item.IsEnable)
+                                                {
+                                                    <a onclick="deleteProduct(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                                                        </svg>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <a onclick="deleteProduct(@item.Id); return false;" class="btn .btn-info shadow btn-xs sharp">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+                                                            <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z" />
+                                                        </svg>
+                                                    </a>
+                                                }
                                             </div>
                                         </td>
                                     </tr>
-                                    
+
                                 }
                             </tbody>
                         </table>
@@ -208,77 +225,93 @@
         </div>
     </div>
 </div>
+@section Scripts {
+    <script>
+        let isImport = true;
+        let importBtn = document.getElementById("import");
+        let exportBtn = document.getElementById("export");
+        let supplierChoice = document.getElementById("supplierChoice");
+        let supplierId = document.getElementById("supplierId");
+        importBtn.onclick = function () {
+            importBtn.classList.add("active");
+            exportBtn.classList.remove("active");
+            isImport = true;
+            supplierChoice.classList.add("d-block");
+            supplierChoice.classList.remove("d-none");
+            supplierId.options[0].disabled = true;
+            supplierId.selectedIndex = 1;
+        }
+        exportBtn.onclick = function () {
+            exportBtn.classList.add("active");
+            importBtn.classList.remove("active");
+            isImport = false;
+            supplierChoice.classList.add("d-none")
+            supplierChoice.classList.remove("d-block");
+            supplierId.options[0].disabled = false;
+            supplierId.selectedIndex = 0;
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+            // Kiểm tra nếu có lỗi xác thực
+            var hasValidationErrors = @Html.Raw(Json.Serialize(hasValidationErrors));
+            importBtn.click();
+            // Nếu có lỗi, mở modal
+            if (hasValidationErrors) {
+                var modalElement = new bootstrap.Modal(document.getElementById('sendMessageModal'));
+                modalElement.show();
+            }
+        });
+        // scripts.js
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Tự động ẩn thông báo sau 5 giây
+            setTimeout(hideNotification, 5000);
+        });
 
-<script>
-    let isImport = true;
-    let importBtn = document.getElementById("import");
-    let exportBtn = document.getElementById("export");
-    let supplierChoice = document.getElementById("supplierChoice");
-    let supplierId = document.getElementById("supplierId");
-    importBtn.onclick = function () {
-        importBtn.classList.add("active");
-        exportBtn.classList.remove("active");
-        isImport = true;
-        supplierChoice.classList.add("d-block");
-        supplierChoice.classList.remove("d-none");
-        supplierId.options[0].disabled = true;
-        supplierId.selectedIndex = 1;
-    }
-    exportBtn.onclick = function () {
-        exportBtn.classList.add("active");
-        importBtn.classList.remove("active");
-        isImport = false;
-        supplierChoice.classList.add("d-none")
-        supplierChoice.classList.remove("d-block");
-        supplierId.options[0].disabled = false;
-        supplierId.selectedIndex = 0;
-    }
-    document.addEventListener("DOMContentLoaded", function () {
-        // Kiểm tra nếu có lỗi xác thực
-        var hasValidationErrors = @Html.Raw(Json.Serialize(hasValidationErrors));
-        importBtn.click();
-        // Nếu có lỗi, mở modal
-        if (hasValidationErrors) {
-            var modalElement = new bootstrap.Modal(document.getElementById('sendMessageModal'));
-            modalElement.show();
+        function hideNotification() {
+            var notification = document.getElementsByClassName('success-message-add');
+            if (notification) {
+                // Dùng hiệu ứng mờ dần để ẩn thông báo
+                notification.style.opacity = '0';
+                // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 500); // Thời gian chờ tương ứng với transition của CSS
+            }
+            var notificationDelete = document.getElementsByClassName('success-message-delete');
+            if (notificationDelete) {
+                // Dùng hiệu ứng mờ dần để ẩn thông báo
+                notificationDelete.style.opacity = '0';
+                // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
+                setTimeout(() => {
+                    notificationDelete.style.display = 'none';
+                }, 500); // Thời gian chờ tương ứng với transition của CSS
+            }
         }
-    });
-    // scripts.js
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // Tự động ẩn thông báo sau 5 giây
-        setTimeout(hideNotification, 5000);
-    });
 
-    function hideNotification() {
-        var notification = document.getElementsByClassName('success-message-add');
-        if (notification) {
-            // Dùng hiệu ứng mờ dần để ẩn thông báo
-            notification.style.opacity = '0';
-            // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 500); // Thời gian chờ tương ứng với transition của CSS
+        function deleteProduct(productId) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                var form = document.getElementById("deleteForm");
+                document.getElementById("productId").value = productId;
+                document.getElementById("pageIndex").value = @Model.Search.Page.PageIndex;
+                form.submit();
+            }
         }
-        var notificationDelete = document.getElementsByClassName('success-message-delete');
-        if (notificationDelete) {
-            // Dùng hiệu ứng mờ dần để ẩn thông báo
-            notificationDelete.style.opacity = '0';
-            // Sau khi hiệu ứng hoàn thành, ẩn hoàn toàn phần tử này
-            setTimeout(() => {
-                notificationDelete.style.display = 'none';
-            }, 500); // Thời gian chờ tương ứng với transition của CSS
-        }
-    }
 
-    function deleteProduct(productId) {
-        if (confirm("Are you sure you want to delete this product?")) {
-            var form = document.getElementById("deleteForm");
-            document.getElementById("productId").value = productId;
-            document.getElementById("pageIndex").value = @Model.Search.Page.PageIndex;
-            form.submit();
-        }
-    }
-</script>
+        let myForm = document.getElementsByClassName("comment-form");
+        myForm.addEventListener('submit', function (event) {
+            // Update the input field value before form submission
+            let typeOfInput = myForm.querySelector('.type-of-input');
+            typeOfInput.value = isImport ? 'import' : 'export';
+            console.log(typeOfInput);
+        });
+    </script>
+
+    <script>
+        document.querySelector('input[type="file"]').addEventListener('change', function () {
+            var preview = document.getElementById('imagePreview-product');
+            preview.style.backgroundImage = 'url(' + URL.createObjectURL(this.files[0]) + ')';
+        });
+    </script>
+}
 <style>
     .success-message {
         position: fixed;
