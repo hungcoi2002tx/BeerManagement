@@ -24,7 +24,22 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("Add")]
+
+		[HttpPost("GetAll")]
+		public async Task<ResponseCustom<ImportHistory>> GetAllBySearchAsync([FromBody] ImportHistorySearchDto search)
+		{
+			try
+			{
+				var result = await _servive.GetAllBySearchAsync(search);
+				return result;
+			}
+			catch (Exception ex)
+			{
+				return ResponeExtentions<ImportHistory>.GetError500(ex.Message);
+			}
+		}
+
+		[HttpPost("Add")]
         public async Task<ResponseCustom<Share.Models.Domain.ImportHistory>> AddAsync([FromBody] ImportHistoryEditDto editModel)
         {
             try

@@ -40,6 +40,10 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.ForSell == model.IsForSell);
                 }
+                if(model.Ids?.Any() == true)
+                {
+					filter = filter.Where(x => model.Ids.Contains(x.Id));
+				}
                 return filter;
             }
             catch (Exception ex)

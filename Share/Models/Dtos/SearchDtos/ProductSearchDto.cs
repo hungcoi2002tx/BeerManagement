@@ -15,5 +15,6 @@ namespace Share.Models.Dtos.SearchDtos
         public bool? IsForSell { get; set; }
         public bool IsIncludeCategory { get; set; }
         public bool IsIncludeSupplier { get; set; }
+        public List<int>? Ids { get; set; }
     }
 }

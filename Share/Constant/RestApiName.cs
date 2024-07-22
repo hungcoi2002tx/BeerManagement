@@ -22,13 +22,14 @@ namespace Share.Constant
         public const string DELETE_SUPPLIER = BaseUrl + "Supplier/Delete/{0}";
         public const string PUT_SUPPLIER = BaseUrl + "Supplier/Update";
 
-        public const string GET_ALL_LIST_PRODUCT = BaseUrl + "Product/GetAll";
+        public const string POST_ALL_LIST_PRODUCT = BaseUrl + "Product/GetAll";
         public const string POST_PAGE_LIST_PRODUCT = BaseUrl + "Product/GetPage";
         public const string POST_ADD_PRODUCT = BaseUrl + "Product/Add";
         public const string DELETE_PRODUCT = BaseUrl + "Product/Delete/{0}";
         public const string PUT_PRODUCT = BaseUrl + "Product/Update";
 
         public const string POST_PAGE_LIST_HISTORYIMPORT = BaseUrl + "HistoryImport/GetPage";
+        public const string POST_ALL_LIST_HISTORYIMPORT = BaseUrl + "HistoryImport/GetAll";
         public const string POST_ADD_HISTORYIMPORT = BaseUrl + "HistoryImport/Add";
         public const string DELETE_HISTORYIMPORT = BaseUrl + "HistoryImport/Delete/{0}";
 

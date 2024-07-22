@@ -50,7 +50,11 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.Account == model.Account);
                 }
-                if (model.IsEnable != null)
+				if (model.Role != null)
+				{
+					filter = filter.Where(x => x.Role == model.Role);
+				}
+				if (model.IsEnable != null)
                 {
                     filter = filter.Where(x => x.IsEnable == model.IsEnable);
                 }
