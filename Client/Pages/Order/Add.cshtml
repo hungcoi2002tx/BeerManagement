@@ -4,11 +4,9 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item-no-link">Setting/</li>
-            <li class="breadcrumb-item-no-link">
-                <a asp-page="Index">
-                    Table/
-                </a>
+            <li>App/</li>
+            <li>
+                <a asp-page="Index">Order/</a>
             </li>
             <li class="breadcrumb-item active">Add</li>
         </ol>
@@ -18,7 +16,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="title-form"> Add New Table</h1>
+                    <h1 class="title-form"> Add New Order for table @Model.TableId</h1>
                 </div>
                 <div class="card-body">
                     <form class="mb-5" method="post">
