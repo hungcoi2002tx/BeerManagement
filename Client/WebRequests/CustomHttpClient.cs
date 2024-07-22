@@ -11,8 +11,8 @@ namespace Client.WebRequests
         public CustomHttpClient(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
-            //var token = httpContextAccessor.HttpContext.Session.GetString("JWToken");
-            //_httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+            var token = httpContextAccessor.HttpContext.Session.GetString("JWToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
         }
 
         public async Task<HttpResponseMessage> DeleteAsync(string requestUri)

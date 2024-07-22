@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using Api.CustomAttribute;
+using AutoMapper;
 using Business.Implements;
 using Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Share.Models;
 using Share.Models.Domain;
 using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
@@ -25,6 +28,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
+        [Authorize]
         public async Task<ResponseCustom<Category>> GetAllAsync([FromBody] CategorySearchDto SearchModel)
         {
             try
@@ -79,7 +83,7 @@ namespace Api.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - SupperlierController");
+                    return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - CategoryController");
                 }
                 var result = await _servive.UpdateAsync(_mapper.Map<Category>(editModel));
                 return result;

@@ -7,6 +7,7 @@ using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
 using Share.Models.Dtos.ViewDtos;
 using Share.Models.ResponseObject;
+using Share.Ultils;
 
 namespace Client.Pages.Supplier
 {
@@ -14,12 +15,14 @@ namespace Client.Pages.Supplier
     {
         private readonly ICustomHttpClient _request;
         private readonly IMapper _mapper;
+        private readonly Logger _logger;
 
 
-        public UpdateModel(ICustomHttpClient request, IMapper mapper)
+        public UpdateModel(ICustomHttpClient request, IMapper mapper, Logger logger)
         {
             _request = request;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public SupplierSearchDto Search { get; set; } = new SupplierSearchDto();
@@ -56,6 +59,7 @@ namespace Client.Pages.Supplier
 			}
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 return Redirect("/Error404");
 			}
         }
@@ -80,6 +84,7 @@ namespace Client.Pages.Supplier
             catch (Exception ex)
             {
                 ViewData["DataAdded"] = false;
+                _logger.LogError(ex.Message);
                 return Redirect(GlobalVariants.PAGE_404);
             }
         }
@@ -94,6 +99,7 @@ namespace Client.Pages.Supplier
 			}
 			catch (Exception ex)
 			{
+                _logger.LogError(ex.Message);
 				return new ResponseCustom<Share.Models.Domain.Supplier>();
 			}
 		}

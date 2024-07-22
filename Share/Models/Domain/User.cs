@@ -8,7 +8,7 @@ namespace Share.Models.Domain
         public int Id { get; set; }
         public string Fullname { get; set; } = null!;
         public string Account { get; set; } = null!;
-        public byte[] Password { get; set; } = null!;
+        public string Password { get; set; } = null!;
         public int Role { get; set; }
         public bool IsEnable { get; set; }
     }
