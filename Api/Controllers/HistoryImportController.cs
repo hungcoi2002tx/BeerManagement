@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Api.CustomAttribute;
+using AutoMapper;
 using Business.Implements;
 using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -26,6 +27,7 @@ namespace Api.Controllers
 
 
 		[HttpPost("GetAll")]
+		[CustomAuthorize("Admin", "Manager", "Staff")]
 		public async Task<ResponseCustom<ImportHistory>> GetAllBySearchAsync([FromBody] ImportHistorySearchDto search)
 		{
 			try
@@ -40,7 +42,8 @@ namespace Api.Controllers
 		}
 
 		[HttpPost("Add")]
-        public async Task<ResponseCustom<Share.Models.Domain.ImportHistory>> AddAsync([FromBody] ImportHistoryEditDto editModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<Share.Models.Domain.ImportHistory>> AddAsync([FromBody] ImportHistoryEditDto editModel)
         {
             try
             {
@@ -59,7 +62,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<ImportHistory>> GetPageAsync([FromBody] ImportHistorySearchDto search)
+		[CustomAuthorize("Admin", "Manager", "Staff")]
+		public async Task<ResponseCustom<ImportHistory>> GetPageAsync([FromBody] ImportHistorySearchDto search)
         {
             try
             {
@@ -73,7 +77,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ResponseCustom<ImportHistory>> DeleteAsync(int id)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<ImportHistory>> DeleteAsync(int id)
         {
             try
             {

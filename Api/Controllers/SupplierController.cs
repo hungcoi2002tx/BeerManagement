@@ -9,6 +9,7 @@ using Share;
 using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
 using Share.Models.ResponseObject;
+using Api.CustomAttribute;
 
 namespace Api.Controllers
 {
@@ -26,7 +27,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
-        public async Task<ResponseCustom<Supplier>> GetAllBySearchAsync([FromBody] SupplierSearchDto search)
+		[CustomAuthorize("Admin", "Manager", "Staff")]
+		public async Task<ResponseCustom<Supplier>> GetAllBySearchAsync([FromBody] SupplierSearchDto search)
         {
             try
             {
@@ -40,7 +42,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<Supplier>> GetPageAsync([FromBody] SupplierSearchDto search)
+		[CustomAuthorize("Admin", "Manager", "Staff")]
+		public async Task<ResponseCustom<Supplier>> GetPageAsync([FromBody] SupplierSearchDto search)
         {
             try
             {
@@ -54,7 +57,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<Supplier>> AddAsync([FromBody] SupplierEditDto editModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<Supplier>> AddAsync([FromBody] SupplierEditDto editModel)
         {
             try
             {
@@ -72,7 +76,8 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<Supplier>> UpdateAsync([FromBody] SupplierEditDto editModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<Supplier>> UpdateAsync([FromBody] SupplierEditDto editModel)
         {
             try
             {
@@ -90,7 +95,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
         {
             try
             {

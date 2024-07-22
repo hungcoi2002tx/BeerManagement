@@ -1,4 +1,5 @@
-﻿using Api.Ultils;
+﻿using Api.CustomAttribute;
+using Api.Ultils;
 using AutoMapper;
 using Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -26,7 +27,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
-        public async Task<ResponseCustom<User>> GetAllAsync([FromBody] UserSearchDto SearchModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<User>> GetAllAsync([FromBody] UserSearchDto SearchModel)
         {
             try
             {
@@ -41,7 +43,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<User>> AddAsync([FromBody] UserEditDto editModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<User>> AddAsync([FromBody] UserEditDto editModel)
         {
             try
             {
@@ -60,7 +63,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-        public async Task<ResponseCustom<User>> DeleteAsync(int id)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<User>> DeleteAsync(int id)
         {
             try
             {
@@ -74,7 +78,8 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<User>> UpdateAsync([FromBody] UserEditDto editModel)
+		[CustomAuthorize("Admin", "Manager")]
+		public async Task<ResponseCustom<User>> UpdateAsync([FromBody] UserEditDto editModel)
         {
             try
             {
@@ -92,7 +97,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
-        public async Task<ResponseCustom<User>> GetPageAsync([FromBody] UserSearchDto search)
+		[CustomAuthorize("Admin", "Manager", "Staff")]
+		public async Task<ResponseCustom<User>> GetPageAsync([FromBody] UserSearchDto search)
         {
             try
             {
