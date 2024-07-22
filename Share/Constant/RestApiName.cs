@@ -46,5 +46,11 @@ namespace Share.Constant
 
 
 
+        public const string POST_ALL_LIST_USER = BaseUrl + "User/GetAll";
+        public const string POST_PAGE_LIST_USER = BaseUrl + "User/GetPage";
+        public const string POST_ADD_USER = BaseUrl + "User/Add";
+        public const string DELETE_USER = BaseUrl + "User/Delete/{0}";
+        public const string PUT_USER = BaseUrl + "User/Update";
+
     }
 }
