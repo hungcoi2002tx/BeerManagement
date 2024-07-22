@@ -29,16 +29,15 @@ namespace Business.Implements
             _mapper = mapper;
         }
 
-        public async Task<ResponseCustom<OrderDetail>> AddAsync(OrderDetailAddDto obj)
+        public async Task<ResponseCustom<OrderDetail>> AddAsync(List<OrderDetailAddDto> list)
         {
             try
             {
-                var response = await _orderDetailRepository.AddAsync(_mapper.Map<OrderDetail>(obj));
+                var response = await _orderDetailRepository.AddRangeAsync(_mapper.Map<List<OrderDetail>>(list));
 
                 return new ResponseCustom<OrderDetail>
                 {
-                    Status = true,
-                    Object = response
+                    Status = response,
                 };
             }
             catch (Exception ex)
@@ -119,11 +118,14 @@ namespace Business.Implements
             }
         }
 
-        public async Task<ResponseCustom<OrderDetail>> UpdateAsync(OrderDetailEditDto obj)
+        public async Task<ResponseCustom<OrderDetail>> UpdateAsync(List<OrderDetailEditDto> obj)
         {
             try
             {
-                var entity = await _orderDetailRepository.UpdateAsync(_mapper.Map<OrderDetail>(obj));
+                for (int i = 0; i< obj.Count; i++)
+                {
+                    await _orderDetailRepository.UpdateAsync(_mapper.Map<OrderDetail>(obj[i]));
+                }
 
                 return new ResponseCustom<OrderDetail>
                 {
