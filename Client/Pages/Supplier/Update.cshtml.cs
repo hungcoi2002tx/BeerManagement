@@ -35,8 +35,8 @@ namespace Client.Pages.Supplier
             {
                 if (id != 0)
                 {
-					#region get id
-					var result = await GetModelBySearchAsync(new SupplierSearchDto
+                    #region get id
+                    var result = await GetModelBySearchAsync(new SupplierSearchDto
                     {
                         Id = id,
                     });
@@ -44,24 +44,28 @@ namespace Client.Pages.Supplier
                     if (model != null)
                     {
                         EditModel = _mapper.Map<SupplierEditDto>(model);
-						return Page();
+                        return Page();
                     }
                     else
                     {
                         throw new Exception();
                     }
-					#endregion
-				}
-				else
+                    #endregion
+                }
+                else
                 {
                     throw new Exception();
                 }
-			}
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return Redirect("/Error404");
-			}
+            }
         }
 
         public async Task<IActionResult> OnPostAsync(SupplierEditDto EditModel)
@@ -74,12 +78,20 @@ namespace Client.Pages.Supplier
                 }
                 EditModel.IsEnable = true;
                 var request = await _request.PutAsync(RestApiName.PUT_SUPPLIER, EditModel);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
                 if (!result.Status)
                 {
                     return Page();
                 }
                 return RedirectToPage(GlobalVariants.LINK_SUPPLIER_INDEX);
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -90,18 +102,14 @@ namespace Client.Pages.Supplier
         }
 
         private async Task<ResponseCustom<Share.Models.Domain.Supplier>> GetModelBySearchAsync(SupplierSearchDto search)
-		{
-			try
-			{
-				var requestGetData = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_SUPPLIER, search);
-				var dataReturn = await requestGetData.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
-				return dataReturn;
-			}
-			catch (Exception ex)
-			{
-                _logger.LogError(ex.Message);
-				return new ResponseCustom<Share.Models.Domain.Supplier>();
-			}
-		}
-	}
+        {
+            var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_SUPPLIER, search);
+            if (request.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(request.CheckValidRequestExtention());
+            }
+            var dataReturn = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+            return dataReturn;
+        }
+    }
 }

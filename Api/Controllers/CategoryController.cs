@@ -11,6 +11,7 @@ using Share.Models.Dtos.EditDtos;
 using Share.Models.Dtos.SearchDtos;
 using Share.Models.ResponseObject;
 using Share.Ultils;
+using System.ComponentModel.DataAnnotations;
 
 namespace Api.Controllers
 {
@@ -27,8 +28,23 @@ namespace Api.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("GetPage")]
+        [CustomAuthorize("Admin","Manager","Staff")]
+        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchDto search)
+        {
+            try
+            {
+                var result = await _servive.GetPageBySearchAsync(search);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ResponeExtentions<Category>.GetError500(ex.Message);
+            }
+        }
+
         [HttpPost("GetAll")]
-        [Authorize]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
         public async Task<ResponseCustom<Category>> GetAllAsync([FromBody] CategorySearchDto SearchModel)
         {
             try
@@ -44,6 +60,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
+        [CustomAuthorize("Admin", "Manager")]
         public async Task<ResponseCustom<Category>> AddAsync([FromBody] CategoryEditDto editModel)
         {
             try
@@ -63,6 +80,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [CustomAuthorize("Admin", "Manager")]
         public async Task<ResponseCustom<Category>> DeleteAsync(int id)
         {
             try
@@ -77,6 +95,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
+        [CustomAuthorize("Admin", "Manager")]
         public async Task<ResponseCustom<Category>> UpdateAsync([FromBody] CategoryEditDto editModel)
         {
             try
@@ -94,18 +113,6 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost("GetPage")]
-        public async Task<ResponseCustom<Category>> GetPageAsync([FromBody] CategorySearchDto search)
-        {
-            try
-            {
-                var result = await _servive.GetPageBySearchAsync(search);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return ResponeExtentions<Category>.GetError500(ex.Message);
-            }
-        }
+
     }
 }

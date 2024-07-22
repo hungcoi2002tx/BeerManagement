@@ -29,7 +29,7 @@ namespace Client.Pages.Product
             _logger = logger;
             _webHostEnvironment = environment;
         }
-        public IFormFile? UploadImage {  get; set; }
+        public IFormFile? UploadImage { get; set; }
 
         public ProductSearchDto Search { get; set; } = new ProductSearchDto();
         public List<ProductViewDto> ViewModels { get; set; } = new();
@@ -44,6 +44,10 @@ namespace Client.Pages.Product
                 ViewData["DataAdded"] = DataAdded;
                 await GetBaseDataAsync(pageIndex);
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -79,7 +83,7 @@ namespace Client.Pages.Product
                             await UploadImage.CopyToAsync(fileStream);
                         }
                         EditModel.Image = fileName;
-                      }
+                    }
                 }
                 if (!ModelState.IsValid || EditModel == null)
                 {
@@ -92,15 +96,23 @@ namespace Client.Pages.Product
                 #endregion
 
                 var request = await _request.PostJsonAsync(RestApiName.POST_ADD_PRODUCT, EditModel);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (result.Status)
                 {
-                    return RedirectToPage("./Index", new { DataAdded = true});
+                    return RedirectToPage("./Index", new { DataAdded = true });
                 }
                 else
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -113,54 +125,59 @@ namespace Client.Pages.Product
 
         private async Task GetBaseDataAsync(int pageIndex = 1)
         {
-            try
-            {
-                Search.Page = new Share.Models.PagingObject.Page()
-                {
-                    PageIndex = pageIndex == 0 ? 1 : pageIndex,
-                    BaseUrl = "Product"
-                };
-                Search.IsIncludeSupplier = true;
-                Search.IsIncludeCategory = true;
-                var requestProduct = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, Search);
-                var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
-                {
-                    IsEnable = true
-                });
-                var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
-                {
-                    IsEnable = true
-                });
 
-                var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-                var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
-                if (dataCategories.Status)
+            Search.Page = new Share.Models.PagingObject.Page()
+            {
+                PageIndex = pageIndex == 0 ? 1 : pageIndex,
+                BaseUrl = "Product"
+            };
+            Search.IsIncludeSupplier = true;
+            Search.IsIncludeCategory = true;
+            var requestProduct = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, Search);
+            var requestCategories = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_CATEGORY, new CategorySearchDto()
+            {
+                IsEnable = true
+            });
+            var requestSuppliers = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_SUPPLIER, new SupplierSearchDto()
+            {
+                IsEnable = true
+            });
+            if (requestProduct.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestProduct.CheckValidRequestExtention());
+            }
+            if (requestCategories.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestCategories.CheckValidRequestExtention());
+            }
+            if (requestSuppliers.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestSuppliers.CheckValidRequestExtention());
+            }
+            var dataProduct = await requestProduct.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
+            var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+            var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
+            if (dataCategories.Status)
+            {
+                Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
+            }
+            if (dataSuppliers.Status)
+            {
+                Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
+            }
+            if (dataProduct.Status)
+            {
+                ViewModels = _mapper.Map<List<ProductViewDto>>(dataProduct.Objects);
+                Search.Page.Total = dataProduct.Total;
+                int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
+                foreach (var item in ViewModels)
                 {
-                    Categories = _mapper.Map<List<CategoryViewDto>>(dataCategories.Objects);
-                }
-                if (dataSuppliers.Status)
-                {
-                    Suppliers = _mapper.Map<List<SupplierViewDto>>(dataSuppliers.Objects);
-                }
-                if (dataProduct.Status)
-                {
-                    ViewModels = _mapper.Map<List<ProductViewDto>>(dataProduct.Objects);
-                    Search.Page.Total = dataProduct.Total;
-                    int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
-                    foreach (var item in ViewModels)
-                    {
-                        item.Stt = i++;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Error");
+                    item.Stt = i++;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
+                throw new Exception("Error");
             }
         }
 
@@ -170,6 +187,10 @@ namespace Client.Pages.Product
             {
                 var apiUrl = string.Format(RestApiName.DELETE_PRODUCT, productId);
                 var request = await _request.DeleteAsync(apiUrl);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var data = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (!data.Status)
                 {
@@ -186,25 +207,13 @@ namespace Client.Pages.Product
                 await GetBaseDataAsync(pageIndex);
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 return Redirect(GlobalVariants.PAGE_400);
-            }
-        }
-
-        private void ValidateImageUpload(IFormFile? imageFile)
-        {
-            if(imageFile == null)
-            {
-                ModelState.AddModelError("UploadImage", "Please upload an image");
-            }
-            else if (imageFile.Length > 4 * 1024 * 1024) // 4MB
-            {
-                ModelState.AddModelError("UploadImage", "The file size cannot exceed 4MB.");
-            }
-            else if (!new[] { ".jpg", ".jpeg", ".png", ".gif" }.Contains(Path.GetExtension(imageFile.FileName).ToLowerInvariant()))
-            {
-                ModelState.AddModelError("UploadImage", "The file type must be one of the following: .jpg, .jpeg, .png, .gif.");
             }
         }
     }

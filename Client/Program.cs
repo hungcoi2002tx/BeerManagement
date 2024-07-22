@@ -1,3 +1,4 @@
+using Client.Middleware;
 using Client.WebRequests;
 using Share.Ultils;
 
@@ -41,10 +42,21 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseWhen(context =>
+        context.Request.Path != "/login" &&
+        context.Request.Path != "/page400" &&
+        context.Request.Path != "/page403" &&
+        context.Request.Path != "/page404" &&
+        context.Request.Path != "/page500" &&
+        context.Request.Path != "/page503",
+        appBuilder =>
+        {
+            appBuilder.UseMiddleware<CheckTokenMiddleware>();
+        });
 
 app.MapGet("/", async context =>
 {
-	context.Response.Redirect("/UserInfo/Index");
+	context.Response.Redirect("/Login");
 });
 
 app.Run();

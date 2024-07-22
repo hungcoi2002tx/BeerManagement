@@ -33,6 +33,10 @@ namespace Client.Pages.UserInfo
                 await GetBaseDataAsync(pageIndex);
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -42,33 +46,31 @@ namespace Client.Pages.UserInfo
 
         private async Task GetBaseDataAsync(int pageIndex)
         {
-            try
+
+            Search.Page = new Share.Models.PagingObject.Page()
             {
-                Search.Page = new Share.Models.PagingObject.Page()
+                PageIndex = pageIndex == 0 ? 1 : pageIndex,
+                BaseUrl = "UserInfo"
+            };
+            var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_USER, Search);
+            if (request.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(request.CheckValidRequestExtention());
+            }
+            var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.User>>();
+            if (datas.Status)
+            {
+                ViewModels = _mapper.Map<List<UserViewDto>>(datas.Objects);
+                Search.Page.Total = datas.Total;
+                int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
+                foreach (var item in ViewModels)
                 {
-                    PageIndex = pageIndex == 0 ? 1 : pageIndex,
-                    BaseUrl = "UserInfo"
-                };
-                var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_USER, Search);
-                var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.User>>();
-                if (datas.Status)
-                {
-                    ViewModels = _mapper.Map<List<UserViewDto>>(datas.Objects);
-                    Search.Page.Total = datas.Total;
-                    int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
-                    foreach (var item in ViewModels)
-                    {
-                        item.Stt = i++;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Error");
+                    item.Stt = i++;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
+                throw new Exception("Error");
             }
         }
         public async Task<IActionResult> OnPostDeleteAsync(int userId, int pageIndex)
@@ -82,6 +84,10 @@ namespace Client.Pages.UserInfo
                 }
                 var apiUrl = string.Format(RestApiName.DELETE_USER, userId);
                 var request = await _request.DeleteAsync(apiUrl);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var data = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.User>>();
                 if (!data.Status)
                 {
@@ -97,6 +103,10 @@ namespace Client.Pages.UserInfo
                 ViewData["DataDeleted"] = true;
                 await GetBaseDataAsync(pageIndex);
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
