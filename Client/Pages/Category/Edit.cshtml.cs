@@ -102,7 +102,7 @@ namespace Client.Pages.Category
                 }
                 else
                 {
-                    request = await _request.PostJsonAsync(RestApiName.POST_Add_CATEGORY, EditModel);
+                    request = await _request.PostJsonAsync(RestApiName.POST_ADD_CATEGORY, EditModel);
                 }
                 result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (result.Status)

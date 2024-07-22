@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Share.Models.Domain
 {
@@ -24,6 +25,7 @@ namespace Share.Models.Domain
 
         public virtual Category Category { get; set; } = null!;
         public virtual Supplier? Supplier { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Models.ResponseObject;
+using System;
 using System.Collections.Generic;
 
 namespace Share.Models.Domain

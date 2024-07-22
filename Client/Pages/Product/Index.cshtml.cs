@@ -91,7 +91,7 @@ namespace Client.Pages.Product
                 EditModel.SupplierId = null;
                 #endregion
 
-                var request = await _request.PostJsonAsync(RestApiName.POST_Add_PRODUCT, EditModel);
+                var request = await _request.PostJsonAsync(RestApiName.POST_ADD_PRODUCT, EditModel);
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (result.Status)
                 {
