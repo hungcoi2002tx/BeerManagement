@@ -34,5 +34,7 @@ namespace Share.Constant
         public const string UPDATE_TABLE = BASEURL + "Table/Update";
         public const string ADD_TABLE = BASEURL + "Table/Add";
 
+        public const string ADD_ORDER = BASEURL + "Order/Add";
+
     }
 }

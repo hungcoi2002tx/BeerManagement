@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Share.Models.Domain;
+using Share.Models.Dtos.ViewDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,6 +47,10 @@ namespace Share.Ultils
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
                 .ReverseMap();
+
+            CreateMap<ProductViewDto, OrderDetailViewDto>()
+              .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
+              .ReverseMap();
 
             #endregion
         }

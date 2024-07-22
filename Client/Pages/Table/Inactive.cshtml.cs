@@ -10,7 +10,7 @@ using Share.Ultils;
 
 namespace Client.Pages.Table
 {
-    public class SetupModel : PageModel
+    public class InactiveModel : PageModel
     {
         private readonly ICustomHttpClient _httpCustom;
         private readonly Logger _logger;
@@ -18,12 +18,13 @@ namespace Client.Pages.Table
 
         public List<Share.Models.Dtos.ViewDtos.TableViewDto> Tables { get; set; } = new();
 
-        public SetupModel(ICustomHttpClient httpCustom, Logger logger, IMapper mapper)
+        public InactiveModel(ICustomHttpClient httpCustom, Logger logger, IMapper mapper)
         {
             _httpCustom = httpCustom;
             _logger = logger;
             _mapper = mapper;
         }
+
         public async Task<IActionResult> OnGetAsync()
         {
             try
