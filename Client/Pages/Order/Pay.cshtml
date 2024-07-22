@@ -1,5 +1,5 @@
 ﻿@page
-@model Client.Pages.OrderDetail.UpdateModel
+@model Client.Pages.Order.PayModel
 
 <h2>Table 3</h2>
 
@@ -34,9 +34,9 @@
                                     <th>Stt</th>
                                     <th>Image</th>
                                     <th>Name</th>
-                                    <th>QuantityPerUnit</th>
                                     <th>UnitPrice</th>
                                     <th>Quantity</th>
+                                    <th>Money</th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
@@ -46,20 +46,13 @@
                                     <tr>
                                         <td>@Model.OrderDetailViewDtos[i].Stt</td>
                                         <td>
-                                            <img class="logo-abbr" src="~/images/product/@Model.OrderDetailViewDtos[i].Image" alt="" />
+                                            <img class="logo-abbr" src="~/images/product/@Model.OrderDetailViewDtos[i].product.Image" alt="" />
                                         </td>
-                                        <td>@Model.OrderDetailViewDtos[i].Name</td>
-                                        <td>@Model.OrderDetailViewDtos[i].QuantityPerUnit</td>
+                                        <td>@Model.OrderDetailViewDtos[i].product.Name</td>
+                                      
                                         <td>@Model.OrderDetailViewDtos[i].UnitPrice</td>
-                                        <td><input type="number" class="form-control solid" asp-for="@Model.OrderDetailViewDtos[i].Quantity" style="width:100px"></td>
-
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].Stt" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].Image" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].OrderId" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].ProductId" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].Name" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].QuantityPerUnit" type="hidden" />
-                                        <input asp-for="@Model.OrderDetailViewDtos[i].UnitPrice" type="hidden" />
+                                        <td><input readonly type="number" class="form-control solid" asp-for="@Model.OrderDetailViewDtos[i].Quantity" style="width:100px"></td>
+                                        <td>@(Model.OrderDetailViewDtos[i].UnitPrice * Model.OrderDetailViewDtos[i].Quantity)</td>
                                     </tr>
                                 }
                                 <tr>
@@ -67,17 +60,21 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>
-                                        <div class="col-lg-9" style="position:relative">
-                                            <div class="mb-3 mb-0" style="position:absolute; right:0">
-                                                <a asp-page="/Order/Pay" asp-route-orderId="@Model.orderId" class="submit btn btn-primary">Pay</a>
-                                            </div>
-                                        </div>
+                                        <input readonly type="" class="form-control solid" value="Total: @Model.Total" style="width:100px">
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                     <td>
                                         <div class="col-lg-9" style="position:relative">
                                             <div class="mb-3 mb-0" style="position:absolute; right:0">
-                                                <input type="submit" value="Update" class="submit btn btn-primary" name="submit">
+                                                <input type="submit" value="Pay" class="submit btn btn-primary" name="submit">
                                             </div>
                                         </div>
                                     </td>
@@ -85,9 +82,11 @@
                             </tbody>
                         </table>
                         <input asp-for="@Model.orderId" type="hidden" />
+                        <input asp-for="@Model.Total" type="hidden" />
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

@@ -16,7 +16,8 @@ namespace Share.Models.Dtos.ViewDtos
         public int Stt { get; set; }
         public string? Image { get; set; }
         public int? QuantityPerUnit { get; set; }
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
+        public ProductViewDto? product { get; set; } = null;
 
         public string GetImageUrl
         {

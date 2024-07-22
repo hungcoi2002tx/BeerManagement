@@ -2,6 +2,8 @@
 using Microsoft.IdentityModel.Tokens;
 using Share.Models.Domain;
 using Share.Models.Dtos.AddDtos;
+using Share.Models.Dtos.EditDtos;
+using Share.Models.Dtos.SearchDtos;
 using Share.Models.Dtos.ViewDtos;
 using System;
 using System.Collections.Generic;
@@ -56,6 +58,9 @@ namespace Share.Ultils
 
             CreateMap<OrderDetailViewDto, OrderDetailAddDto>()
              .ReverseMap();
+
+            CreateMap<OrderSearchDto, OrderEditDto>()
+            .ReverseMap();
             #endregion
         }
     }

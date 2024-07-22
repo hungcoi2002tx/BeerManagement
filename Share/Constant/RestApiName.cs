@@ -35,6 +35,8 @@ namespace Share.Constant
         public const string ADD_TABLE = BASEURL + "Table/Add";
 
         public const string ADD_ORDER = BASEURL + "Order/Add";
+        public const string GET_LIST_ORDER_BY_CONDITION = BASEURL + "Order/GetPage";
+        public const string UPDATE_ORDER = BASEURL + "Order/Update";
 
         public const string POST_PAGE_LIST_HISTORYIMPORT = BASEURL + "HistoryImport/GetPage";
         public const string POST_ADD_HISTORYIMPORT = BASEURL + "HistoryImport/Add";
@@ -46,11 +48,11 @@ namespace Share.Constant
 
 
 
-        public const string POST_ALL_LIST_USER = BaseUrl + "User/GetAll";
-        public const string POST_PAGE_LIST_USER = BaseUrl + "User/GetPage";
-        public const string POST_ADD_USER = BaseUrl + "User/Add";
-        public const string DELETE_USER = BaseUrl + "User/Delete/{0}";
-        public const string PUT_USER = BaseUrl + "User/Update";
+        public const string POST_ALL_LIST_USER = BASEURL + "User/GetAll";
+        public const string POST_PAGE_LIST_USER = BASEURL + "User/GetPage";
+        public const string POST_ADD_USER = BASEURL + "User/Add";
+        public const string DELETE_USER = BASEURL + "User/Delete/{0}";
+        public const string PUT_USER = BASEURL + "User/Update";
 
     }
 }
