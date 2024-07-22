@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Models.Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,5 +19,7 @@ namespace Share.Models.Dtos.ViewDtos
         public int Status { get; set; }
         [Display(Name = "IsEnable")]
         public bool IsEnable { get; set; }
+
+        public int? OrderId { get; set; } = null;
     }
 }

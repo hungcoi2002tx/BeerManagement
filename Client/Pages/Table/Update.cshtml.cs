@@ -88,6 +88,9 @@ namespace Client.Pages.Table
                 _logger.LogError(ex.Message);
                 return Redirect(GlobalVariants.PAGE_400);
             }
+
+
+
         }
     }
 }

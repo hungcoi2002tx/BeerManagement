@@ -12,24 +12,25 @@ using System.Data;
 
 namespace Client.Pages.OrderDetail
 {
-    public class CreateModel : PageModel
+    public class AddModel : PageModel
     {
         private readonly ICustomHttpClient _httpCustom;
         private readonly Logger _logger;
         private readonly IMapper _mapper;
 
         [BindProperty]
-        public List<OrderDetailViewDto> OrderDetailViewDtos { get; set; } = new();
+        public List<OrderDetailViewDto> OrderDetailViewDtos { get; set; } = new ();
         public List<ProductViewDto> ProductViewDtos { get; set; } = new();
 
-        public CreateModel(ICustomHttpClient httpCustom, Logger logger, IMapper mapper)
+        public AddModel(ICustomHttpClient httpCustom, Logger logger, IMapper mapper)
         {
+           
             _httpCustom = httpCustom;
             _logger = logger;
             _mapper = mapper;
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int orderId)
         {
             try
             {
@@ -51,7 +52,11 @@ namespace Client.Pages.OrderDetail
                         item.Stt = i++;
                     }
 
-                    this.OrderDetailViewDtos = _mapper.Map<List<OrderDetailViewDto>>(ProductViewDtos);
+                    OrderDetailViewDtos = _mapper.Map<List<OrderDetailViewDto>>(ProductViewDtos);
+                    foreach (var item in OrderDetailViewDtos)
+                    {
+                        item.OrderId = orderId;
+                    }
 
                 }
                 if (data.StatusCode == 500)
@@ -60,6 +65,37 @@ namespace Client.Pages.OrderDetail
                 }
 
                 return Page();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Redirect(GlobalVariants.PAGE_400);
+            }
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                if (!ModelState.IsValid || OrderDetailViewDtos == null)
+                {
+                    return Page();
+                }
+
+                var orderDetailAddDtos = _mapper.Map<List<OrderDetailAddDto>>(OrderDetailViewDtos);
+
+
+                var request = await _httpCustom.PostJsonAsync(RestApiName.ADD_ORDER_DETAIL, orderDetailAddDtos);
+                var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.OrderDetail>>();
+
+                if (result.Status)
+                {
+                    return RedirectToPage("/Table/Active");
+                }
+                else
+                {
+                    return Redirect(GlobalVariants.PAGE_500);
+                }
             }
             catch (Exception ex)
             {

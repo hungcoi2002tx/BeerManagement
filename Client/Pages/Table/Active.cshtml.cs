@@ -33,7 +33,8 @@ namespace Client.Pages.Table
                 var response = await _httpCustom.PostJsonAsync(RestApiName.GET_LIST_TABLE_BY_CONDITION, new TableSearchDto()
                 {
                     Status = TableStatus.ACTIVE,
-                    IsEnable = true
+                    IsEnable = true,
+                    IsInclueProduct = true
                 });
 
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
@@ -41,6 +42,17 @@ namespace Client.Pages.Table
                 if (data.Status)
                 {
                     Tables = _mapper.Map<List<TableViewDto>>(data.Objects);
+
+                    foreach (var table in Tables)
+                    {
+                        foreach (var item in data.Objects)
+                        {
+                            if (item.Id == table.Id)
+                            {
+                                table.OrderId = item.Orders.Where(o => o.TableId == table.Id).OrderByDescending(o => o.Date).First().Id;
+                            }
+                        }
+                    }
                 }
                 if (data.StatusCode == 500)
                 {

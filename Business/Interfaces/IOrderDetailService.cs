@@ -14,8 +14,8 @@ namespace Business.Interfaces
     public interface IOrderDetailService
     {
         Task<ResponseCustom<OrderDetail>> GetAllBySearchAsync(OrderDetailSearchDto obj);
-        Task<ResponseCustom<OrderDetail>> AddAsync(OrderDetailAddDto obj);
-        Task<ResponseCustom<OrderDetail>> UpdateAsync(OrderDetailEditDto obj);
+        Task<ResponseCustom<OrderDetail>> AddAsync(List<OrderDetailAddDto> list);
+        Task<ResponseCustom<OrderDetail>> UpdateAsync(List<OrderDetailEditDto> obj);
         Task<ResponseCustom<OrderDetail>> DeleteAsync(int orderId, int productId);
         Task<ResponseCustom<OrderDetail>> GetPageBySearchAsync(OrderDetailSearchDto obj);
     }

@@ -100,5 +100,25 @@ namespace DataLayer.Implements
         {
             await _transaction.RollbackAsync();
         }
+
+        public async Task<bool> AddRangeAsync(List<T> list, bool usingTransaction = true)
+        {
+            try
+            {
+                if (usingTransaction) OpenTransaction();
+
+                await _dbSet.AddRangeAsync(list);
+                await _context.SaveChangesAsync();
+
+                if (usingTransaction) await CommitTransactionAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                if (usingTransaction) await RollBackTransactionAsync();
+                throw;
+            }
+        }
     }
 }

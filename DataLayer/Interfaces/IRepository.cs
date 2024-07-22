@@ -16,5 +16,7 @@ namespace DataLayer.Interfaces
         IDbContextTransaction OpenTransaction();
         Task CommitTransactionAsync();
         Task RollBackTransactionAsync();
+        Task<bool> AddRangeAsync(List<T> obj, bool usingTransaction = true);
+
     }
 }
