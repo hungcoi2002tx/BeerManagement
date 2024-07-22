@@ -5,8 +5,8 @@
 <div class="container-fluid">
     <div class="row page-titles">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item-no-link">Setting/</li>
-            <li class="breadcrumb-item-no-link">Category/</li>
+            <li class="breadcrumb-item-no-link">App/</li>
+            <li class="breadcrumb-item-no-link">Table/</li>
             <li class="breadcrumb-item active">Index</li>
         </ol>
     </div>
@@ -39,24 +39,29 @@
                             <thead>
                                 <tr>
                                     <th>Image</th>
-                                    <th>No</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Active Status</th>
+                                    <th>Number</th>
+                                    <th>Status</th>
+                                    <th>Is enable</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
-                                @foreach (var item in Model.ViewModels)
+                                @foreach (var t in Model.Tables)
                                 {
                                     <tr>
                                         <td>
-                                            <img class="logo-abbr" src="@item.GetImageUrl" alt="" />
+                                            <img class="logo-abbr" src="~/images/product/table.png" alt="" />
                                         </td>
-                                        <td>@item.Stt</td>
-                                        <td>@item.Name</td>
-                                        <td>@item.Description</td>
-                                        @if (item.IsEnable)
+                                        <td>@t.Number</td>
+                                        @if (@t.Status == 1)
+                                        {
+                                            <td><span class="badge light badge-success">Current use</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge light badge-danger">Unused</span></td>
+                                        }
+                                        @if (t.IsEnable)
                                         {
                                             <td><span class="badge light badge-success">Enable</span></td>
                                         }
@@ -66,10 +71,10 @@
                                         }
                                         <td>
                                             <div class="d-flex">
-                                                <a asp-page="./Add" asp-route-id="@item.Id" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
-                                                @if (item.IsEnable)
+                                                <a asp-page="./Update" asp-route-id="@t.Id" class="btn btn-primary shadow btn-xs sharp me-1"><i class="fas fa-pencil-alt"></i></a>
+                                                @if (t.IsEnable)
                                                 {
-                                                    <a onclick="deleteCategory(@item.Id); return false;" class="btn btn-danger shadow btn-xs sharp">
+                                                    <a onclick="deleteCategory(@t.Id); return false;" class="btn btn-danger shadow btn-xs sharp">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                                                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
@@ -78,7 +83,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <a onclick="deleteCategory(@item.Id); return false;" class="btn .btn-info shadow btn-xs sharp">
+                                                    <a onclick="deleteCategory(@t.Id); return false;" class="btn .btn-info shadow btn-xs sharp">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
                                                             <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z" />
                                                         </svg>
@@ -98,7 +103,7 @@
     </div>
 </div>
 <form id="deleteForm" method="post" asp-page-handler="Delete" style="display:none;">
-    <input type="hidden" name="categoryId" id="categoryId" />
+    <input type="hidden" name="tableId" id="categoryId" />
     <input type="hidden" name="pageIndex" id="pageIndex" />
 </form>
 <script>

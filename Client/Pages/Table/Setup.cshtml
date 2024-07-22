@@ -1,0 +1,35 @@
+﻿@page
+@model Client.Pages.Table.SetupModel
+
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Apps</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Table</a></li>
+        </ol>
+    </div>
+
+    <h3>Choose an table</h3>
+
+    <div class="row">
+        @foreach (var t in Model.Tables)
+        {
+            <div class="col-xl-2 col-xxl-3 col-md-4 col-sm-6">
+                <div class="card">
+                    <a href="ecom-product-detail.html">
+                        <div class="card-body product-grid-card">
+                            <div class="new-arrival-product">
+                                <div class="new-arrivals-img-contnent">
+                                    <img class="img-fluid" src="~/images/product/table.png" alt="">
+                                </div>
+                                <div class="new-arrival-content text-center mt-3">
+                                    <h4>Table @t.Number</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

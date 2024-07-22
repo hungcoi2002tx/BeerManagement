@@ -30,5 +30,9 @@ namespace Share.Constant
 
         public const string GET_LIST_TABLE = BASEURL + "Table/GetAll";
         public const string GET_LIST_TABLE_BY_CONDITION = BASEURL + "Table/GetPage";
+        public const string DELETE_TABLE = BASEURL + "Table/Delete/{0}";
+        public const string UPDATE_TABLE = BASEURL + "Table/Update";
+        public const string ADD_TABLE = BASEURL + "Table/Add";
+
     }
 }

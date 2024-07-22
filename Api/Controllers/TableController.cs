@@ -28,6 +28,7 @@ namespace Api.Controllers
             try
             {
                 var result = await _tableService.GetAllBySearchAsync(search);
+
                 return result;
             }
             catch (Exception)
