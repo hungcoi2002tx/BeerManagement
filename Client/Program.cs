@@ -31,7 +31,7 @@ app.MapRazorPages();
 
 app.MapGet("/", async context =>
 {
-	context.Response.Redirect("/WareHouse/Add");
+	context.Response.Redirect("/WareHouse/Index");
 });
 
 app.Run();

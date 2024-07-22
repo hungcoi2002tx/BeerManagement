@@ -50,7 +50,7 @@
                                             <div class="card-body">
                                                 <div class="basic-dropdown">
                                                     <label for="productSelect">Select a product:</label>
-                                                    <select id="productSelect" class="form-control solid" onchange="handleSelectChange()">
+                                                    <select id="productSelect" class="form-control solid" onchange="handleSelectChange()" asp-for="EditModel.ProductId">
                                                         @foreach (var item in Model.Products)
                                                         {
                                                             <option value="@item.Id">
@@ -69,12 +69,14 @@
                                             <div class="form-group">
                                                 <label class="form-label">Quantity<span class="required">*</span></label>
                                                 <input asp-for="EditModel.Quantity" class="form-control solid" placeholder="0" oninput="syncInput()" id="input-quantity">
+                                                <span asp-validation-for="EditModel.Quantity" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-6 mb-2">
                                             <div class="form-group">
                                                 <label class="form-label">UnitPrice<span class="required">*</span></label>
                                                 <input asp-for="EditModel.UnitPrice" class="form-control solid" placeholder="0" id="input-unitPrice" oninput="syncInput()">
+                                                <span asp-validation-for="EditModel.UnitPrice" class="text-danger"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 mb-2">

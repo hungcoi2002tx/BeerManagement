@@ -56,7 +56,7 @@ namespace Client.Pages.Supperlier
 					await GetBaseDataAsync();
 					return Page();
 				}
-				var request = await _request.PostJsonAsync(RestApiName.POST_Add_SUPPLIER, EditModel);
+				var request = await _request.PostJsonAsync(RestApiName.POST_ADD_SUPPLIER, EditModel);
 				var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
 				if (result.Status)
 				{
