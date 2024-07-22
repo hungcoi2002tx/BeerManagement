@@ -34,6 +34,10 @@ namespace Client.Pages.WareHouse
                 await GetBaseDataAsync(pageIndex);
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -43,34 +47,32 @@ namespace Client.Pages.WareHouse
 
         private async Task GetBaseDataAsync(int pageIndex = 1)
         {
-            try
+
+            Search.Page = new Share.Models.PagingObject.Page()
             {
-                Search.Page = new Share.Models.PagingObject.Page()
+                PageIndex = pageIndex == 0 ? 1 : pageIndex,
+                BaseUrl = "WareHouse"
+            };
+            Search.IsInclueProduct = true;
+            var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_HISTORYIMPORT, Search);
+            if (request.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(request.CheckValidRequestExtention());
+            }
+            var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
+            if (datas.Status)
+            {
+                ViewModels = _mapper.Map<List<ImportHistoryViewDto>>(datas.Objects);
+                Search.Page.Total = datas.Total;
+                int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
+                foreach (var item in ViewModels)
                 {
-                    PageIndex = pageIndex == 0 ? 1 : pageIndex,
-                    BaseUrl = "WareHouse"
-                };
-                Search.IsInclueProduct = true;
-                var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_HISTORYIMPORT, Search);
-                var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
-                if (datas.Status)
-                {
-                    ViewModels = _mapper.Map<List<ImportHistoryViewDto>>(datas.Objects);
-                    Search.Page.Total = datas.Total;
-                    int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
-                    foreach (var item in ViewModels)
-                    {
-                        item.Stt = i++;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Error");
+                    item.Stt = i++;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                _logger.LogError(ex.Message);
+                throw new Exception("Error");
             }
         }
 
@@ -80,6 +82,10 @@ namespace Client.Pages.WareHouse
             {
                 var apiUrl = string.Format(RestApiName.DELETE_HISTORYIMPORT, warehouseId);
                 var request = await _request.DeleteAsync(apiUrl);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var data = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
                 if (!data.Status)
                 {
@@ -95,6 +101,10 @@ namespace Client.Pages.WareHouse
                 ViewData["DataDeleted"] = true;
                 await GetBaseDataAsync(pageIndex);
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

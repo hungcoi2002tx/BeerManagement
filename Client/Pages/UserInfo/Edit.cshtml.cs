@@ -26,17 +26,24 @@ namespace Client.Pages.UserInfo
 
         [BindProperty]
         public UserEditDto EditDto { get; set; }
+
+        public bool isAdd { get; set; } = true;
         public async Task<IActionResult> OnGetAsync(int id = 0)
         {
             try
             {
                 if (id != 0)
                 {
+                    isAdd = false;
                     var request = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_USER
                         , new CategorySearchDto
                         {
                             Id = id
                         });
+                    if (request.CheckValidRequestExtention() != null)
+                    {
+                        throw new AuthenticationException(request.CheckValidRequestExtention());
+                    }
                     var entity = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.User>>();
                     if (!entity.Status || entity.StatusCode == 500)
                     {
@@ -49,6 +56,10 @@ namespace Client.Pages.UserInfo
                     EditDto = _mapper.Map<UserEditDto>(entity.Objects.First());
                 }
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -76,7 +87,17 @@ namespace Client.Pages.UserInfo
                 {
                     request = await _request.PostJsonAsync(RestApiName.POST_ADD_USER, EditDto);
                 }
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.User>>();
+                if(result.StatusCode == 400)
+                {
+                    ModelState.AddModelError("", result.Message);
+                    EditDto.Id = 0;
+                    return Page();
+                }
                 if (result.Status)
                 {
                     return RedirectToPage("./Index", new { DataAdded = true });
@@ -85,6 +106,10 @@ namespace Client.Pages.UserInfo
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

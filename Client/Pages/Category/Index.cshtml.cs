@@ -32,6 +32,10 @@ namespace Client.Pages.Category
                 await GetBaseDataAsync(pageIndex);
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -41,33 +45,27 @@ namespace Client.Pages.Category
 
         private async Task GetBaseDataAsync(int pageIndex)
         {
-            try
+
+            Search.Page = new Share.Models.PagingObject.Page()
             {
-                Search.Page = new Share.Models.PagingObject.Page()
-                {
-                    PageIndex = pageIndex == 0 ? 1 : pageIndex,
-                    BaseUrl = "Category"
-                };
-                var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_CATEGORY, Search);
-                var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
-                if (datas.Status)
-                {
-                    ViewModels = _mapper.Map<List<CategoryViewDto>>(datas.Objects);
-                    Search.Page.Total = datas.Total;
-                    int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
-                    foreach (var item in ViewModels)
-                    {
-                        item.Stt = i++;
-                    }
-                }
-                else
-                {
-                    throw new Exception("Error");
-                }
+                PageIndex = pageIndex == 0 ? 1 : pageIndex,
+                BaseUrl = "Category"
+            };
+            var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_CATEGORY, Search);
+            if (request.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(request.CheckValidRequestExtention());
             }
-            catch (Exception ex)
+            var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
+            if (datas.Status)
             {
-                _logger.LogError(ex.Message);
+                ViewModels = _mapper.Map<List<CategoryViewDto>>(datas.Objects);
+                Search.Page.Total = datas.Total;
+                int i = (Search.Page.PageIndex - 1) * Search.Page.PageSize + 1;
+                foreach (var item in ViewModels)
+                {
+                    item.Stt = i++;
+                }
             }
         }
 
@@ -82,6 +80,10 @@ namespace Client.Pages.Category
                 }
                 var apiUrl = string.Format(RestApiName.DELETE_CATEGORY, categoryId);
                 var request = await _request.DeleteAsync(apiUrl);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var data = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (!data.Status)
                 {
@@ -97,6 +99,10 @@ namespace Client.Pages.Category
                 ViewData["DataDeleted"] = true;
                 await GetBaseDataAsync(pageIndex);
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

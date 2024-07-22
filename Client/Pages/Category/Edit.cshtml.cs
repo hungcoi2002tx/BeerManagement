@@ -41,6 +41,10 @@ namespace Client.Pages.Category
                         {
                             Id = id
                         });
+                    if (request.CheckValidRequestExtention() != null)
+                    {
+                        throw new AuthenticationException(request.CheckValidRequestExtention());
+                    }
                     var entity = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                     if (!entity.Status || entity.StatusCode == 500)
                     {
@@ -53,6 +57,10 @@ namespace Client.Pages.Category
                     EditModel = _mapper.Map<CategoryEditDto>(entity.Objects.First());
                 }
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -104,6 +112,10 @@ namespace Client.Pages.Category
                 {
                     request = await _request.PostJsonAsync(RestApiName.POST_ADD_CATEGORY, EditModel);
                 }
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
                 if (result.Status)
                 {
@@ -113,6 +125,10 @@ namespace Client.Pages.Category
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

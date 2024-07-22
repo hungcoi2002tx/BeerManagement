@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Api.Ultils;
+using AutoMapper;
+using Business.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Share.Models;
+using Share.Models.Domain;
 using System.CodeDom.Compiler;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -15,19 +19,24 @@ namespace Api.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
+        private readonly IUserService _servive;
+        private readonly IMapper _mapper;
 
-        public LoginController(IConfiguration config)
+        public LoginController(IConfiguration config, IUserService servive, IMapper mapper)
         {
             _config = config;
+            _servive = servive;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public IActionResult Login(UserLogin userLogin)
+        public async Task<IActionResult> Login(UserLogin userLogin)
         {
-            var user = Authenticate(userLogin);
+            var user = await AuthenticateAsync(userLogin);
             if (user != null)
             {
-                var token = Generated(user);
+                var userModel = _mapper.Map<UserModel>(user);
+                var token = Generated(userModel);
                 return Ok(token);
             }
             return NotFound("User not found");
@@ -40,7 +49,6 @@ namespace Api.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.UserName),
-                new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, user.Role),
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"]
@@ -51,13 +59,21 @@ namespace Api.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        private UserModel Authenticate(UserLogin userLogin)
+        private async Task<User> AuthenticateAsync(UserLogin userLogin)
         {
-            var currentUser = UserConstants.Users.FirstOrDefault(x => x.UserName.ToLower() == userLogin.UserName.ToLower() && x.Password == userLogin.Password);
-
-            if (currentUser != null)
+            var data = await _servive.GetPageBySearchAsync(new Share.Models.Dtos.SearchDtos.UserSearchDto
             {
-                return currentUser;
+                IsEnable = true,
+                Account = userLogin.UserName
+            });
+
+            if (data.Objects?.Any() == true)
+            {
+                var pass = data.Objects.First().Password;
+                if (PasswordHasher.VerifyPassword(userLogin.Password, pass))
+                {
+                    return data.Objects.First();
+                }
             }
             return null;
         }

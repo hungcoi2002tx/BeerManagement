@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Share.Models.Domain;
 using Share.Models.Dtos.SearchDtos;
+using Share.Ultils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,7 +42,18 @@ namespace DataLayer.Implements
             try
             {
                 IQueryable<User> filter = _context.Users;
-               
+                if (model.Id != 0)
+                {
+                    filter = filter.Where(x => x.Id == model.Id);
+                }
+                if (model.Account.IsNotNullOrEmpty())
+                {
+                    filter = filter.Where(x => x.Account == model.Account);
+                }
+                if (model.IsEnable != null)
+                {
+                    filter = filter.Where(x => x.IsEnable == model.IsEnable);
+                }
                 return filter;
             }
             catch (Exception ex)

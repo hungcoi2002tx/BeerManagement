@@ -37,6 +37,5 @@ namespace Share.Constant
         public const string POST_ADD_USER = BaseUrl + "User/Add";
         public const string DELETE_USER = BaseUrl + "User/Delete/{0}";
         public const string PUT_USER = BaseUrl + "User/Update";
-
     }
 }

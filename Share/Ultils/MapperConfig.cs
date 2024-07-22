@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Share.Models;
 using Share.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,10 @@ namespace Share.Ultils
                 .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
                 .ReverseMap();
-
+            CreateMap<User, UserModel>()
+               .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Account))
+               .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.GetRoleString()))
+               .ReverseMap();
             #endregion
         }
     }
