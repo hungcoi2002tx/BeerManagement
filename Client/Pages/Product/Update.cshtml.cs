@@ -63,6 +63,10 @@ namespace Client.Pages.Product
                     throw new Exception();
                 }
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -80,7 +84,14 @@ namespace Client.Pages.Product
             {
                 IsEnable = true
             });
-
+            if (requestCategories.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestCategories.CheckValidRequestExtention());
+            }
+            if (requestSuppliers.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestSuppliers.CheckValidRequestExtention());
+            }
             var dataCategories = await requestCategories.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Category>>();
             var dataSuppliers = await requestSuppliers.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Supplier>>();
 
@@ -131,12 +142,20 @@ namespace Client.Pages.Product
                 }
 
                 var request = await _request.PutAsync(RestApiName.PUT_PRODUCT, EditModel);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
                 if (!result.Status)
                 {
                     return Page();
                 }
                 return RedirectToPage(GlobalVariants.LINK_PRODUCT_INDEX);
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -147,16 +166,16 @@ namespace Client.Pages.Product
 
         private async Task<ResponseCustom<Share.Models.Domain.Product>> GetModelBySearchAsync(ProductSearchDto search)
         {
-            try
+
+            var request = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, search);
+            if (request.CheckValidRequestExtention() != null)
             {
-                var requestGetData = await _request.PostJsonAsync(RestApiName.POST_PAGE_LIST_PRODUCT, search);
-                var dataReturn = await requestGetData.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-                return dataReturn;
+                throw new AuthenticationException(request.CheckValidRequestExtention());
             }
-            catch (Exception ex)
-            {
-                return new ResponseCustom<Share.Models.Domain.Product>();
-            }
+            var dataReturn = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
+            return dataReturn;
+
+
         }
     }
 }

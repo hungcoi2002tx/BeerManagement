@@ -36,6 +36,10 @@ namespace Client.Pages.WareHouse
                 await GetBaseDataAsync();
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -52,6 +56,10 @@ namespace Client.Pages.WareHouse
                     return Page();
                 }
                 var request = await _request.PostJsonAsync(RestApiName.POST_ADD_HISTORYIMPORT, EditModel);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
                 if (result.Status)
                 {
@@ -62,6 +70,10 @@ namespace Client.Pages.WareHouse
                     return Redirect(GlobalVariants.PAGE_500);
                 }
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -71,24 +83,20 @@ namespace Client.Pages.WareHouse
 
         private async Task GetBaseDataAsync()
         {
-            try
+            var requestProducts = await _request.PostJsonAsync(RestApiName.GET_ALL_LIST_PRODUCT, new ProductSearchDto()
             {
-                var requestProducts = await _request.PostJsonAsync(RestApiName.GET_ALL_LIST_PRODUCT, new ProductSearchDto()
-                {
-                    IsEnable = true,
-                    IsForSell = false
-                });
-
-                var dataProduct = await requestProducts.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
-
-                if (dataProduct.Status)
-                {
-                    Products = dataProduct.Objects;
-                }
+                IsEnable = true,
+                IsForSell = false
+            });
+            if (requestProducts.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(requestProducts.CheckValidRequestExtention());
             }
-            catch (Exception ex)
+            var dataProduct = await requestProducts.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
+
+            if (dataProduct.Status)
             {
-                throw ex;
+                Products = dataProduct.Objects;
             }
         }
     }

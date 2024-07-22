@@ -30,6 +30,14 @@ namespace Business.Implements
         {
             try
             {
+                var result = await _repository.GetPageBySearchAsync(new UserSearchDto()
+                {
+                    Account = model.Account,
+                });
+                if (result.Item2 != 0)
+                {
+                    return ResponeExtentions<User>.GetError400($"There is exist account {model.Account}");
+                }
                 var entity = await _repository.AddAsync(model);
                 return new ResponseCustom<User>
                 {

@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+
 using Microsoft.IdentityModel.Tokens;
+
+using Share.Models;
+
 using Share.Models.Domain;
 using Share.Models.Dtos.AddDtos;
 using Share.Models.Dtos.EditDtos;
@@ -52,6 +56,7 @@ namespace Share.Ultils
                 .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
                 .ReverseMap();
 
+
             CreateMap<ProductViewDto, OrderDetailViewDto>()
               .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
               .ReverseMap();
@@ -61,6 +66,11 @@ namespace Share.Ultils
 
             CreateMap<OrderSearchDto, OrderEditDto>()
             .ReverseMap();
+
+            CreateMap<User, UserModel>()
+               .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Account))
+               .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.GetRoleString()))
+               .ReverseMap();
             #endregion
         }
     }

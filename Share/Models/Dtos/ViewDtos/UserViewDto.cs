@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Ultils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Share.Models.Dtos.ViewDtos
         public string Fullname { get; set; }
         public string Account { get; set; }
         public int Role { get; set; }
-        public string RoleStr { get => GetRoleStr(); set { } }
+        public string RoleStr { get => Role.GetRoleString(); set { } }
         public bool IsEnable { get; set; }
 
         private string GetRoleStr()
