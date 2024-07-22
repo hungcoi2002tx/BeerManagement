@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Share.Models.Domain
 {
@@ -17,12 +18,14 @@ namespace Share.Models.Domain
         public int? QuantityPerUnit { get; set; }
         public string Name { get; set; } = null!;
         public int CategoryId { get; set; }
-        public int SupplierId { get; set; }
+        public int? SupplierId { get; set; }
         public bool ForSell { get; set; }
         public bool IsAvailable { get; set; }
+        public bool IsEnable { get; set; }
 
         public virtual Category Category { get; set; } = null!;
-        public virtual Supplier Supplier { get; set; } = null!;
+        public virtual Supplier? Supplier { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

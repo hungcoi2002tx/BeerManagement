@@ -1,9 +1,15 @@
+using Client.WebRequests;
 using Share.Ultils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddHttpClient();
+builder.Services.AddAutoMapperConfig();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
+builder.Services.AddSingleton<Logger>();
 // Add httpclient Services
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -37,5 +43,10 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapGet("/", async context =>
+{
+	context.Response.Redirect("/WareHouse/Index");
+});
 
 app.Run();

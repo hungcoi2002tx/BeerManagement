@@ -1,0 +1,164 @@
+﻿@page
+@model Client.Pages.WareHouse.AddModel
+@{
+}
+
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">List Transaction</a></li>
+            <li class="breadcrumb-item  active"><a href="javascript:void(0)">Add</a></li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="row">
+        <div class="col-xl-12 col-xxl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Form step</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div id="smartwizard" class="form-wizard order-create">
+                            <ul class="nav nav-wizard">
+                                <li>
+                                    <a class="nav-link" href="#wizard_Service">
+                                        <span>1</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#wizard_Time">
+                                        <span>2</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="#wizard_Details" id="nav-link-total">
+                                        <span>3</span>
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div id="wizard_Service" class="tab-pane" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="card-header d-block">
+                                                <h4 class="card-title">Choose Product</h4>
+                                                <p class="m-0 subtitle">
+                                                    Choosing products to be entered into the Warehouse.
+                                                </p>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="basic-dropdown">
+                                                    <label for="productSelect">Select a product:</label>
+                                                    <select id="productSelect" class="form-control solid" onchange="handleSelectChange()" asp-for="EditModel.ProductId">
+                                                        @foreach (var item in Model.Products)
+                                                        {
+                                                            <option value="@item.Id">
+                                                                @item.Name
+                                                            </option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wizard_Time" class="tab-pane" role="tabpanel">
+                                    <div class="row">
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Quantity<span class="required">*</span></label>
+                                                <input asp-for="EditModel.Quantity" class="form-control solid" placeholder="0" oninput="syncInput()" id="input-quantity">
+                                                <span asp-validation-for="EditModel.Quantity" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 mb-2">
+                                            <div class="form-group">
+                                                <label class="form-label">UnitPrice<span class="required">*</span></label>
+                                                <input asp-for="EditModel.UnitPrice" class="form-control solid" placeholder="0" id="input-unitPrice" oninput="syncInput()">
+                                                <span asp-validation-for="EditModel.UnitPrice" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 mb-2">
+                                            <div class="form-group">
+                                                <label class="form-label">Description<span class="required">*</span></label>
+                                                <textarea rows="8" class="form-control solid" asp-for="EditModel.Description" placeholder="Description"></textarea>
+                                                <span asp-validation-for="EditModel.Description" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="wizard_Details" class="tab-pane" role="tabpanel">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-black">Summany Transaction</span>
+                                    </h4>
+                                    <ul class="list-group mb-3">
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Price</h6>
+                                                <small class="text-muted"></small>
+                                            </div>
+                                            <span class="text-muted" id="price"></span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                            <div>
+                                                <h6 class="my-0">Quantity</h6>
+                                                <small class="text-muted"></small>
+                                            </div>
+                                            <span class="text-muted" id="quantity"></span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between active">
+                                            <div class="text-white">
+                                                <h6 class="my-0 text-white">Total</h6>
+                                            </div>
+                                            <span class="text-white" id="total"></span>
+                                        </li>
+                                    </ul>
+                                    <div class="input-group">
+                                        <input type="submit" value="Add" class="submit btn btn-primary" id="submitButton" name="Add" hidden>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        var price = document.getElementById("price");
+        var quantity = document.getElementById("quantity");
+        var inputUnitPrice = document.getElementById("input-unitPrice");
+        var inputQuantity = document.getElementById("input-quantity");
+        
+        function syncInput() {
+            price.textContent = inputUnitPrice.value;
+            quantity.textContent = inputQuantity.value;
+            if (price.textContent.trim() && !isNaN(price.textContent.trim()) && quantity.textContent.trim() && !isNaN(quantity.textContent.trim())) {
+                var total = document.getElementById("total");
+                total.textContent = inputUnitPrice.value * inputQuantity.value;
+                var submitButton = document.getElementById("submitButton");
+                if (total.textContent.trim() && !isNaN(total.textContent.trim())) {
+                    submitButton.hidden = false; // Bỏ kích hoạt nút
+                } else {
+                    submitButton.hidden = true; // Vô hiệu hóa nút
+                }
+                console.log(submitButton);
+                console.log(submitButton.hidden);
+            } else {
+                var total = document.getElementById("total");
+                total.textContent = "";
+                var submitButton = document.getElementById("submitButton");
+                submitButton.hidden = true;
+            }
+            
+        }
+
+        document.getElementById("nav-link-total").addEventListener("click", function (event) {
+           
+        });
+</script>
+}

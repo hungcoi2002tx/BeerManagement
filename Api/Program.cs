@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Api.Middleware;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
+using Share.Ultils;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,13 +36,14 @@ builder.Services.AddAuthentication(x =>
 });
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddAutoMapperConfig();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddServicesDbcontext(config)
                 .AddServicesDataLayer()
                 .AddServicesBusinessLayer();
-
+builder.Services.AddSingleton<Logger>();
 
 var app = builder.Build();
 

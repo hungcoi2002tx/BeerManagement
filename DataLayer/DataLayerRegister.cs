@@ -16,7 +16,7 @@ public static class DataLayerRegister
 {
     public static IServiceCollection AddServicesDbcontext(this IServiceCollection services, IConfiguration configration)
     {
-        string beerManagementConfiguration = configration.GetConnectionString("MyDatabase");
+        string beerManagementConfiguration = configration.GetConnectionString("MyDatabase") ?? throw new Exception(" Can not get connecttion string ");
         services.AddDbContext<BeerManagementContext>(
             opt => opt.UseSqlServer(beerManagementConfiguration));
 

@@ -1,18 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
-public class CustomAuthorizeAttribute : Attribute, IAuthorizationFilter
+namespace Api.CustomAttribute
 {
-    public void OnAuthorization(AuthorizationFilterContext context)
+    public class CustomAuthorizeAttribute : Attribute, IAuthorizationFilter
     {
-        if (!context.HttpContext.User.Identity.IsAuthenticated)
+        public void OnAuthorization(AuthorizationFilterContext context)
         {
-            context.Result = new JsonResult(new { message = "Unauthorized" })
+            if (!context.HttpContext.User.Identity.IsAuthenticated)
             {
-                StatusCode = (int)HttpStatusCode.Unauthorized
-            };
-            return;
+                context.Result = new JsonResult(new { message = "Unauthorized" })
+                {
+                    StatusCode = (int)HttpStatusCode.Unauthorized
+                };
+                return;
+            }
         }
     }
 }

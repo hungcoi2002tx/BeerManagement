@@ -11,10 +11,8 @@ namespace DataLayer.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        Task<List<T>> GetAllAsync();
-        Task AddAsync(T obj);
-        Task<Boolean> DeleteAsync(int id);
-        Task EditAsync(T obj);
+        Task<T> AddAsync(T obj, bool usingTransaction = true);
+        Task<bool> DeleteAsync(T obj, bool usingTransaction = true);
         IDbContextTransaction OpenTransaction();
         Task CommitTransactionAsync();
         Task RollBackTransactionAsync();

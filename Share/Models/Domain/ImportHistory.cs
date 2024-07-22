@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Models.ResponseObject;
+using System;
 using System.Collections.Generic;
 
 namespace Share.Models.Domain
@@ -12,6 +13,7 @@ namespace Share.Models.Domain
         public DateTime Date { get; set; }
         public int ProductId { get; set; }
         public double UnitPrice { get; set; }
+        public bool IsEnable { get; set; }
 
         public virtual Product Product { get; set; } = null!;
     }

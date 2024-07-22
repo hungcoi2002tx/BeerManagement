@@ -31,7 +31,14 @@
     <link href="~/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
           rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet">
     <link href="~/../../cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet" />
+    <!-- Form step -->
+    <link href="~/vendor/jquery-steps/css/jquery.steps.css" rel="stylesheet">
+    <!-- Form step -->
+    <link href="~/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css" rel="stylesheet">
+    <!-- Custom Stylesheet -->
+    <link href="~/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
 </head>
 <body>
     <!--*******************
@@ -56,9 +63,9 @@
           ***********************************-->
         <div class="nav-header">
             <a href="index.html" class="brand-logo">
-                <img class="logo-abbr" src="images/logo.png" alt="" />
-                <img class="logo-compact" src="images/logo-text.png" alt="" />
-                <img class="brand-title" src="images/logo-text.png" alt="" />
+                <img class="logo-abbr" src="~/images/logo.png" alt="" />
+                <img class="logo-compact" src="~/images/logo-text.png" alt="" />
+                <img class="brand-title" src="~/images/logo-text.png" alt="" />
             </a>
 
             <div class="nav-control">
@@ -149,7 +156,7 @@
                                     <li class="active dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/1.jpg"
+                                                <img src="~/images/avatar/1.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -163,7 +170,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/2.jpg"
+                                                <img src="~/images/avatar/2.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -177,7 +184,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/3.jpg"
+                                                <img src="~/images/avatar/3.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -191,7 +198,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/4.jpg"
+                                                <img src="~/images/avatar/4.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -206,7 +213,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/5.jpg"
+                                                <img src="~/images/avatar/5.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -220,7 +227,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/1.jpg"
+                                                <img src="~/images/avatar/1.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon"></span>
@@ -234,7 +241,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/2.jpg"
+                                                <img src="~/images/avatar/2.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -263,7 +270,7 @@
                                     <li class="dz-chat-user">
                                         <div class="d-flex bd-highlight">
                                             <div class="img_cont">
-                                                <img src="images/avatar/4.jpg"
+                                                <img src="~/images/avatar/4.jpg"
                                                      class="rounded-circle user_img"
                                                      alt="" />
                                                 <span class="online_icon offline"></span>
@@ -995,7 +1002,7 @@
                                     <div class="header-info">
                                         <span>Hello, <strong>Samuel</strong></span>
                                     </div>
-                                    <img src="images/profile/pic1.jpg" width="20" alt="" />
+                                    <img src="~/images/profile/pic1.jpg" width="20" alt="" />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a href="app-profile.html" class="dropdown-item ai-icon">
@@ -1369,42 +1376,29 @@
                            href="javascript:void()"
                            aria-expanded="false">
                             <i class="flaticon-381-network"></i>
-                            <span class="nav-text">Table</span>
+                            <span class="nav-text">WareHouse</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="table-bootstrap-basic.html">Bootstrap</a></li>
-                            <li><a href="table-datatable-basic.html">Datatable</a></li>
+                            <li><a asp-page="/WareHouse/Add">Add</a></li>
                         </ul>
                     </li>
                     <li>
                         <a class="has-arrow ai-icon"
                            href="javascript:void()"
                            aria-expanded="false">
-                            <i class="flaticon-381-layer-1"></i>
-                            <span class="nav-text">Pages</span>
+                            <i class="fa-solid fa-gear"></i>
+                            <span class="nav-text">Setting</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="page-register.html">Register</a></li>
-                            <li><a href="page-login.html">Login</a></li>
-                            <li>
-                                <a class="has-arrow"
-                                   href="javascript:void()"
-                                   aria-expanded="false">Error</a>
-                                <ul aria-expanded="false">
-                                    <li><a href="page-error-400.html">Error 400</a></li>
-                                    <li><a href="page-error-403.html">Error 403</a></li>
-                                    <li><a href="page-error-404.html">Error 404</a></li>
-                                    <li><a href="page-error-500.html">Error 500</a></li>
-                                    <li><a href="page-error-503.html">Error 503</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="page-lock-screen.html">Lock Screen</a></li>
+                            <li><a asp-page="/Category/Index">Category</a></li>
+                            <li><a asp-page="/Supplier/Index">Supplier</a></li>
+                            <li><a asp-page="/Product/Index">Product</a></li>
                         </ul>
                     </li>
                 </ul>
 
                 <div class="add-menu-sidebar">
-                    <img src="images/icon1.png" alt="" />
+                    <img src="~/images/icon1.png" alt="" />
                     <p>Organize your menus through button bellow</p>
                     <a href="javascript:void(0);" class="btn bg-white text-black">+ Add Menus</a>
                 </div>
@@ -1425,7 +1419,7 @@
           ***********************************-->
         <div class="content-body">
             <!-- row -->
-            @RenderBody();
+            @RenderBody()
         </div>
         <!--**********************************
               Content body end
@@ -1463,16 +1457,33 @@
           rel="stylesheet" />
     <script src="~/js/custom.min.js"></script>
     <script src="~/js/deznav-init.js"></script>
-
+    <script src="~/vendor/jquery-steps/build/jquery.steps.min.js"></script>
+    <script src="~/vendor/jquery-validation/jquery.validate.min.js"></script>
     <!-- Counter Up -->
     <script src="~/vendor/waypoints/jquery.waypoints.min.js"></script>
     <script src="~/vendor/jquery.counterup/jquery.counterup.min.js"></script>
 
     <!-- Chart piety plugin files -->
     <script src="~/vendor/peity/jquery.peity.min.js"></script>
-
+    <!-- Form validate init -->
+    <script src="~/js/plugins-init/jquery.validate-init.js"></script>
     <!-- Apex Chart -->
     <script src="~/vendor/apexchart/apexchart.js"></script>
+    <!-- Datatable -->
+    <script src="~/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/plugins-init/datatables.init.js"></script>
+
+    <!-- Form Steps -->
+    <script src="~/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // SmartWizard initialize
+            $('#smartwizard').smartWizard();
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 
 <!-- Mirrored from davur.dexignzone.com/dashboard/page-order.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 19 Jun 2024 15:16:05 GMT -->

@@ -14,74 +14,91 @@ namespace DataLayer.Implements
 {
     public abstract class Repository<T> : IRepository<T> where T : class
     {
-        private readonly BeerManagementContext _context;
-        protected IDbContextTransaction _transaction;
-        private DbSet<T> _dbSet { get => _context.Set<T>(); }
+        private IDbContextTransaction _transaction;
+        protected readonly BeerManagementContext _context;
+        protected DbSet<T> _dbSet { get => _context.Set<T>(); }
 
-        public Repository(BeerManagementContext beerManagementContext)
+        public Repository(BeerManagementContext context)
         {
-            _context = beerManagementContext;
+            _context = context;
         }
 
-        public async Task AddAsync(T obj)
+        public async Task<T> AddAsync(T obj, bool usingTransaction = true)
         {
-            await _dbSet.AddAsync(obj);
-        }
-
-        public async Task<Boolean> DeleteAsync(int id)
-        {
-            var obj = await GetByIdAsync(id);
-            if (obj == null)
+            try
             {
-                return false;
+                if (usingTransaction) OpenTransaction();
+
+                await _dbSet.AddAsync(obj);
+                await _context.SaveChangesAsync();
+
+                if (usingTransaction) await CommitTransactionAsync();
+
+                return obj;
             }
-            _dbSet.Remove(obj);
-            return true;
+            catch (Exception)
+            {
+                if (usingTransaction) await RollBackTransactionAsync();
+                throw ;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(T obj, bool usingTransaction = true)
+        {
+            try
+            {
+                if (usingTransaction) OpenTransaction();
+
+                _dbSet.Remove(obj);
+                _context.SaveChanges();
+
+                if (usingTransaction) await CommitTransactionAsync();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                if (usingTransaction) await RollBackTransactionAsync();
+                throw;
+            }
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _dbSet.FindAsync(id);
+            var result = await _dbSet.FindAsync(id);
+
+            return result;
         }
 
-        public async Task EditAsync(T obj)
+        public async Task<List<T>> GetAllBySearchAsync()
         {
-            await _dbSet.AddAsync(obj);
+            var result = await _dbSet.ToListAsync();
+
+            return result;
         }
 
-        public async Task<List<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
-
-        public T GetByKey(Object key)
+        public T? GetByKey(Object key)
         {
             var entity = _dbSet.Find(key);
+
             return entity;
         }
 
         public IDbContextTransaction OpenTransaction()
         {
             _transaction = _context.Database.BeginTransaction();
+
             return _transaction;
         }
 
         public async Task CommitTransactionAsync()
         {
-            try
-            {
-                _transaction.CommitAsync();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-           
+            await _transaction.CommitAsync();
         }
 
         public async Task RollBackTransactionAsync()
         {
-            _transaction.RollbackAsync();
+            await _transaction.RollbackAsync();
         }
     }
 }
