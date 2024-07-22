@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Share.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,10 @@ namespace Share.Ultils
             #endregion
 
             #region Custome Map
+            CreateMap<Product, ImportHistory>()
+                .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.UnitPrice))
+                .ReverseMap();
 
             #endregion
         }
