@@ -83,7 +83,7 @@ namespace Client.Pages.WareHouse
 
         private async Task GetBaseDataAsync()
         {
-            var requestProducts = await _request.PostJsonAsync(RestApiName.GET_ALL_LIST_PRODUCT, new ProductSearchDto()
+            var requestProducts = await _request.PostJsonAsync(RestApiName.POST_ALL_LIST_PRODUCT, new ProductSearchDto()
             {
                 IsEnable = true,
                 IsForSell = false

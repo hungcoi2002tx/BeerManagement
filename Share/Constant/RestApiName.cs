@@ -42,9 +42,6 @@ namespace Share.Constant
         public const string POST_ADD_HISTORYIMPORT = BASEURL + "HistoryImport/Add";
         public const string DELETE_HISTORYIMPORT = BASEURL + "HistoryImport/Delete/{0}";
 
-        public const string ADD_ORDER_DETAIL = BASEURL + "OrderDetail/Add";
-        public const string GET_LIST_ORDER_DETAIL_BY_CONDITION = BASEURL + "OrderDetail/GetPage";
-        public const string UPDATE_ORDER_DETAIL = BASEURL + "OrderDetail/Update";
 
 
 
@@ -54,6 +51,10 @@ namespace Share.Constant
         public const string DELETE_USER = BASEURL + "User/Delete/{0}";
         public const string PUT_USER = BASEURL + "User/Update";
 
+        public const string POST_PAGE_LIST_HISTORYIMPORT = BaseUrl + "HistoryImport/GetPage";
+        public const string POST_ALL_LIST_HISTORYIMPORT = BaseUrl + "HistoryImport/GetAll";
+        public const string POST_ADD_HISTORYIMPORT = BaseUrl + "HistoryImport/Add";
+        public const string DELETE_HISTORYIMPORT = BaseUrl + "HistoryImport/Delete/{0}";
 
     }
 }

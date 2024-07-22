@@ -75,10 +75,24 @@ namespace Business.Implements
             }
         }
 
-        public Task<ResponseCustom<ImportHistory>> GetAllBySearchAsync(ImportHistorySearchDto model)
+        public async Task<ResponseCustom<ImportHistory>> GetAllBySearchAsync(ImportHistorySearchDto model)
         {
-            throw new NotImplementedException();
-        }
+			try
+			{
+				var result = await _repository.GetAllBySearchAsync(model);
+
+				return new ResponseCustom<ImportHistory>
+				{
+					Status = true,
+					Objects = result.ToList()
+				};
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError(ex.ToString());
+				throw;
+			}
+		}
 
         public async Task<ResponseCustom<ImportHistory>> GetPageBySearchAsync(ImportHistorySearchDto model)
         {

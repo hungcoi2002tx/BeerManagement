@@ -77,7 +77,7 @@ namespace Client.Pages
                 return null;
             }
 
-            return Redirect("/Index");
+            return Redirect("/Dashboard/Index");
         }
 
         public async Task<IActionResult> OnGetABCAsync()
