@@ -33,6 +33,10 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.Status == obj.Status);
                 }
+                if(obj.IsInclueProduct == true)
+                {
+                    filter = filter.Include(x => x.Orders);
+                }
                 return filter;
             }
             catch (Exception ex)

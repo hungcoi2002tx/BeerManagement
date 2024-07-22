@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Share.Constant;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Share.Models.Dtos.AddDtos
     {
         [Required]
         public int Number { get; set; }
-        public int Status { get; set; }
-        public bool IsEnable { get; set; }
+        public int Status { get; set; } = TableStatus.INACTIVE;
+        public bool IsEnable { get; set; } = true;
     }
 }

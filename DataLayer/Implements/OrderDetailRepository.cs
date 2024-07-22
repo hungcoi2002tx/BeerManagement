@@ -44,6 +44,10 @@ namespace DataLayer.Implements
                 {
                     filter = filter.Where(x => x.ProductId == obj.ProductId);
                 }
+                if (obj.GetProduct)
+                {
+                    filter = filter.Include(x => x.Product);
+                }
                 return filter;
             }
             catch (Exception ex)
@@ -94,5 +98,7 @@ namespace DataLayer.Implements
                 throw;
             }
         }
+
+      
     }
 }

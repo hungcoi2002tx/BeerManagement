@@ -11,5 +11,6 @@ namespace Share.Models.Dtos.SearchDtos
     {
         public int OrderId { get; set; } = -1;
         public int ProductId { get; set; } = -1;
+        public bool GetProduct { get; set; } = false;
     }
 }

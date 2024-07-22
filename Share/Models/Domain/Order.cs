@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Share.Models.Domain
 {
@@ -19,6 +20,7 @@ namespace Share.Models.Domain
         public int TableId { get; set; }
         public bool IsEnable { get; set; }
 
+        [JsonIgnore]
         public virtual Table Table { get; set; } = null!;
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }

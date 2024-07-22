@@ -27,6 +27,7 @@ namespace Share.Models.Domain
         public virtual Supplier? Supplier { get; set; }
         [JsonIgnore]
         public virtual ICollection<ImportHistory> ImportHistories { get; set; }
+        [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
     }
 }

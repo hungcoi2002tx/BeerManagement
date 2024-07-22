@@ -19,7 +19,7 @@ namespace Share.Models.Dtos.ViewDtos
         [Display(Name = "Quantity Per Unit")]
         public int? QuantityPerUnit { get; set; }
         [Display(Name = "Name")]
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
         public int CategoryId { get; set; }
         public int? SupplierId { get; set; }
         public bool ForSell { get; set; }

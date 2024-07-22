@@ -22,12 +22,13 @@ namespace Api.Controllers
             _tableService = tableService;
         }
 
-        [HttpGet("GetAll")]
+        [HttpPost("GetAll")]
         public async Task<ResponseCustom<Table>> GetAllBySearchAsync([FromBody] TableSearchDto search)
         {
             try
             {
                 var result = await _tableService.GetAllBySearchAsync(search);
+
                 return result;
             }
             catch (Exception)

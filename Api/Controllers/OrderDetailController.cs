@@ -51,7 +51,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
-        public async Task<ResponseCustom<OrderDetail>> AddAsync([FromBody] OrderDetailAddDto obj)
+        public async Task<ResponseCustom<OrderDetail>> AddAsync([FromBody] List<OrderDetailAddDto> list)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace Api.Controllers
                     return ResponeExtentions<OrderDetail>.GetError400("Validate AddAsync - orderDetailController");
                 }
 
-                var result = await _orderDetailService.AddAsync(obj);
+                var result = await _orderDetailService.AddAsync(list);
                 return result;
             }
             catch (Exception)
@@ -70,7 +70,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<ResponseCustom<OrderDetail>> UpdateAsync([FromBody] OrderDetailEditDto obj)
+        public async Task<ResponseCustom<OrderDetail>> UpdateAsync([FromBody] List<OrderDetailEditDto> obj)
         {
             try
             {
