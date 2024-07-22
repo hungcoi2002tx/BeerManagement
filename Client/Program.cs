@@ -7,14 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddHttpClient();
 builder.Services.AddAutoMapperConfig();
+
+#region config http client
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICustomHttpClient, CustomHttpClient>();
 builder.Services.AddSingleton<Logger>();
-// Add httpclient Services
-builder.Services.AddHttpClient();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<CustomHttpClient>();
-
+#endregion
 #region Add session
 builder.Services.AddDistributedMemoryCache(); //using local storage to save session
 builder.Services.AddSession(x =>
@@ -46,7 +44,7 @@ app.MapRazorPages();
 
 app.MapGet("/", async context =>
 {
-	context.Response.Redirect("/WareHouse/Index");
+	context.Response.Redirect("/UserInfo/Index");
 });
 
 app.Run();

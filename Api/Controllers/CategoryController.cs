@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Api.CustomAttribute;
+using AutoMapper;
 using Business.Implements;
 using Business.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +28,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
+        [Authorize]
         public async Task<ResponseCustom<Category>> GetAllAsync([FromBody] CategorySearchDto SearchModel)
         {
             try
@@ -81,7 +83,7 @@ namespace Api.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - SupperlierController");
+                    return ResponeExtentions<Category>.GetError400("Validate UpdateAsync - CategoryController");
                 }
                 var result = await _servive.UpdateAsync(_mapper.Map<Category>(editModel));
                 return result;
@@ -104,16 +106,6 @@ namespace Api.Controllers
             {
                 return ResponeExtentions<Category>.GetError500(ex.Message);
             }
-        }
-
-        private Boolean GetSessionData()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            if(identity == null)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

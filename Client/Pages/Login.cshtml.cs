@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Client.WebRequests;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Share.Models;
 using Share.Models.Domain;
@@ -11,14 +12,14 @@ namespace Client.Pages
 {
     public class LoginModel : PageModel
     {
-        private readonly CustomHttpClient _customHttpClient;
+        private readonly ICustomHttpClient _request;
 
         [BindProperty]
         public UserLogin User { get; set; }
 
-        public LoginModel(CustomHttpClient customHttpClient)
+        public LoginModel(ICustomHttpClient request)
         {
-            _customHttpClient = customHttpClient;
+            _request = request;
         }
 
         public void OnGet()
@@ -33,7 +34,7 @@ namespace Client.Pages
                 Password = User.Password
             };
 
-            var response = await _customHttpClient.PostJsonAsync("https://localhost:7169/api/Login", loginModel);
+            var response = await _request.PostJsonAsync("https://localhost:7169/api/Login", loginModel);
 
             if (response.IsSuccessStatusCode)
             {
@@ -54,11 +55,11 @@ namespace Client.Pages
 
         public async Task<IActionResult> OnGetABCAsync()
         {
-            var response = await _customHttpClient.GetAsync("https://localhost:7169/api/Category");
+            var response = await _request.GetAsync("https://localhost:7169/api/Category");
 
             if (response.IsSuccessStatusCode)
             {
-                var list = await response.Content.ReadFromJsonAsync<List<Category>>();
+                //var list = await response.Content.ReadFromJsonAsync<List<Category>>();
                 return RedirectToPage();
             }
             else
