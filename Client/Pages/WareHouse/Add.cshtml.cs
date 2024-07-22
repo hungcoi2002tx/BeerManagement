@@ -25,12 +25,9 @@ namespace Client.Pages.WareHouse
             _logger = logger;
             _webHostEnvironment = webHostEnvironment;
         }
-        [BindProperty]
-        public Share.Models.Domain.Product ProductSelected { get; set; }
-
-        public List<Share.Models.Domain.Product> Products { get; set; } = new();
-
         public Share.Models.Dtos.EditDtos.ImportHistoryEditDto EditModel { get; set; }
+
+        public List<Share.Models.Domain.Product> Products { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -46,12 +43,24 @@ namespace Client.Pages.WareHouse
             }
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(Share.Models.Dtos.EditDtos.ImportHistoryEditDto EditModel)
         {
             try
             {
-                await GetBaseDataAsync();
-                return Page();
+                if (!ModelState.IsValid || EditModel == null)
+                {
+                    return Page();
+                }
+                var request = await _request.PostJsonAsync(RestApiName.POST_ADD_HISTORYIMPORT, EditModel);
+                var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
+                if (result.Status)
+                {
+                    return RedirectToPage(GlobalVariants.LINK_CATEGORY_INDEX);
+                }
+                else
+                {
+                    return Redirect(GlobalVariants.PAGE_500);
+                }
             }
             catch (Exception ex)
             {
