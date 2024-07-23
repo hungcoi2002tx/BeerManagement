@@ -47,6 +47,10 @@ namespace Client.Pages.Order
 
                 OrderAddDto.TableId = TableId;
                 var request = await _httpCustom.PostJsonAsync(RestApiName.ADD_ORDER, OrderAddDto);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Order>>();
 
                 if (result.Status)
@@ -58,6 +62,10 @@ namespace Client.Pages.Order
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -71,6 +79,7 @@ namespace Client.Pages.Order
             try
             {
                 var response = await GetTableById(id);
+               
                 response.Status = TableStatus.ACTIVE;
                 await ChangeTableStatus(response);
             }

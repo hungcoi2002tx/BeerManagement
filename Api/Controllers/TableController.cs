@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Api.CustomAttribute;
+using AutoMapper;
 using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
         public async Task<ResponseCustom<Table>> GetAllBySearchAsync([FromBody] TableSearchDto search)
         {
             try
@@ -38,6 +40,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
         public async Task<ResponseCustom<Table>> GetPageAsync([FromBody] TableSearchDto search)
         {
             try
@@ -52,6 +55,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
+        [CustomAuthorize("Admin", "Manager")]
+
         public async Task<ResponseCustom<Table>> AddAsync([FromBody] TableAddDto obj)
         {
             try
@@ -71,6 +76,8 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
+        [CustomAuthorize("Admin", "Manager")]
+
         public async Task<ResponseCustom<Table>> UpdateAsync([FromBody] TableEditDto obj)
         {
             try
@@ -90,6 +97,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [CustomAuthorize("Admin", "Manager")]
+
         public async Task<ResponseCustom<Table>> DeleteAsync(int id)
         {
             try

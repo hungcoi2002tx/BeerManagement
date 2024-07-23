@@ -33,22 +33,40 @@ namespace Client.Pages.Order
             _mapper = mapper;
         }
 
-        public async Task OnGetAsync(int orderId)
+        public async Task<IActionResult> OnGetAsync(int orderId)
         {
-            this.orderId = orderId;
-            var responseOrderDetail = await _httpCustom.PostJsonAsync(RestApiName.GET_LIST_ORDER_DETAIL_BY_CONDITION, new OrderDetailSearchDto()
+            try
             {
-                OrderId = orderId,
-                GetProduct = true
-            });
-            var dataOrderDetail = await responseOrderDetail.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.OrderDetail>>();
+                this.orderId = orderId;
+                var responseOrderDetail = await _httpCustom.PostJsonAsync(RestApiName.GET_LIST_ORDER_DETAIL_BY_CONDITION, new OrderDetailSearchDto()
+                {
+                    OrderId = orderId,
+                    GetProduct = true
+                });
+                if (responseOrderDetail.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(responseOrderDetail.CheckValidRequestExtention());
+                }
+                var dataOrderDetail = await responseOrderDetail.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.OrderDetail>>();
 
-            OrderDetailViewDtos = _mapper.Map<List<OrderDetailViewDto>>(dataOrderDetail.Objects);
-            int i = 1;
-            foreach (var item in OrderDetailViewDtos)
+                OrderDetailViewDtos = _mapper.Map<List<OrderDetailViewDto>>(dataOrderDetail.Objects);
+                int i = 1;
+                foreach (var item in OrderDetailViewDtos)
+                {
+                    item.Stt = i++;
+                    Total = Total + (item.Quantity * item.UnitPrice);
+                }
+
+                return Page();
+            }
+            catch (AuthenticationException ex)
             {
-                item.Stt = i++;
-                Total = Total + (item.Quantity * item.UnitPrice);
+                return Redirect(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return Redirect(GlobalVariants.PAGE_400);
             }
         }
 
@@ -63,7 +81,10 @@ namespace Client.Pages.Order
                         {
                             Id = orderId
                         });
-
+                    if (response.CheckValidRequestExtention() != null)
+                    {
+                        throw new AuthenticationException(response.CheckValidRequestExtention());
+                    }
                     var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Order>>();
 
                     if (!data.Status || data.StatusCode == 500)
@@ -81,11 +102,15 @@ namespace Client.Pages.Order
                     order.PaymentDate = DateTime.Now;
                     order.PaymentStatus = Share.Constant.PaymentStatus.PAID;
 
-                   await UpdateOrder(order);
+                    await UpdateOrder(order);
                     await ChangeTableStatus(order.TableId);
 
                 }
                 return RedirectToPage("/Table/Active");
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -154,7 +179,7 @@ namespace Client.Pages.Order
             {
                 if (!ModelState.IsValid || orderEditDto == null)
                 {
-                   throw new Exception(nameof(orderEditDto));
+                    throw new Exception(nameof(orderEditDto));
                 }
 
                 var request = await _httpCustom.PutAsync(RestApiName.UPDATE_ORDER, orderEditDto);

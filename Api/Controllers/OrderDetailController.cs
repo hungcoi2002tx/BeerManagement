@@ -1,4 +1,5 @@
-﻿using Business.Implements;
+﻿using Api.CustomAttribute;
+using Business.Implements;
 using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<OrderDetail>> GetAllBySearchAsync([FromBody] OrderDetailSearchDto search)
         {
             try
@@ -37,6 +40,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<OrderDetail>> GetPageAsync([FromBody] OrderDetailSearchDto search)
         {
             try
@@ -51,6 +56,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<OrderDetail>> AddAsync([FromBody] List<OrderDetailAddDto> list)
         {
             try
@@ -70,6 +77,8 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<OrderDetail>> UpdateAsync([FromBody] List<OrderDetailEditDto> obj)
         {
             try
@@ -89,6 +98,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [CustomAuthorize("Admin")]
+
         public async Task<ResponseCustom<OrderDetail>> DeleteAsync(int orderId, int productId)
         {
             try
