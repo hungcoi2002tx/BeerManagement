@@ -24,6 +24,8 @@ namespace Client.Pages.Dashboard
 		}
 
 		public int TotalEmployeeOn { get; set; }
+		public int TotalMenus { get; set; }
+		public Double Total { get; set; }
 		public int TotalEmployeeOff { get; set; }
 
 		public List<ProductViewDto> ProductInStocks { get; set; }
@@ -48,6 +50,8 @@ namespace Client.Pages.Dashboard
 		private async Task GetBaseDataAsync()
 		{
 			await GetTotalEmployeeAsync();
+			await GetProductInStockAsync();
+			await GetTotalRevenueAsync();
 			await GetProductInStockAsync();
 		}
 
@@ -90,8 +94,44 @@ namespace Client.Pages.Dashboard
 			if (datas.Status)
 			{
 				var data = datas.Objects;
-				TotalEmployeeOn = data.Where(x => x.IsEnable = true).Count();
-				TotalEmployeeOff = data.Where(x => x.IsEnable = false).Count();
+				TotalEmployeeOn = data.Where(x => x.IsEnable == true).Count();
+				TotalEmployeeOff = data.Where(x => x.IsEnable == false).Count();
+			}
+		}
+
+        private async Task GetTotalMenuAsync()
+        {
+            var request = await _request.PostJsonAsync(RestApiName.GET_LIST_ORDER_BY_CONDITION, new OrderSearchDto()
+            {
+                PaymentStatus = PaymentStatus.PAID
+            });
+            if (request.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(request.CheckValidRequestExtention());
+            }
+            var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Order>>();
+            if (datas.Status)
+            {
+                var data = datas.Objects;
+                TotalMenus = data.Where(x => x.IsEnable == true).Count();
+            }
+        }
+
+		private async Task GetTotalRevenueAsync()
+		{
+			var request = await _request.PostJsonAsync(RestApiName.GET_LIST_ORDER_BY_CONDITION, new OrderSearchDto()
+			{
+				PaymentStatus = PaymentStatus.PAID
+			});
+			if (request.CheckValidRequestExtention() != null)
+			{
+				throw new AuthenticationException(request.CheckValidRequestExtention());
+			}
+			var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Order>>();
+			if (datas.Status)
+			{
+				var data = datas.Objects;
+				Total = (double)data.Where(x => x.IsEnable == true).Sum(x => x.Total);
 			}
 		}
 	}
