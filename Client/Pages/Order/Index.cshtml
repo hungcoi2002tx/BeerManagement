@@ -1,0 +1,70 @@
+﻿@page
+@model Client.Pages.Order.IndexModel
+
+
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item-no-link">App/</li>
+            <li class="breadcrumb-item-no-link">Order/</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="modal fade" id="sendMessageModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Supplier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th>Table Id</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Payment Date</th>
+                                    <th>Payment Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                @foreach (var t in Model.Orders)
+                                {
+
+                                    <tr>
+                                        <td><a asp-page="/OrderDetail/Index" asp-route-orderId="@t.Id">@t.Id</a></td>
+                                        <td>
+                                            @t.Date
+                                        </td>
+                                        <td>@t.Total</td>
+                                        <td>@t.PaymentDate</td>
+                                        
+                                        @if (t.PaymentStatus == PaymentStatus.PAID)
+                                        {
+                                            <td><span class="badge light badge-success">Paid</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="badge light badge-danger">Unpaid</span></td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

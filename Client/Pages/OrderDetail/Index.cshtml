@@ -1,0 +1,58 @@
+﻿@page
+@model Client.Pages.OrderDetail.IndexModel
+
+
+<div class="container-fluid">
+    <div class="row page-titles">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item-no-link">App/</li>
+            <li class="breadcrumb-item-no-link">Order Detail/</li>
+            <li class="breadcrumb-item active">Index</li>
+        </ol>
+    </div>
+    <!-- row -->
+    <div class="modal fade" id="sendMessageModal">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Supplier</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="display table" style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th>Order Id</th>
+                                    <th>Product name</th>
+                                    <th>Unit Price</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                @foreach (var t in Model.OrderDetails)
+                                {
+
+                                    <tr>
+                                        <td>@t.OrderId</td>
+                                        <td>
+                                            @t.product.Name
+                                        </td>
+                                        <td>@t.UnitPrice</td>
+                                        <td>@t.Quantity</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

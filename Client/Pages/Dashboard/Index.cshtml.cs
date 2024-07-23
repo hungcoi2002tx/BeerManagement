@@ -53,6 +53,7 @@ namespace Client.Pages.Dashboard
 			await GetProductInStockAsync();
 			await GetTotalRevenueAsync();
 			await GetProductInStockAsync();
+			await GetTableNumberAsync();
 		}
 
 		private async Task GetProductInStockAsync()
@@ -132,6 +133,28 @@ namespace Client.Pages.Dashboard
 			{
 				var data = datas.Objects;
 				Total = (double)data.Where(x => x.IsEnable == true).Sum(x => x.Total);
+			}
+		}
+
+		public int TotalActive { get; set; }
+		public int TotalInactive { get; set; }
+
+		private async Task GetTableNumberAsync()
+		{
+			var request = await _request.PostJsonAsync(RestApiName.GET_LIST_TABLE_BY_CONDITION, new TableSearchDto()
+			{
+				IsEnable = true
+			}); ;
+			if (request.CheckValidRequestExtention() != null)
+			{
+				throw new AuthenticationException(request.CheckValidRequestExtention());
+			}
+			var datas = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
+			if (datas.Status)
+			{
+				var data = datas.Objects;
+				TotalActive = data.Where(x => x.Status == TableStatus.ACTIVE).Count();
+				TotalInactive = data.Where(x => x.Status == TableStatus.INACTIVE).Count();
 			}
 		}
 	}
