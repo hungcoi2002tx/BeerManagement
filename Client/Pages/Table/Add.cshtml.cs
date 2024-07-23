@@ -41,6 +41,10 @@ namespace Client.Pages.Table
                 }
 
                 var request = await _httpCustom.PostJsonAsync(RestApiName.ADD_TABLE, TableAddDto);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
                 if (result.Status)
@@ -51,6 +55,10 @@ namespace Client.Pages.Table
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

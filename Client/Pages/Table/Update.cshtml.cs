@@ -38,7 +38,10 @@ namespace Client.Pages.Table
                         {
                             Id = id
                         });
-
+                    if (response.CheckValidRequestExtention() != null)
+                    {
+                        throw new AuthenticationException(response.CheckValidRequestExtention());
+                    }
                     var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
                     if (!data.Status || data.StatusCode == 500)
@@ -54,6 +57,10 @@ namespace Client.Pages.Table
                     TableEditDto = _mapper.Map<TableEditDto>(data.Objects.First());
                 }
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -72,6 +79,10 @@ namespace Client.Pages.Table
                 }
 
                 var request = await _httpCustom.PutAsync(RestApiName.UPDATE_TABLE, TableEditDto);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
                 if (result.Status)
@@ -82,6 +93,10 @@ namespace Client.Pages.Table
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+﻿using Api.CustomAttribute;
+using Business.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Share.Models.Domain;
@@ -22,6 +23,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<Order>> GetAllBySearchAsync([FromBody] OrderSearchDto search)
         {
             try
@@ -36,6 +39,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetPage")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<Order>> GetPageAsync([FromBody] OrderSearchDto search)
         {
             try
@@ -50,6 +55,8 @@ namespace Api.Controllers
         }
 
         [HttpPost("Add")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<Order>> AddAsync([FromBody] OrderAddDto obj)
         {
             try
@@ -69,6 +76,8 @@ namespace Api.Controllers
         }
 
         [HttpPut("Update")]
+        [CustomAuthorize("Admin", "Manager", "Staff")]
+
         public async Task<ResponseCustom<Order>> UpdateAsync([FromBody] OrderEditDto obj)
         {
             try
@@ -88,6 +97,8 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [CustomAuthorize("Admin")]
+
         public async Task<ResponseCustom<Order>> DeleteAsync(int id)
         {
             try

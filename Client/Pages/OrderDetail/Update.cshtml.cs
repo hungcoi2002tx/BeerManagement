@@ -18,8 +18,6 @@ namespace Client.Pages.OrderDetail
         private readonly Logger _logger;
         private readonly IMapper _mapper;
 
-
-
         [BindProperty]
         public List<OrderDetailViewDto> OrderDetailViewDtos { get; set; } = new();
         public List<ProductViewDto> ProductViewDtos { get; set; } = new();
@@ -45,7 +43,10 @@ namespace Client.Pages.OrderDetail
                     IsForSell = true,
                     IsEnable = true
                 });
-
+                if (response.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(response.CheckValidRequestExtention());
+                }
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
 
                 var responseOrderDetail = await _httpCustom.PostJsonAsync(RestApiName.GET_LIST_ORDER_DETAIL_BY_CONDITION, new OrderDetailSearchDto()
@@ -85,6 +86,10 @@ namespace Client.Pages.OrderDetail
 
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -108,7 +113,12 @@ namespace Client.Pages.OrderDetail
                 {
                     OrderId = orderId
                 });
+                if (responseOrderDetail.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(responseOrderDetail.CheckValidRequestExtention());
+                }
                 var dataOrderDetail = await responseOrderDetail.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.OrderDetail>>();
+
 
                 for (int i = 0; i < orderDetailAddDtos.Count; i++)
                 {
@@ -142,6 +152,10 @@ namespace Client.Pages.OrderDetail
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

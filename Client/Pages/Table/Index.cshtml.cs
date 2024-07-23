@@ -35,6 +35,10 @@ namespace Client.Pages.Table
 
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -51,6 +55,10 @@ namespace Client.Pages.Table
             };
 
             var response = await _httpCustom.PostJsonAsync(RestApiName.GET_LIST_TABLE_BY_CONDITION, Search);
+            if (response.CheckValidRequestExtention() != null)
+            {
+                throw new AuthenticationException(response.CheckValidRequestExtention());
+            }
             var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
             if (data.Status)
@@ -80,6 +88,11 @@ namespace Client.Pages.Table
                     IsEnable = true
                 });
 
+                if (response.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(response.CheckValidRequestExtention());
+                }
+
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
                 if (data.Status)
@@ -92,6 +105,10 @@ namespace Client.Pages.Table
                 }
 
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
@@ -112,6 +129,10 @@ namespace Client.Pages.Table
 
                 var apiUrl = string.Format(RestApiName.DELETE_TABLE, tableId);
                 var response = await _httpCustom.DeleteAsync(apiUrl);
+                if (response.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(response.CheckValidRequestExtention());
+                }
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
                 if (!data.Status)
@@ -130,6 +151,10 @@ namespace Client.Pages.Table
                 await GetlDataAsync(pageIndex);
 
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception)
             {

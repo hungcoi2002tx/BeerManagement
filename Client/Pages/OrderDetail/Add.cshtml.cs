@@ -39,6 +39,10 @@ namespace Client.Pages.OrderDetail
                     IsForSell = true,
                     IsEnable = true
                 });
+                if (response.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(response.CheckValidRequestExtention());
+                }
 
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Product>>();
 
@@ -66,6 +70,10 @@ namespace Client.Pages.OrderDetail
 
                 return Page();
             }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
@@ -86,6 +94,10 @@ namespace Client.Pages.OrderDetail
 
 
                 var request = await _httpCustom.PostJsonAsync(RestApiName.ADD_ORDER_DETAIL, orderDetailAddDtos);
+                if (request.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(request.CheckValidRequestExtention());
+                }
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.OrderDetail>>();
 
                 if (result.Status)
@@ -96,6 +108,10 @@ namespace Client.Pages.OrderDetail
                 {
                     return Redirect(GlobalVariants.PAGE_500);
                 }
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {

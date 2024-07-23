@@ -34,6 +34,10 @@ namespace Client.Pages.Table
                     Status = TableStatus.INACTIVE,
                     IsEnable = true
                 });
+                if (response.CheckValidRequestExtention() != null)
+                {
+                    throw new AuthenticationException(response.CheckValidRequestExtention());
+                }
 
                 var data = await response.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.Table>>();
 
@@ -47,6 +51,10 @@ namespace Client.Pages.Table
                 }
 
                 return Page();
+            }
+            catch (AuthenticationException ex)
+            {
+                return Redirect(ex.Message);
             }
             catch (Exception ex)
             {
