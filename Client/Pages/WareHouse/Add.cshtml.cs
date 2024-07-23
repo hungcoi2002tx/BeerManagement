@@ -63,7 +63,7 @@ namespace Client.Pages.WareHouse
                 var result = await request.Content.ReadFromJsonAsync<ResponseCustom<Share.Models.Domain.ImportHistory>>();
                 if (result.Status)
                 {
-                    return RedirectToPage(GlobalVariants.LINK_CATEGORY_INDEX);
+                    return RedirectToPage(GlobalVariants.LINK_WAREHOURSE_INDEX);
                 }
                 else
                 {
