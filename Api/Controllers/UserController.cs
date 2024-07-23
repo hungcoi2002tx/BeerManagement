@@ -27,7 +27,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("GetAll")]
-		[CustomAuthorize("Admin", "Manager")]
+		[CustomAuthorize("Admin", "Manager", "Staff")]
 		public async Task<ResponseCustom<User>> GetAllAsync([FromBody] UserSearchDto SearchModel)
         {
             try
@@ -63,7 +63,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-		[CustomAuthorize("Admin", "Manager")]
+		[CustomAuthorize("Admin")]
 		public async Task<ResponseCustom<User>> DeleteAsync(int id)
         {
             try
