@@ -17,6 +17,7 @@ namespace Share.Constant
         public const string PAGE_503 = "/Error503";
         public const string LINK_SUPPLIER_INDEX = "/Supplier/Index";
         public const string LINK_CATEGORY_INDEX = "/Category/Index";
+        public const string LINK_WAREHOURSE_INDEX = "/Warehouse/Index";
         public const string LINK_PRODUCT_INDEX = "/Product/Index";
         public const string LINK_LOGIN = "/Login";
         #endregion

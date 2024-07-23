@@ -95,7 +95,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
-		[CustomAuthorize("Admin", "Manager")]
+		[CustomAuthorize("Admin")]
 		public async Task<ResponseCustom<Supplier>> DeleteAsync(int id)
         {
             try
